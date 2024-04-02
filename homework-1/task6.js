@@ -22,8 +22,7 @@ function uncamelizeString(str) {
         return;
     }
 
-    const gap = " ";
-    return str.replace(/[A-Z]/g, item => gap + item.toLowerCase()).trim();
+    return str.replace(/[A-Z]/g, item => " " + item.toLowerCase()).trim();
 }
 
 // TASK6
