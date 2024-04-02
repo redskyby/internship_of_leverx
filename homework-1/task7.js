@@ -13,20 +13,24 @@ rl.question('Введите строку, потом через пробел sub
 });
 
 function countOfSubStr(str, subStr) {
-    if (str.length === 0) {
+    if (str.length === 0 || subStr.length === 0) {
         return 0;
     }
 
-    let count = 0;
-    let index = 0;
+    // old code
+    // let count = 0;
+    // let index = 0;
+    // while ((index = str.indexOf(subStr, index)) !== -1) {
+    //     count++;
+    //     index += subStr.length;
+    // }
+    // return count;
 
-    while ((index = str.indexOf(subStr, index)) !== -1) {
-        count++;
-        index += subStr.length;
-    }
 
+    // new code
+    const regex = new RegExp(subStr, 'g');
+    return (str.match(regex) || []).length;
 
-    return count;
 }
 
 // TASK7
