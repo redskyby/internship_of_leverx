@@ -22,7 +22,7 @@ const arrayFlatAndSort = (arr) => {
     }
 
     const newFlatArray = flatArray(arr);
-    return sortArray(newFlatArray)
+    return sortArray(newFlatArray);
 };
 
 const output = arrayFlatAndSort(input);
