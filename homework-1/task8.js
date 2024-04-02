@@ -17,9 +17,10 @@ const sortArray = (arr) => {
 
 
 const arrayFlatAndSort = (arr) => {
-    if (arr.length === 0) {
+    if (!Array.isArray(arr) || arr.length === 0){
         return arr;
     }
+
     const newFlatArray = flatArray(arr);
     return sortArray(newFlatArray)
 };
