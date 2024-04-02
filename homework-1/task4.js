@@ -1,13 +1,19 @@
 const reverseObj = (obj) => {
     const swappedObj = {};
+    // old code
+    // for (const key in obj) {
+    //     if (Object.hasOwnProperty.call(obj, key)) {
+    //         swappedObj[obj[key]] = key;
+    //     }
+    // }
 
-    for (const key in obj) {
-        if (Object.hasOwnProperty.call(obj, key)) {
-            swappedObj[obj[key]] = key;
-        }
-    }
 
-    console.log( swappedObj);
+    //new code
+    Object.entries(obj).forEach(([key, value]) => {
+        swappedObj[value] = key;
+    });
+
+    console.log(swappedObj);
 }
 
 // Example usage:

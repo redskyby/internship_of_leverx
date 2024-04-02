@@ -8,7 +8,7 @@ const rl = readline.createInterface({
 rl.question('Введите ограничение для последовательности Фибоначчи: ', (limit) => {
     const result = fibonacciSeries(parseInt(limit));
     if (result === undefined) {
-        console.log('Некорректное значение. Программа будет завершена.');
+        console.log('Некорректное значение. Программа будет завершена!');
         rl.close();
         return;
     }
