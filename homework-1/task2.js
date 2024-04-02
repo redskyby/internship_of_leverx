@@ -1,14 +1,14 @@
-let a = [1, 2, 3];
-let b = [100, 2, 1, 10];
+const a = [1, 2, 3];
+const b = [100, 2, 1, 10];
 
-let c = [1, 2, 3, 4, 5];
-let d = [1, [2], [3, [[4]]], [5, 6]];
+const c = [1, 2, 3, 4, 5];
+const d = [1, [2], [3, [[4]]], [5, 6]];
 
 const check = (a, b) => {
 
-    let newA = [...a.flat(Infinity)];
-    let newB = [...b.flat(Infinity)]
-    let fullFlatArray = [...newA, ...newB];
+    const newA = a.flat(Infinity);
+    const newB = b.flat(Infinity)
+    const fullFlatArray = [...newA, ...newB];
     let result = []
 
 
