@@ -1,14 +1,27 @@
 const input = [1, 2, 1000, 300, [400, [3, 10, [11, 12]], [1, 2, [3, 4]], 5, 6]];
 
-const arrayFlatAndSort = (arr) => {
+const flatArray = (arr) => {
     return arr.reduce((acc, curr) => {
         if (Array.isArray(curr)) {
-            return acc.concat(arrayFlatAndSort(curr));
+            return acc.concat(flatArray(curr));
         } else {
             acc.push(curr);
             return acc;
         }
-    }, []).sort((a, b) => a - b);
+    }, []);
+}
+
+const sortArray = (arr) => {
+    return arr.sort((a, b) => a - b);
+}
+
+
+const arrayFlatAndSort = (arr) => {
+    if (arr.length === 0) {
+        return arr;
+    }
+    const newFlatArray = flatArray(arr);
+    return sortArray(newFlatArray)
 };
 
 const output = arrayFlatAndSort(input);
