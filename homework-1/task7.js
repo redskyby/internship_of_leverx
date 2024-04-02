@@ -12,7 +12,8 @@ rl.question('Введите строку, потом через пробел sub
     rl.close();
 });
 
-function countOfSubStr(str, subStr) {
+function countOfSubStr(str, subStr = "") {
+
     if (str.length === 0 || subStr.length === 0) {
         return 0;
     }
