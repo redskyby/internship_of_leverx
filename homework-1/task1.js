@@ -7,11 +7,30 @@ const rl = readline.createInterface({
 
 rl.question('Введите ограничение для последовательности Фибоначчи: ', (limit) => {
     const result = fibonacciSeries(parseInt(limit));
+    if (result === undefined) {
+        console.log('Некорректное значение. Программа будет завершена.');
+        rl.close();
+        return;
+    }
     console.log('Последовательность Фибоначчи:', result);
     rl.close();
 });
 
 function fibonacciSeries(limit) {
+    if (limit === 0) {
+        return [0];
+    }
+
+    if (limit < 0) {
+        console.log("Вы ввели число меньше нуля!")
+        return;
+    }
+
+    if (!parseInt(limit)) {
+        console.log("Вы ввели букву!")
+        return;
+    }
+
     let fibonacci = [0, 1];
     let nextNum = 0;
     while ((nextNum = fibonacci[fibonacci.length - 1] + fibonacci[fibonacci.length - 2]) < limit) {
