@@ -7,11 +7,18 @@ const exampleObject = {
 const pairObj = (obj) => {
     const pairs = [];
 
-    for (const key in obj) {
-        if (Object.hasOwnProperty.call(obj, key)) {
-            pairs.push([key, obj[key]]);
-        }
-    }
+    // old code
+    // for (const key in obj) {
+    //     if (Object.hasOwnProperty.call(obj, key)) {
+    //         pairs.push([key, obj[key]]);
+    //     }
+    // }
+
+
+    // new code
+    Object.entries(obj).forEach(([key]) => {
+        pairs.push([key , obj[key]]);
+    });
 
     console.log(pairs)
 }
