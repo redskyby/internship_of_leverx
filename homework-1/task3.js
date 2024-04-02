@@ -1,8 +1,8 @@
-let str1 = "JavaScript Exercises";
-let str2 = "exercises";
+const str1 = "JavaScript Exercises";
+const str2 = "exercises";
 
-let str3 = "JavaScript Exercises";
-let str4 = "Exercisess";
+const str3 = "JavaScript Exercises";
+const str4 = "Exercisess";
 
 
 const caseInsensitiveSearch = (a, b) => {
