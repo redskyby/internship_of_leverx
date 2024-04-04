@@ -18,11 +18,11 @@ const createCvfFile = (name, data) => {
     //New code
     const writeStream = fs.createWriteStream(name);
 
-    writeStream.on('error', (error) => {
+    writeStream.on("error", (error) => {
         console.log("Ошибка при создании потока записи : ", error);
     });
 
-    writeStream.write(data, 'utf8', (error) => {
+    writeStream.write(data, "utf8", (error) => {
         if (error) {
             console.log("Ошибка при создании : ", error);
         } else {
