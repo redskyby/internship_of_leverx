@@ -1,7 +1,7 @@
 const filterCsvFile = (result) => {
     // тут импровизированные поля для сортировки
 
-    const fromDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toDateString();
+    const fromDate = new Date(new Date().setFullYear(new Date().getFullYear() - 2)).toDateString();
     const toDate = new Date(new Date().setFullYear(new Date().getFullYear() + 2)).toDateString();
     const minPrice = 20;
     const maxPrice = 70;
