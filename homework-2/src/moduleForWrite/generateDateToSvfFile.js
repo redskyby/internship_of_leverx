@@ -2,6 +2,8 @@ const generateUUID = require("./generateUUID");
 const generatePrice = require("./generatePrice");
 const generateQuantity = require("./generateQuantity");
 const generateDate = require("./generateDate");
+const writeStream = require("../writeFile");
+
 const generateDateToSvfFile = (n) => {
     let csvData = "UUID,Price,Quantity,Date\n";
 
@@ -12,9 +14,10 @@ const generateDateToSvfFile = (n) => {
         const date = generateDate().toDateString();
 
         csvData += `${uuid},${price},${quantity},${date}\n`;
+        writeStream.write(csvData, "utf8");
     }
 
-    return csvData;
+
 };
 
 module.exports = generateDateToSvfFile;
