@@ -15,7 +15,10 @@
   "license": "ISC",
   "dependencies": {
     "csv-parse": "^5.5.5",
+    "csv-parser": "^3.0.0",
+    "csv-stringify": "^6.4.6",
     "cvs": "^0.6.8",
+    "through2": "^4.0.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
