@@ -1,9 +1,9 @@
 const Router = require("express");
+const UserController = require("../controllers/userController");
 
 const router = Router();
 
-router.get("/registration", (req, res) => {
-    return res.status(200).json({ message: "Hello world" });
-});
+router.get("/registration", UserController.registration);
+
 
 module.exports = router;
