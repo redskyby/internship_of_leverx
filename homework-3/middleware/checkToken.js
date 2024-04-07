@@ -13,9 +13,8 @@ module.exports = function (req, res, next) {
             return res.status(401).json({ message: "Не авторизован" });
         }
 
-        // Раз я должен проверить авторизованного пользователя, то я уже получил token  ранее и сохранил его в localStorage
+        // Раз я должен проверить авторизованного пользователя, то я уже получил валидный токен, который ранее сохранил в localStorage
         // Токен приходит с клиента, по своей практике я храню jwt token в localStorage
-        // Там же старый удаляю и получаю с сервера новый.
         // Данные на клиенте декодирую с помощью jwt-decode
 
         const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);

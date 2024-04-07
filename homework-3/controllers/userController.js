@@ -12,7 +12,7 @@ class UserController {
             const candidate = users.find((user) => user.email === email);
 
             if (candidate) {
-                return res.status(403).json({ message: "Пользователь с таким адресом существует!" });
+                return res.status(403).json({ message: "Пользователь с таким email существует!" });
             }
 
             const hashPassword = await bcrypt.hash(password, 3);
@@ -45,7 +45,7 @@ class UserController {
             const candidate = users.find((user) => user.email === email);
 
             if (!candidate) {
-                return res.status(403).json({ message: "Пользователь с таким адресом не существует!" });
+                return res.status(403).json({ message: "Пользователь с таким email не существует!" });
             }
 
             const comparePassword = bcrypt.compareSync(String(password), String(candidate.password));
@@ -72,6 +72,40 @@ class UserController {
             const token = await jwtService.generateToken(req.user.name, req.user.lastName, req.user.email);
 
             const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+            // вывел информацию
+            // хотя я бы отправлял токен и на клиенте его декодил,
+            // но по заданию нужно вывести информацию.
+            return res.status(200).json({ user });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
+
+    async updateSomeInformation(req, res) {
+        try {
+            const { name, lastName } = req.body;
+
+            const candidate = users.find((user) => user.name === req.user.name);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Пользователь с таким именем не существует!" });
+            }
+
+            // Обновляем пользователя
+
+            candidate.name = name;
+            candidate.lastName = lastName;
+
+            // Обновляем токен у пользователя
+            const token = await jwtService.generateToken(candidate.name, candidate.lastName, req.user.email);
+
+            candidate.token = token;
+
+            const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+
+            // Возвращаю нового пользователя
+            // Но лучше новый токен и на клиенте декодил
             return res.status(200).json({ user });
         } catch (e) {
             console.error(e);
