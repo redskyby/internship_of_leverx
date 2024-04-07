@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const newUser = require("../simpleDatabase/newUser");
 const users = require("../simpleDatabase/simpeDatabase");
 const jwtService = require("../service/jwtService");
+const jwt = require("jsonwebtoken");
 
 class UserController {
     async registration(req, res) {
@@ -29,6 +30,7 @@ class UserController {
             //     "iat": 1712511996,
             //     "exp": 1712515596
             // }
+
             return res.status(200).json({ token });
         } catch (e) {
             console.error(e);
@@ -52,12 +54,25 @@ class UserController {
                 return res.status(500).json({ message: "Указан неверный пароль" });
             }
 
-            const token = await jwtService.refreshToken(candidate.name, candidate.lastName, candidate.email);
+            const token = await jwtService.generateToken(candidate.name, candidate.lastName, candidate.email);
 
             // Обновляем токен в базе данных
             candidate.token = token;
 
             return res.status(200).json({ token });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
+
+    async getAllInformation(req, res) {
+        try {
+            // Обновил токен
+            const token = await jwtService.generateToken(req.user.name, req.user.lastName, req.user.email);
+
+            const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+            return res.status(200).json({ user });
         } catch (e) {
             console.error(e);
             res.status(404).json(e);
