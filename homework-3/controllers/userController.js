@@ -6,7 +6,6 @@ const posts = require("../simpleDatabase/simpleDatabaseOfPosts");
 const jwtService = require("../service/jwtService");
 const jwt = require("jsonwebtoken");
 const mailService = require("./mailController");
-const showPostByAuthor = require("../middleware/postsByAuthor");
 
 class UserController {
     async registration(req, res) {
@@ -155,6 +154,25 @@ class UserController {
             const result = posts.filter((item) => item.authorName === name);
 
             return res.status(200).json({ result });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
+
+    async deletePostById(req, res) {
+        try {
+            const { id } = req.body;
+
+            const candidate = posts.findIndex((item) => item.id === id);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Постов с таким не id  существует!" });
+            }
+
+            posts.splice(candidate, 1);
+
+            return res.status(200).json({ message: "Пост успешно удален.", posts });
         } catch (e) {
             console.error(e);
             res.status(404).json(e);
