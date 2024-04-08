@@ -178,6 +178,25 @@ class UserController {
             res.status(404).json(e);
         }
     }
+    async updatePostById(req, res) {
+        try {
+            const { id, title, description } = req.body;
+
+            const candidate = posts.find((item) => item.id === id);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Постов с таким не id  существует!" });
+            }
+
+            candidate.title = title;
+            candidate.description = description;
+
+            return res.status(200).json({ message: "Пост успешно обновлен.", posts });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
 }
 
 module.exports = new UserController();

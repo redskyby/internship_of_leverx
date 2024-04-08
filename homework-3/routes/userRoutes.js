@@ -7,6 +7,7 @@ const updateInformation = require("../middleware/updateInformation");
 const createPost = require("../middleware/createPost");
 const showPostByAuthor = require("../middleware/postsByAuthor");
 const deletePostById = require("../middleware/deletePostById");
+const updatePostById = require("../middleware/updatePostById");
 
 const router = Router();
 // http://localhost:5000/api/user
@@ -17,5 +18,6 @@ router.put("/updateInformation", updateInformation, UserController.updateSomeInf
 router.post("/createPost", createPost, UserController.createPost);
 router.get("/showPostsByAuthor", showPostByAuthor, UserController.showPostByAuthor);
 router.delete("/deletePostById", deletePostById, UserController.deletePostById);
+router.put("/updatePostById", updatePostById, UserController.updatePostById);
 
 module.exports = router;
