@@ -5,6 +5,7 @@ const checkLogin = require("../middleware/checkLogin");
 const checkToken = require("../middleware/checkToken");
 const updateInformation = require("../middleware/updateInformation");
 const createPost = require("../middleware/createPost");
+const showPostByAuthor = require("../middleware/postsByAuthor");
 
 const router = Router();
 // http://localhost:5000/api/user
@@ -13,5 +14,6 @@ router.post("/login", checkLogin, UserController.login);
 router.get("/getAllInformations", checkToken, UserController.getAllInformation);
 router.put("/updateInformation", updateInformation, UserController.updateSomeInformation);
 router.post("/createPost", createPost, UserController.createPost);
+router.get("/showPostsByAuthor", showPostByAuthor, UserController.showPostByAuthor);
 
 module.exports = router;

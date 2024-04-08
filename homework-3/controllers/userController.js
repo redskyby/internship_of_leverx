@@ -6,6 +6,7 @@ const posts = require("../simpleDatabase/simpleDatabaseOfPosts");
 const jwtService = require("../service/jwtService");
 const jwt = require("jsonwebtoken");
 const mailService = require("./mailController");
+const showPostByAuthor = require("../middleware/postsByAuthor");
 
 class UserController {
     async registration(req, res) {
@@ -134,6 +135,26 @@ class UserController {
             posts.push(newPostInDatabase);
 
             return res.status(200).json({ newPostInDatabase });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
+
+    async showPostByAuthor(req, res) {
+        try {
+            const { name } = req.user;
+            console.log(name);
+
+            const candidate = posts.find((item) => item.authorName === name);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Постов с таким не автором  существует!" });
+            }
+
+            const result = posts.filter((item) => item.authorName === name);
+
+            return res.status(200).json({ result });
         } catch (e) {
             console.error(e);
             res.status(404).json(e);

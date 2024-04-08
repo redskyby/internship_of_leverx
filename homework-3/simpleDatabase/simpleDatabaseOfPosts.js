@@ -4,14 +4,21 @@ const posts = [
         title: "First post",
         description: "Description of the first post",
         createdDate: "2022-04-05",
-        authorName: "Author 1",
+        authorName: "Pasha",
     },
     {
         id: 2,
-        title: "Second post",
+        title: "First post1",
+        description: "Description of the first post",
+        createdDate: "2022-04-05",
+        authorName: "Pasha",
+    },
+    {
+        id: 3,
+        title: "Second pos1t",
         description: "Description of the second post",
         createdDate: "2022-04-04",
-        authorName: "Author 2",
+        authorName: "Jon",
     },
 ];
 
