@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const newUser = require("../simpleDatabase/newUser");
-const users = require("../simpleDatabase/simpeDatabase");
+const newPost = require("../simpleDatabase/newPost");
+const users = require("../simpleDatabase/simpeDatabaseOfUsers");
+const posts = require("../simpleDatabase/simpleDatabaseOfPosts");
 const jwtService = require("../service/jwtService");
 const jwt = require("jsonwebtoken");
 const mailService = require("./mailController");
@@ -110,6 +112,28 @@ class UserController {
             // Возвращаю нового пользователя
             // Но лучше новый токен и на клиенте декодил
             return res.status(200).json({ user });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
+
+    async createPost(req, res) {
+        try {
+            const { title, description } = req.body;
+
+            const candidate = posts.find((user) => user.title === title);
+
+            if (candidate) {
+                return res.status(403).json({ message: "Пост с таким названием уже существует!" });
+            }
+
+            const newId = posts.length + 1;
+            const newPostInDatabase = new newPost(newId, title, description, new Date(), "Pasha");
+
+            posts.push(newPostInDatabase);
+
+            return res.status(200).json({ newPostInDatabase });
         } catch (e) {
             console.error(e);
             res.status(404).json(e);
