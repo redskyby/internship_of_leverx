@@ -3,6 +3,7 @@ const newUser = require("../simpleDatabase/newUser");
 const users = require("../simpleDatabase/simpeDatabase");
 const jwtService = require("../service/jwtService");
 const jwt = require("jsonwebtoken");
+const mailService = require("./mailController");
 
 class UserController {
     async registration(req, res) {
@@ -84,7 +85,7 @@ class UserController {
 
     async updateSomeInformation(req, res) {
         try {
-            const { name, lastName } = req.body;
+            const { newName, newLastName } = req.body;
 
             const candidate = users.find((user) => user.name === req.user.name);
 
@@ -94,13 +95,15 @@ class UserController {
 
             // Обновляем пользователя
 
-            candidate.name = name;
-            candidate.lastName = lastName;
+            candidate.name = newName;
+            candidate.lastName = newLastName;
 
             // Обновляем токен у пользователя
             const token = await jwtService.generateToken(candidate.name, candidate.lastName, req.user.email);
 
             candidate.token = token;
+
+            await mailService.sendNewInformation("x0xmik@mail.ru", candidate.name, candidate.lastName);
 
             const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 

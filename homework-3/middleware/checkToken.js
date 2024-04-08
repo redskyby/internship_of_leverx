@@ -18,6 +18,7 @@ module.exports = function (req, res, next) {
         // Данные на клиенте декодирую с помощью jwt-decode
 
         const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+
         req.user = decoded;
         next();
     } catch (e) {
