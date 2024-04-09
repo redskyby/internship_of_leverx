@@ -1,11 +1,23 @@
-const users = require("../simpleDatabase/simpeDatabaseOfUsers");
-const bcrypt = require("bcrypt");
-const jwtService = require("./jwtService");
-const newUser = require("../simpleDatabase/newUser");
-const userRepositories = require("../repositories/userRepository");
+import users from "../simpleDatabase/simpeDatabaseOfUsers";
+import bcrypt from "bcrypt";
+import newUser from "../simpleDatabase/newUser";
+import jwtService from "./jwtService";
+import userRepositories from "../repositories/userRepository";
 
+interface User {
+    id: number;
+    name: string;
+    lastName: string;
+    password: string;
+    email: string;
+    token: string;
+}
 class RegistrationService {
-    async createUser(name, lastName, password, email) {
+    checkUser(email: string): User | undefined {
+        return userRepositories.findByEmail(email);
+    }
+
+    async createUser(name: string, lastName: string, password: string, email: string): Promise<string> {
         try {
             const hashPassword = await bcrypt.hash(password, 3);
             const newId = users.length + 1;
@@ -30,4 +42,4 @@ class RegistrationService {
     }
 }
 
-module.exports = new RegistrationService();
+export default new RegistrationService();

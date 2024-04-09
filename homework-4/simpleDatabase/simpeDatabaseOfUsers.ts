@@ -1,4 +1,13 @@
-let users = [
+interface User {
+    id: number;
+    name: string;
+    lastName: string;
+    password: string;
+    email: string;
+    token: string;
+}
+
+let users: User[] = [
     {
         id: 1,
         name: "Pasha",
@@ -19,4 +28,4 @@ let users = [
     },
 ];
 
-module.exports = users;
+export default users;

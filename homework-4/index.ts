@@ -1,12 +1,10 @@
 import { config } from "dotenv";
 config();
 import express, { Express } from "express";
-// @ts-ignore
-import  routes from "./routes/index";
+import routes from "./routes/index";
 import cors from "cors";
 
-
-const app : Express = express();
+const app: Express = express();
 
 app.use(cors());
 app.use(express.json());
