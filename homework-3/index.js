@@ -1,7 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const routes = require("./routes/index");
 const cors = require("cors");
-require("dotenv").config();
 const app = express();
 
 app.use(cors());
@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 const start = async () => {
     try {
-        app.listen(PORT, () => {
+        await app.listen(PORT, () => {
             console.log(`Server running at http://localhost:${PORT}`);
         });
     } catch (e) {

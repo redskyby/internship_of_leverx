@@ -11,13 +11,13 @@ const updatePostById = require("../middleware/updatePostById");
 
 const router = Router();
 // http://localhost:5000/api/user
-router.post("/registration", checkRegistration, UserController.registration);
+router.post("/users", checkRegistration, UserController.registration);
 router.post("/login", checkLogin, UserController.login);
-router.get("/getAllInformations", checkToken, UserController.getAllInformation);
-router.put("/updateInformation", updateInformation, UserController.updateSomeInformation);
-router.post("/createPost", createPost, UserController.createPost);
-router.get("/showPostsByAuthor", showPostByAuthor, UserController.showPostByAuthor);
-router.delete("/deletePostById", deletePostById, UserController.deletePostById);
-router.put("/updatePostById", updatePostById, UserController.updatePostById);
+router.get("/information", checkToken, UserController.getAllInformation);
+router.put("/information", checkToken, updateInformation, UserController.updateSomeInformation);
+router.post("/posts", checkToken, createPost, UserController.createPost);
+router.get("/posts/author", checkToken, showPostByAuthor, UserController.showPostByAuthor);
+router.delete("/posts/:id", checkToken, deletePostById, UserController.deletePostById);
+router.put("/posts", checkToken, updatePostById, UserController.updatePostById);
 
 module.exports = router;

@@ -1,26 +1,25 @@
 const nodemailer = require("nodemailer");
 
+// Контроллер для отправки почты
+
 class MailController {
     constructor() {
         this.transporter = nodemailer.createTransport({
-            // host : process.env.SMTP_HOST,
+            host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
-            host: "smtp.gmail.com",
             secure: false,
             auth: {
-                // user: process.env.SMTP_USER,
-                // pass: process.env.SMTP_PASSWORD,
-                user: "pashadocenko@gmail.com",
-                pass: "dmvu brpk qrdf gnlj ",
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASSWORD,
             },
         });
     }
 
-    async sendNewInformation(to, name, lastName) {
+    async sendNewInformation(sendToEmail, name, lastName) {
         try {
             await this.transporter.sendMail({
                 from: process.env.SMTP_USER,
-                to: "x0xmik@mail.ru",
+                to: sendToEmail,
                 subject: "Новые данные",
                 text: "",
                 html: `

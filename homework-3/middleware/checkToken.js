@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 // Так как проверяю авторизованного пользователя, то валидации данных не будет.
 // По смыслу она была при регистрации или при входе
 
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
     if (req.method === "OPTIONS") {
         next();
     }
@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
         // Токен приходит с клиента, по своей практике я храню jwt token в localStorage
         // Данные на клиенте декодирую с помощью jwt-decode
 
-        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+        const decoded = await jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
         req.user = decoded;
         next();
