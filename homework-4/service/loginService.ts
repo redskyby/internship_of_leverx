@@ -1,10 +1,20 @@
 import registrationService from "./registrationService";
 import bcrypt from "bcrypt";
 import jwtService from "./jwtService";
+import checkService from "./checkService";
+
+interface User {
+    id: number;
+    name: string;
+    lastName: string;
+    password: string;
+    email: string;
+    token: string;
+}
 
 class LoginService {
-    async checkLogin(email: string, password: string): Promise<string> {
-        const candidate = await registrationService.checkUser("email", email);
+    async checkLogin( key : keyof User, staff: string , password : string): Promise<string> {
+        const candidate = await checkService.checkUser(key, staff);
 
         if (!candidate) {
             throw new Error("Пользователь не найден");

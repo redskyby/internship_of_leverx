@@ -1,4 +1,12 @@
-const posts = [
+interface Post {
+    id: number;
+    title: string;
+    description: string;
+    createdDate: string;
+    authorName: string;
+}
+
+let posts: Post[] = [
     {
         id: 1,
         title: "First post",
@@ -22,4 +30,4 @@ const posts = [
     },
 ];
 
-module.exports = posts;
+export default posts;

@@ -1,16 +1,18 @@
-// import bcrypt from "bcrypt";
 // import newPost  from "../simpleDatabase/newPost";
 // import users  from "../simpleDatabase/simpeDatabaseOfUsers";
 // import posts  from "../simpleDatabase/simpleDatabaseOfPosts";
 // import jwtService from "../service/jwtService";
 // import jwt  from "jsonwebtoken";
-// import mailService  from "./mailController";
 import serviceForUserRegistration from "../service/registrationService";
 import { Request, Response } from "express";
 import registrationService from "../service/registrationService";
 import loginService from "../service/loginService";
 import jwtService from "../service/jwtService";
 import updateService from "../service/updateService";
+import postService from "../service/postService";
+import checkService from "../service/checkService";
+import postRepository from "../repositories/postRepository";
+
 
 interface User {
     id: number;
@@ -45,7 +47,7 @@ class UserController {
         try {
             const { email, password } = req.body;
 
-            const token = await loginService.checkLogin(email, password);
+            const token = await loginService.checkLogin("email" , email, password);
 
             return res.status(200).json({ token });
         } catch (error: any) {
@@ -97,51 +99,24 @@ class UserController {
         }
     }
 
-    // async createPost(req, res) {
-    //     try {
-    //         // Запрос
-    //         // {
-    //         //     "title": "First post3",
-    //         //     "description": "Description of the first post",
-    //         //     "createdDate": "2022-04-05",
-    //         //     "authorName": "Pasha"
-    //         // }
-    //
-    //         const { title, description } = req.body;
-    //         const user = req.user.name;
-    //
-    //         const candidate = posts.find((user) => user.title === title);
-    //
-    //         if (candidate) {
-    //             return res.status(403).json({ message: "Пост с таким названием уже существует!" });
-    //         }
-    //
-    //         const newId = posts.length + 1;
-    //         const newPostInDatabase = new newPost({
-    //             id: newId,
-    //             title: title,
-    //             description: description,
-    //             createdDate: new Date(),
-    //             authorName: user,
-    //         });
-    //
-    //         posts.push(newPostInDatabase);
-    //
-    //         // ответ
-    //         // {
-    //         //     "id": 4,
-    //         //     "title": "First post3",
-    //         //     "description": "Description of the first post",
-    //         //     "createdDate": "2024-04-08T20:00:36.381Z",
-    //         //     "authorName": "Pasha"
-    //         // }
-    //
-    //         return res.status(200).json(newPostInDatabase);
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
+    async createPost(req: Request, res: Response) {
+        try {
+            const {title, description} = req.body;
+            const userName = req.user!.name;
+
+            const candidate = await postService.checkPost("title", title);
+            if (candidate) {
+                return res.status(403).json({message : "Пост с таким названием уже существует!"});
+            }
+
+            const newPost = await postService.createPost(title , description , userName);
+
+            return res.status(200).json(newPost);
+        } catch (error: any) {
+            console.error(error);
+            res.status(404).json(error.message);
+        }
+    }
     //
     // async showPostByAuthor(req, res) {
     //     try {

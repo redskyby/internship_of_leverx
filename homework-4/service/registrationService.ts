@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import newUser from "../simpleDatabase/newUser";
 import jwtService from "./jwtService";
 import userRepositories from "../repositories/userRepository";
+import checkService from "./checkService";
 
 interface User {
     id: number;
@@ -12,9 +13,14 @@ interface User {
     email: string;
     token: string;
 }
+
+
 class RegistrationService {
-    checkUser(key: keyof User, staff: string): User | undefined {
-        return userRepositories.findBy(key, staff);
+
+    async checkUser( key : keyof User, staff: string){
+        const candidate = await checkService.checkUser(key, staff);
+
+        return candidate;
     }
 
     async createUser(name: string, lastName: string, password: string, email: string): Promise<string> {

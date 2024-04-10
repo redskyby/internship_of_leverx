@@ -1,6 +1,7 @@
-const { body, validationResult } = require("express-validator");
+import { body, validationResult } from "express-validator";
+import { NextFunction, Request, Response } from "express";
 
-module.exports = [
+export default [
     // Проверка поля title
     body("title")
         .notEmpty()
@@ -14,7 +15,7 @@ module.exports = [
         .isLength({ min: 4, max: 100 })
         .withMessage("Описание должна содержать как минимум 4 символа и не больше 100 символов"),
 
-    function (req, res, next) {
+    function (req: Request, res: Response, next: NextFunction) {
         if (req.method === "OPTIONS") {
             next();
         }
