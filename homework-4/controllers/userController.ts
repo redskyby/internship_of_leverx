@@ -10,13 +10,23 @@ import { Request, Response } from "express";
 import registrationService from "../service/registrationService";
 import loginService from "../service/loginService";
 import jwtService from "../service/jwtService";
+import updateService from "../service/updateService";
+
+interface User {
+    id: number;
+    name: string;
+    lastName: string;
+    password: string;
+    email: string;
+    token: string;
+}
 
 class UserController {
     async registration(req: Request, res: Response) {
         try {
             const { name, lastName, password, email } = req.body;
 
-            const candidate = await registrationService.checkUser(email);
+            const candidate = await registrationService.checkUser("email", email);
 
             if (candidate) {
                 return res.status(403).json({ message: "Пользователь с таким email существует!" });
@@ -62,63 +72,31 @@ class UserController {
         }
     }
 
-    // async updateSomeInformation(req, res) {
-    //     try {
-    //         // Токен выше предоставлен выше, дальше и ниже все запросы идут с заголовком авторизации и там токен Bearer
-    //         // {
-    //         //     "name": "Pasha",
-    //         //     "newName" : "Pasha2",
-    //         //     "lastName": "Dotsenko",
-    //         //     "newLastName": "Dotsenko2",
-    //         //     "email": "pashadocenko@gmail.com",
-    //         //     "password" : "123456",
-    //         //     "sendToEmail" : "x0xmik@mail.ru"
-    //         // }
-    //         const { newName, newLastName, sendToEmail } = req.body;
-    //
-    //         const candidate = users.find((user) => user.name === req.user.name);
-    //
-    //         if (!candidate) {
-    //             return res.status(403).json({ message: "Пользователь с таким именем не существует!" });
-    //         }
-    //
-    //         // Обновляем пользователя
-    //
-    //         candidate.name = newName;
-    //         candidate.lastName = newLastName;
-    //
-    //         // Обновляем токен у пользователя
-    //         const token = await jwtService.generateToken(
-    //             candidate.id,
-    //             candidate.name,
-    //             candidate.lastName,
-    //             req.user.email,
-    //         );
-    //
-    //         candidate.token = token;
-    //
-    //         await mailService.sendNewInformation(sendToEmail, candidate.name, candidate.lastName);
-    //
-    //         const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    //
-    //         // Возвращаю нового пользователя
-    //         // Но лучше новый токен и на клиенте декодил
-    //
-    //         // ответ
-    //         //             {
-    //         //                 "name": "Pasha2",
-    //         //                 "lastName": "Dotsenko2",
-    //         //                 "email": "pashadocenko@gmail.com",
-    //         //                 "iat": 1712606238,
-    //         //                 "exp": 1713211038
-    //         //             }
-    //         return res.status(200).json(user);
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
-    //
+    async updateSomeInformation(req: Request, res: Response) {
+        try {
+            const { newName, newLastName, sendToEmail } = req.body;
+
+            const candidate = await registrationService.checkUser("name", req.user!.name);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Пользователь с таким именем не существует!" });
+            }
+
+            const user = await updateService.updateInformation(
+                candidate,
+                newName,
+                newLastName,
+                sendToEmail,
+                req.user!.email,
+            );
+
+            return res.status(200).json(user);
+        } catch (error: any) {
+            console.error(error);
+            res.status(404).json(error.message);
+        }
+    }
+
     // async createPost(req, res) {
     //     try {
     //         // Запрос

@@ -4,7 +4,7 @@ import jwtService from "./jwtService";
 
 class LoginService {
     async checkLogin(email: string, password: string): Promise<string> {
-        const candidate = await registrationService.checkUser(email);
+        const candidate = await registrationService.checkUser("email", email);
 
         if (!candidate) {
             throw new Error("Пользователь не найден");

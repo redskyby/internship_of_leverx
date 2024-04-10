@@ -1,6 +1,7 @@
-const { body, validationResult } = require("express-validator");
+import { body, validationResult } from "express-validator";
+import { NextFunction, Request, Response } from "express";
 
-module.exports = [
+export default [
     // Проверка поля name
     body("name")
         .notEmpty()
@@ -16,7 +17,7 @@ module.exports = [
     // Проверка поля sendToEmail
     body("sendToEmail").isEmail().withMessage("Некорректный формат email"),
 
-    function (req, res, next) {
+    function (req: Request, res: Response, next: NextFunction) {
         if (req.method === "OPTIONS") {
             next();
         }

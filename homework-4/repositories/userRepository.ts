@@ -9,8 +9,8 @@ interface User {
     token: string;
 }
 class UserRepository {
-    findBy(email: string): User | undefined {
-        return users.find((user: User) => user.email === email);
+    findBy<T>(prop: keyof User, value: string | number): User | undefined {
+        return users.find((user: User) => user[prop] === value);
     }
 
     createUser(newUser: User): void {
