@@ -10,6 +10,7 @@ import loginService from "../service/loginService";
 import jwtService from "../service/jwtService";
 import updateService from "../service/updateService";
 import postService from "../service/postService";
+import posts from "../simpleDatabase/simpleDatabaseOfPosts";
 
 interface User {
     id: number;
@@ -134,49 +135,24 @@ class UserController {
         }
     }
 
-    // async deletePostById(req, res) {
-    //     try {
-    //         //  запрос
-    //         // {
-    //         //     "id" : 3
-    //         // }
-    //
-    //         const id = parseInt(req.params.id);
-    //
-    //         const candidate = posts.findIndex((item) => item.id === id);
-    //
-    //         if (candidate === -1) {
-    //             return res.status(403).json({ message: "Постов с таким не id  существует!" });
-    //         }
-    //
-    //         posts.splice(candidate, 1);
-    //
-    //         // ответ массив без удаленного поста
-    //         // {
-    //         //     "message": "Пост успешно удален.",
-    //         //     "posts": [
-    //         //     {
-    //         //         "id": 1,
-    //         //         "title": "First post",
-    //         //         "description": "Description of the first post",
-    //         //         "createdDate": "2022-04-05",
-    //         //         "authorName": "Pasha"
-    //         //     },
-    //         //     {
-    //         //         "id": 2,
-    //         //         "title": "First post1",
-    //         //         "description": "Description of the first post",
-    //         //         "createdDate": "2022-04-05",
-    //         //         "authorName": "Pasha"
-    //         //     }
-    //         // ]
-    //         // }
-    //         return res.status(200).json({ message: "Пост успешно удален.", posts });
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
+    async deletePostById(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id);
+
+            const candidate = postService.findIndex(id);
+
+            if (candidate) {
+                return res.status(403).json({ message: "Постов с таким не id  существует!" });
+            }
+
+            postService.deletePost(candidate);
+
+            return res.status(200).json({ message: "Пост успешно удален.", posts });
+        } catch (e) {
+            console.error(e);
+            res.status(404).json(e);
+        }
+    }
     // async updatePostById(req, res) {
     //     try {
     //         // запрос

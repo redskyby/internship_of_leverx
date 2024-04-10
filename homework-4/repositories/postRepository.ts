@@ -24,6 +24,14 @@ class PostRepository {
     filterPost(prop: keyof Post, value: string | number): Post[] {
         return posts.filter((item) => item[prop] === value);
     }
+
+    findIndex(id: number): number {
+        return posts.findIndex((item: Post) => item.id === id);
+    }
+
+    deletePost(id: number) {
+        posts.splice(id, 1);
+    }
 }
 
 export default new PostRepository();

@@ -1,13 +1,14 @@
-const { param, validationResult } = require("express-validator");
+import { param, validationResult } from "express-validator";
+import { NextFunction, Request, Response } from "express";
 
-module.exports = [
+export default [
     // Проверка поля id
     param("id")
         .notEmpty()
         .withMessage("Id обязательно для заполнения")
         .isNumeric()
         .withMessage("Id должен быть числом"),
-    function (req, res, next) {
+    function (req: Request, res: Response, next: NextFunction) {
         if (req.method === "OPTIONS") {
             next();
         }

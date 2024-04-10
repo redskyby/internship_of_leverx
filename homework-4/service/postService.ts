@@ -11,7 +11,7 @@ interface Post {
 }
 
 class PostService {
-    async checkPost(key: keyof Post, staff: string) {
+    async checkPost(key: keyof Post, staff: string | number) {
         const candidate = await checkService.checkPost(key, staff);
         return candidate;
     }
@@ -30,8 +30,16 @@ class PostService {
         return newPostInDatabase;
     }
 
-    async filter(key: keyof Post, staff: string) {
+    async filter(key: keyof Post, staff: string | number) {
         return postRepository.filterPost(key, staff);
+    }
+
+    findIndex(id: number): number {
+        return postRepository.findIndex(id);
+    }
+
+    deletePost(id: number) {
+        postRepository.deletePost(id);
     }
 }
 
