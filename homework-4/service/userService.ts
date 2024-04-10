@@ -1,4 +1,3 @@
-import users from "../simpleDatabase/simpeDatabaseOfUsers";
 import bcrypt from "bcrypt";
 import newUser from "../simpleDatabase/newUser";
 import jwtService from "./jwtService";
@@ -16,7 +15,7 @@ class UserService {
     async createUser(name: string, lastName: string, password: string, email: string): Promise<string> {
         try {
             const hashPassword = await bcrypt.hash(password, 3);
-            const newId = users.length + 1;
+            const newId = userRepositories.checkLength() + 1;
             const token = await jwtService.generateToken(newId, name, lastName, email);
 
             const user = new newUser({
@@ -58,18 +57,23 @@ class UserService {
     }
 
     async updateInformation(candidate: User, newName: string, newLastName: string, sendToEmail: string, email: string) {
-        candidate.name = newName;
-        candidate.lastName = newLastName;
+        try {
+            candidate.name = newName;
+            candidate.lastName = newLastName;
 
-        const token = await jwtService.generateToken(candidate.id, candidate.name, candidate.lastName, email);
+            const token = await jwtService.generateToken(candidate.id, candidate.name, candidate.lastName, email);
 
-        candidate.token = token;
+            candidate.token = token;
 
-        await mailController.sendNewInformation(sendToEmail, candidate.name, candidate.lastName);
+            await mailController.sendNewInformation(sendToEmail, candidate.name, candidate.lastName);
 
-        const user = await jwtService.verifyUserToken(token);
+            const user = await jwtService.verifyUserToken(token);
 
-        return user;
+            return user;
+        } catch (e) {
+            console.error("Произошла ошибка при обновлении пользователя:", e);
+            throw new Error("Произошла ошибка при обновлении пользователя");
+        }
     }
 }
 

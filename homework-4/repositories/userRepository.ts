@@ -9,6 +9,10 @@ class UserRepository {
     createUser(newUser: User): void {
         users.push(newUser);
     }
+
+    checkLength(): number {
+        return users.length;
+    }
 }
 
 export default new UserRepository();
