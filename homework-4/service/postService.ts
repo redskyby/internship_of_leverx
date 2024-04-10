@@ -41,6 +41,13 @@ class PostService {
     deletePost(id: number) {
         postRepository.deletePost(id);
     }
+
+    updatePost(candidate: Post, title: string, description: string): Post {
+        candidate.title = title;
+        candidate.description = description;
+
+        return candidate;
+    }
 }
 
 export default new PostService();

@@ -7,8 +7,7 @@ import updateInformation from "../middleware/updateInformation";
 import createPost from "../middleware/createPost";
 import postsByAuthor from "../middleware/postsByAuthor";
 import deletePostById from "../middleware/deletePostById";
-
-// const updatePostById = require("../middleware/updatePostById");
+import updatePostById from "../middleware/updatePostById";
 
 const router: Router = Router();
 
@@ -19,6 +18,6 @@ router.put("/information", checkToken, updateInformation, UserController.updateS
 router.post("/posts", checkToken, createPost, UserController.createPost);
 router.get("/posts/author", checkToken, postsByAuthor, UserController.showPostByAuthor);
 router.delete("/posts/:id", checkToken, deletePostById, UserController.deletePostById);
-// router.put("/posts", checkToken, updatePostById, UserController.updatePostById);
+router.put("/posts", checkToken, updatePostById, UserController.updatePostById);
 
 export default router;

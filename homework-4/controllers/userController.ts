@@ -1,8 +1,3 @@
-// import newPost  from "../simpleDatabase/newPost";
-// import users  from "../simpleDatabase/simpeDatabaseOfUsers";
-// import posts  from "../simpleDatabase/simpleDatabaseOfPosts";
-// import jwtService from "../service/jwtService";
-// import jwt  from "jsonwebtoken";
 import serviceForUserRegistration from "../service/registrationService";
 import { Request, Response } from "express";
 import registrationService from "../service/registrationService";
@@ -11,16 +6,6 @@ import jwtService from "../service/jwtService";
 import updateService from "../service/updateService";
 import postService from "../service/postService";
 import posts from "../simpleDatabase/simpleDatabaseOfPosts";
-
-interface User {
-    id: number;
-    name: string;
-    lastName: string;
-    password: string;
-    email: string;
-    token: string;
-}
-
 class UserController {
     async registration(req: Request, res: Response) {
         try {
@@ -148,65 +133,29 @@ class UserController {
             postService.deletePost(candidate);
 
             return res.status(200).json({ message: "Пост успешно удален.", posts });
-        } catch (e) {
-            console.error(e);
-            res.status(404).json(e);
+        } catch (error: any) {
+            console.error(error);
+            res.status(404).json(error.message);
         }
     }
-    // async updatePostById(req, res) {
-    //     try {
-    //         // запрос
-    //         // {
-    //         //     "id" : 2,
-    //         //     "title": "___First post3__",
-    //         //     "description": "Description of the first post__________",
-    //         // }
-    //
-    //         const { id, title, description } = req.body;
-    //
-    //         const candidate = posts.find((item) => item.id === id);
-    //
-    //         if (!candidate) {
-    //             return res.status(403).json({ message: "Постов с таким не id  существует!" });
-    //         }
-    //
-    //         candidate.title = title;
-    //         candidate.description = description;
-    //
-    //         // ответ массив с измененным постом
-    //         // {
-    //         //     "message": "Пост успешно обновлен.",
-    //         //     "posts": [
-    //         //     {
-    //         //         "id": 1,
-    //         //         "title": "First post",
-    //         //         "description": "Description of the first post",
-    //         //         "createdDate": "2022-04-05",
-    //         //         "authorName": "Pasha"
-    //         //     },
-    //         //     {
-    //         //         "id": 2,
-    //         //         "title": "___First post3__",
-    //         //         "description": "Description of the first post__________",
-    //         //         "createdDate": "2022-04-05",
-    //         //         "authorName": "Pasha"
-    //         //     },
-    //         //     {
-    //         //         "id": 3,
-    //         //         "title": "Second pos1t",
-    //         //         "description": "Description of the second post",
-    //         //         "createdDate": "2022-04-04",
-    //         //         "authorName": "Jon"
-    //         //     }
-    //         // ]
-    //         // }
-    //
-    //         return res.status(200).json({ message: "Пост успешно обновлен.", posts });
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
+    async updatePostById(req: Request, res: Response) {
+        try {
+            const { id, title, description } = req.body;
+
+            const candidate = await postService.checkPost("id", id);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Постов с таким не id  существует!" });
+            }
+
+            postService.updatePost(candidate, title, description);
+
+            return res.status(200).json({ message: "Пост успешно обновлен.", posts });
+        } catch (error: any) {
+            console.error(error);
+            res.status(404).json(error.message);
+        }
+    }
 }
 
 export default new UserController();
