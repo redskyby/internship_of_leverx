@@ -8,19 +8,22 @@ interface Post {
     authorName: string;
 }
 
-
 class PostRepository {
     findBy<T>(prop: keyof Post, value: string | number): Post | undefined {
-         return posts.find((post: Post) => post[prop] == value);
+        return posts.find((post: Post) => post[prop] == value);
     }
 
-    createPost(newPost : Post): void{
+    createPost(newPost: Post): void {
         posts.push(newPost);
     }
 
-    checkLenght() :number{
+    checkLength(): number {
         return posts.length;
+    }
+
+    filterPost(prop: keyof Post, value: string | number): Post[] {
+        return posts.filter((item) => item[prop] === value);
     }
 }
 
-export  default new PostRepository();
+export default new PostRepository();

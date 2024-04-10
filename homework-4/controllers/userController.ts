@@ -10,9 +10,6 @@ import loginService from "../service/loginService";
 import jwtService from "../service/jwtService";
 import updateService from "../service/updateService";
 import postService from "../service/postService";
-import checkService from "../service/checkService";
-import postRepository from "../repositories/postRepository";
-
 
 interface User {
     id: number;
@@ -47,7 +44,7 @@ class UserController {
         try {
             const { email, password } = req.body;
 
-            const token = await loginService.checkLogin("email" , email, password);
+            const token = await loginService.checkLogin("email", email, password);
 
             return res.status(200).json({ token });
         } catch (error: any) {
@@ -101,15 +98,15 @@ class UserController {
 
     async createPost(req: Request, res: Response) {
         try {
-            const {title, description} = req.body;
+            const { title, description } = req.body;
             const userName = req.user!.name;
 
             const candidate = await postService.checkPost("title", title);
             if (candidate) {
-                return res.status(403).json({message : "Пост с таким названием уже существует!"});
+                return res.status(403).json({ message: "Пост с таким названием уже существует!" });
             }
 
-            const newPost = await postService.createPost(title , description , userName);
+            const newPost = await postService.createPost(title, description, userName);
 
             return res.status(200).json(newPost);
         } catch (error: any) {
@@ -117,48 +114,26 @@ class UserController {
             res.status(404).json(error.message);
         }
     }
-    //
-    // async showPostByAuthor(req, res) {
-    //     try {
-    //         // Запрос
-    //         // {
-    //         //     "name": "Pasha"
-    //         // }
-    //
-    //         const { name } = req.user;
-    //
-    //         const candidate = posts.find((item) => item.authorName === name);
-    //
-    //         if (!candidate) {
-    //             return res.status(403).json({ message: "Постов с таким не автором  существует!" });
-    //         }
-    //
-    //         const result = posts.filter((item) => item.authorName === name);
-    //
-    //         // ответ
-    //         // [
-    //         //     {
-    //         //         "id": 1,
-    //         //         "title": "First post",
-    //         //         "description": "Description of the first post",
-    //         //         "createdDate": "2022-04-05",
-    //         //         "authorName": "Pasha"
-    //         //     },
-    //         //     {
-    //         //         "id": 2,
-    //         //         "title": "First post1",
-    //         //         "description": "Description of the first post",
-    //         //         "createdDate": "2022-04-05",
-    //         //         "authorName": "Pasha"
-    //         //     }
-    //         // ]
-    //         return res.status(200).json(result);
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
-    //
+
+    async showPostByAuthor(req: Request, res: Response) {
+        try {
+            const { name } = req.user!;
+
+            const candidate = await postService.checkPost("authorName", name);
+
+            if (!candidate) {
+                return res.status(403).json({ message: "Постов с таким не автором  существует!" });
+            }
+
+            const result = await postService.filter("authorName", name);
+
+            return res.status(200).json(result);
+        } catch (error: any) {
+            console.error(error);
+            res.status(404).json(error.message);
+        }
+    }
+
     // async deletePostById(req, res) {
     //     try {
     //         //  запрос

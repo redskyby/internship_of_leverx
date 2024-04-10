@@ -1,8 +1,6 @@
 import userRepositories from "../repositories/userRepository";
 import postRepository from "../repositories/postRepository";
 
-
-
 interface User {
     id: number;
     name: string;
@@ -28,7 +26,6 @@ class CheckService {
     checkPost(key: keyof Post, staff: string): Post | undefined {
         return postRepository.findBy(key, staff);
     }
-
 }
 
 export default new CheckService();

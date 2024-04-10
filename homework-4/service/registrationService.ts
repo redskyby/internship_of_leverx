@@ -14,10 +14,8 @@ interface User {
     token: string;
 }
 
-
 class RegistrationService {
-
-    async checkUser( key : keyof User, staff: string){
+    async checkUser(key: keyof User, staff: string) {
         const candidate = await checkService.checkUser(key, staff);
 
         return candidate;

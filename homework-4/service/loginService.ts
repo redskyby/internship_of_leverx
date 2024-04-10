@@ -1,4 +1,3 @@
-import registrationService from "./registrationService";
 import bcrypt from "bcrypt";
 import jwtService from "./jwtService";
 import checkService from "./checkService";
@@ -13,7 +12,7 @@ interface User {
 }
 
 class LoginService {
-    async checkLogin( key : keyof User, staff: string , password : string): Promise<string> {
+    async checkLogin(key: keyof User, staff: string, password: string): Promise<string> {
         const candidate = await checkService.checkUser(key, staff);
 
         if (!candidate) {

@@ -11,15 +11,13 @@ interface Post {
 }
 
 class PostService {
-    async checkPost(key : keyof Post , staff : string) {
-
-        const candidate = await checkService.checkPost(key ,staff )
+    async checkPost(key: keyof Post, staff: string) {
+        const candidate = await checkService.checkPost(key, staff);
         return candidate;
-
     }
-    async createPost(title : string , description : string , userName : string){
+    async createPost(title: string, description: string, userName: string) {
+        const newId = postRepository.checkLength() + 1;
 
-        const newId = await postRepository.checkLenght() +  1;
         const newPostInDatabase = new newPost({
             id: newId,
             title: title,
@@ -28,10 +26,13 @@ class PostService {
             authorName: userName,
         });
 
-       await postRepository.createPost(newPostInDatabase);
-       return newPostInDatabase;
+        await postRepository.createPost(newPostInDatabase);
+        return newPostInDatabase;
     }
 
+    async filter(key: keyof Post, staff: string) {
+        return postRepository.filterPost(key, staff);
+    }
 }
 
 export default new PostService();

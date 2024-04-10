@@ -1,6 +1,7 @@
-const { validationResult, body } = require("express-validator");
+import { body, validationResult } from "express-validator";
+import { NextFunction, Request, Response } from "express";
 
-module.exports = [
+export default [
     // Проверка поля name
     body("name")
         .notEmpty()
@@ -8,7 +9,7 @@ module.exports = [
         .isLength({ min: 3, max: 10 })
         .withMessage("Имя должна содержать как минимум 3 символа и не больше 10 символов"),
 
-    function (req, res, next) {
+    function (req: Request, res: Response, next: NextFunction) {
         if (req.method === "OPTIONS") {
             next();
         }
