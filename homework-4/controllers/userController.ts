@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
 // import newPost  from "../simpleDatabase/newPost";
 // import users  from "../simpleDatabase/simpeDatabaseOfUsers";
 // import posts  from "../simpleDatabase/simpleDatabaseOfPosts";
@@ -9,6 +9,7 @@ import serviceForUserRegistration from "../service/registrationService";
 import { Request, Response } from "express";
 import registrationService from "../service/registrationService";
 import loginService from "../service/loginService";
+import jwtService from "../service/jwtService";
 
 class UserController {
     async registration(req: Request, res: Response) {
@@ -24,7 +25,7 @@ class UserController {
             const token = await serviceForUserRegistration.createUser(name, lastName, password, email);
 
             return res.status(200).json({ token });
-        } catch (error : any) {
+        } catch (error: any) {
             console.error(error);
             res.status(404).json(error.message);
         }
@@ -37,21 +38,25 @@ class UserController {
             const token = await loginService.checkLogin(email, password);
 
             return res.status(200).json({ token });
-        } catch (error : any) {
+        } catch (error: any) {
             console.error(error);
             res.status(404).json(error.message);
         }
     }
 
-    async getAllInformation(req: Request, res: Response)  {
+    async getAllInformation(req: Request, res: Response) {
         try {
+            const token = await jwtService.generateToken(
+                req.user!.id,
+                req.user!.name,
+                req.user!.lastName,
+                req.user!.email,
+            );
 
-            const token = await jwtService.generateToken(req.user.id, req.user.name, req.user.lastName, req.user.email);
-
-            const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+            const user = await jwtService.verifyUserToken(token);
 
             return res.status(200).json(user);
-        } catch (error : any) {
+        } catch (error: any) {
             console.error(error);
             res.status(404).json(error.message);
         }
