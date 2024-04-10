@@ -1,6 +1,7 @@
-const { body, validationResult } = require("express-validator");
+import { body, validationResult } from "express-validator";
+import { NextFunction, Request, Response } from "express";
 
-module.exports = [
+export default [
     // Проверка поля email
     body("email").isEmail().withMessage("Некорректный формат email"),
     // Проверка поля password
@@ -8,7 +9,7 @@ module.exports = [
         .isLength({ min: 6, max: 10 })
         .withMessage("Пароль должен содержать как минимум 6 символов и не больше 10 символов"),
 
-    function (req, res, next) {
+    function (req: Request, res: Response, next: NextFunction) {
         if (req.method === "OPTIONS") {
             next();
         }

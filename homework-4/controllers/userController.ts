@@ -8,14 +8,14 @@ import bcrypt from "bcrypt";
 import serviceForUserRegistration from "../service/registrationService";
 import { Request, Response } from "express";
 import registrationService from "../service/registrationService";
+import loginService from "../service/loginService";
 
 class UserController {
     async registration(req: Request, res: Response) {
         try {
-
             const { name, lastName, password, email } = req.body;
 
-            const candidate = registrationService.checkUser(email);
+            const candidate = await registrationService.checkUser(email);
 
             if (candidate) {
                 return res.status(403).json({ message: "Пользователь с таким email существует!" });
@@ -24,88 +24,39 @@ class UserController {
             const token = await serviceForUserRegistration.createUser(name, lastName, password, email);
 
             return res.status(200).json({ token });
-        } catch (e) {
-            console.error(e);
-            res.status(404).json(e);
+        } catch (error : any) {
+            console.error(error);
+            res.status(404).json(error.message);
         }
     }
 
-    // async login(req, res) {
-    //     try {
-    //         // Запрос
-    //         // {
-    //         //     "name": "Jon",
-    //         //     "lastName": "Doet1",
-    //         //     "email": "john1.doe@example.com",
-    //         //     "password" : "654321"
-    //         // }
-    //
-    //         const { email, password } = req.body;
-    //
-    //         const candidate = users.find((user) => user.email === email);
-    //
-    //         if (!candidate) {
-    //             return res.status(403).json({ message: "Пользователь с таким email не существует!" });
-    //         }
-    //
-    //         const comparePassword = await bcrypt.compare(String(password), String(candidate.password));
-    //
-    //         if (!comparePassword) {
-    //             return res.status(500).json({ message: "Указан неверный пароль" });
-    //         }
-    //
-    //         const token = await jwtService.generateToken(
-    //             candidate.id,
-    //             candidate.name,
-    //             candidate.lastName,
-    //             candidate.email,
-    //         );
-    //
-    //         // Обновляем токен в базе данных
-    //         candidate.token = token;
-    //
-    //         // Ответ
-    //         // {
-    //         //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9uIiwibGFzdE5hbWUiOiJEb2V0MSIsImVtYWlsIjoiam9objEuZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNzEyNjA1OTY4LCJleHAiOjE3MTMyMTA3Njh9.usO9DdYhBbJOoLSRscXf2_GdjwXa6s9HBWVujpp1HLY"
-    //         // }
-    //
-    //         return res.status(200).json({ token });
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
-    //
-    // async getAllInformation(req, res) {
-    //     try {
-    //         // Парсим токен в middleware, который пришел с клиента
-    //         // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUGFzaGEiLCJsYXN0TmFtZSI6IkRvdHNlbmtvIiwiZW1haWwiOiJwYXNoYWRvY2Vua29AZ21haWwuY29tIiwiaWF0IjoxNzEyNTE5NzUxLCJleHAiOjE3MTMxMjQ1NTF9.TCC31-xc2mEVwmfmWNgWVKkuaEzZnlKVCmSi6pCObsM
-    //
-    //         // Обновил токен
-    //         const token = await jwtService.generateToken(req.user.id, req.user.name, req.user.lastName, req.user.email);
-    //
-    //         const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    //         // вывел информацию
-    //         // хотя я бы отправлял токен и на клиенте его декодил,
-    //         // но по заданию нужно вывести информацию.
-    //
-    //         // Ответ :
-    //         //
-    //         //     "user": {
-    //         //     "name": "Pasha",
-    //         //         "lastName": "Dotsenko",
-    //         //         "email": "pashadocenko@gmail.com",
-    //         //         "iat": 1712606015,
-    //         //         "exp": 1713210815
-    //         // }
-    //
-    //         return res.status(200).json(user);
-    //     } catch (e) {
-    //         console.error(e);
-    //         res.status(404).json(e);
-    //     }
-    // }
-    //
+    async login(req: Request, res: Response) {
+        try {
+            const { email, password } = req.body;
+
+            const token = await loginService.checkLogin(email, password);
+
+            return res.status(200).json({ token });
+        } catch (error : any) {
+            console.error(error);
+            res.status(404).json(error.message);
+        }
+    }
+
+    async getAllInformation(req: Request, res: Response)  {
+        try {
+
+            const token = await jwtService.generateToken(req.user.id, req.user.name, req.user.lastName, req.user.email);
+
+            const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+
+            return res.status(200).json(user);
+        } catch (error : any) {
+            console.error(error);
+            res.status(404).json(error.message);
+        }
+    }
+
     // async updateSomeInformation(req, res) {
     //     try {
     //         // Токен выше предоставлен выше, дальше и ниже все запросы идут с заголовком авторизации и там токен Bearer

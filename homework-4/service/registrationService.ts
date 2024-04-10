@@ -13,8 +13,8 @@ interface User {
     token: string;
 }
 class RegistrationService {
-    checkUser(email: string): User | undefined {
-        return userRepositories.findByEmail(email);
+    checkUser(mail: string): User | undefined {
+        return userRepositories.findBy(mail);
     }
 
     async createUser(name: string, lastName: string, password: string, email: string): Promise<string> {

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import UserController from "../controllers/userController";
 import checkRegistration from "../middleware/checkRegistration";
-// const checkLogin = require("../middleware/checkLogin");
+import checkLogin from "../middleware/checkLogin";
 // const checkToken = require("../middleware/checkToken");
 // const updateInformation = require("../middleware/updateInformation");
 // const createPost = require("../middleware/createPost");
@@ -10,9 +10,9 @@ import checkRegistration from "../middleware/checkRegistration";
 // const updatePostById = require("../middleware/updatePostById");
 
 const router: Router = Router();
-// http://localhost:5000/api/user
+
 router.post("/users", checkRegistration, UserController.registration);
-// router.post("/login", checkLogin, UserController.login);
+router.post("/login", checkLogin, UserController.login);
 // router.get("/information", checkToken, UserController.getAllInformation);
 // router.put("/information", checkToken, updateInformation, UserController.updateSomeInformation);
 // router.post("/posts", checkToken, createPost, UserController.createPost);
