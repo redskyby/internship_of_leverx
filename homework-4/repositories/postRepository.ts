@@ -1,12 +1,5 @@
 import posts from "../simpleDatabase/simpleDatabaseOfPosts";
-
-interface Post {
-    id: number;
-    title: string;
-    description: string;
-    createdDate: string;
-    authorName: string;
-}
+import Post from "../interfaces/interfaceOfPost";
 
 class PostRepository {
     findBy<T>(prop: keyof Post, value: string | number): Post | undefined {

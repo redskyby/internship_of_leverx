@@ -1,14 +1,7 @@
 import checkService from "./checkService";
 import postRepository from "../repositories/postRepository";
 import newPost from "../simpleDatabase/newPost";
-
-interface Post {
-    id: number;
-    title: string;
-    description: string;
-    createdDate: string;
-    authorName: string;
-}
+import Post from "../interfaces/interfaceOfPost";
 
 class PostService {
     async checkPost(key: keyof Post, staff: string | number) {

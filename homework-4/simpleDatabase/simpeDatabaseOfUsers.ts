@@ -1,11 +1,4 @@
-interface User {
-    id: number;
-    name: string;
-    lastName: string;
-    password: string;
-    email: string;
-    token: string;
-}
+import User from "../interfaces/interfaceOfUser";
 
 let users: User[] = [
     {

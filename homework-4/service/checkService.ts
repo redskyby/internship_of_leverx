@@ -1,22 +1,7 @@
 import userRepositories from "../repositories/userRepository";
 import postRepository from "../repositories/postRepository";
-
-interface User {
-    id: number;
-    name: string;
-    lastName: string;
-    password: string;
-    email: string;
-    token: string;
-}
-
-interface Post {
-    id: number;
-    title: string;
-    description: string;
-    createdDate: string;
-    authorName: string;
-}
+import User from "../interfaces/interfaceOfUser";
+import Post from "../interfaces/interfaceOfPost";
 
 class CheckService {
     checkUser(key: keyof User, staff: string): User | undefined {

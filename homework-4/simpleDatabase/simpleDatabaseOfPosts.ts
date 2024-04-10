@@ -1,10 +1,4 @@
-interface Post {
-    id: number;
-    title: string;
-    description: string;
-    createdDate: string;
-    authorName: string;
-}
+import Post from "../interfaces/interfaceOfPost";
 
 let posts: Post[] = [
     {

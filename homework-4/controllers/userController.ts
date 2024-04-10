@@ -1,17 +1,15 @@
-import serviceForUserRegistration from "../service/registrationService";
+import serviceForUserRegistration from "../service/userService";
 import { Request, Response } from "express";
-import registrationService from "../service/registrationService";
-import loginService from "../service/loginService";
 import jwtService from "../service/jwtService";
-import updateService from "../service/updateService";
 import postService from "../service/postService";
 import posts from "../simpleDatabase/simpleDatabaseOfPosts";
+import userService from "../service/userService";
 class UserController {
     async registration(req: Request, res: Response) {
         try {
             const { name, lastName, password, email } = req.body;
 
-            const candidate = await registrationService.checkUser("email", email);
+            const candidate = await userService.checkUser("email", email);
 
             if (candidate) {
                 return res.status(403).json({ message: "Пользователь с таким email существует!" });
@@ -30,7 +28,7 @@ class UserController {
         try {
             const { email, password } = req.body;
 
-            const token = await loginService.checkLogin("email", email, password);
+            const token = await userService.checkLogin("email", email, password);
 
             return res.status(200).json({ token });
         } catch (error: any) {
@@ -61,13 +59,13 @@ class UserController {
         try {
             const { newName, newLastName, sendToEmail } = req.body;
 
-            const candidate = await registrationService.checkUser("name", req.user!.name);
+            const candidate = await userService.checkUser("name", req.user!.name);
 
             if (!candidate) {
                 return res.status(403).json({ message: "Пользователь с таким именем не существует!" });
             }
 
-            const user = await updateService.updateInformation(
+            const user = await userService.updateInformation(
                 candidate,
                 newName,
                 newLastName,

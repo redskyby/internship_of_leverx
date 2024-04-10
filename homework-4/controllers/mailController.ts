@@ -15,12 +15,12 @@ class MailController {
 
     constructor() {
         const options: CustomTransportOptions = {
-            host: process.env.SMTP_HOST || "",
-            port: Number(process.env.SMTP_PORT), // Порт должен быть числом
+            host: process.env.SMTP_HOST!,
+            port: Number(process.env.SMTP_PORT),
             secure: false,
             auth: {
-                user: process.env.SMTP_USER || "",
-                pass: process.env.SMTP_PASSWORD || "",
+                user: process.env.SMTP_USER!,
+                pass: process.env.SMTP_PASSWORD!,
             },
         };
 

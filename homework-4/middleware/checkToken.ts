@@ -1,15 +1,8 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import User from "../interfaces/interfaceOfUser";
 
-interface User {
-    id: number;
-    name: string;
-    lastName: string;
-    email: string;
-    iat: number;
-    exp: number;
-}
-
+// Этот интерфейс уникальный, оставляю его здесь
 declare module "express" {
     interface Request {
         user?: User;
