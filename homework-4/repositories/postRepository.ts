@@ -1,5 +1,5 @@
 import posts from "../simpleDatabase/simpleDatabaseOfPosts";
-import Post from "../interfaces/interfaceOfPost";
+import { Post } from "../interfaces/post";
 
 class PostRepository {
     findBy<T>(prop: keyof Post, value: string | number): Post | undefined {
@@ -10,7 +10,7 @@ class PostRepository {
         posts.push(newPost);
     }
 
-    checkLength(): number {
+    getLength(): number {
         return posts.length;
     }
 

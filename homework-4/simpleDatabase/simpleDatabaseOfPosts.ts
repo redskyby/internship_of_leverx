@@ -1,4 +1,4 @@
-import Post from "../interfaces/interfaceOfPost";
+import { Post } from "../interfaces/post";
 
 let posts: Post[] = [
     {

@@ -1,5 +1,5 @@
 import users from "../simpleDatabase/simpeDatabaseOfUsers";
-import User from "../interfaces/interfaceOfUser";
+import { User } from "../interfaces/user";
 
 class UserRepository {
     findBy<T>(prop: keyof User, value: string | number): User | undefined {
@@ -10,7 +10,7 @@ class UserRepository {
         users.push(newUser);
     }
 
-    checkLength(): number {
+    getLength(): number {
         return users.length;
     }
 }

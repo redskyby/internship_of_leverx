@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
-import User from "../interfaces/interfaceOfUser";
+import { User } from "../interfaces/user";
 
 // Этот интерфейс уникальный, оставляю его здесь
 declare module "express" {
@@ -14,6 +14,7 @@ export default async function (req: Request, res: Response, next: NextFunction) 
         next();
     }
     try {
+        // PhpStorm 2022.3.2 argues to me if i use "req.headers.authorization === undefined" without "undefined"
         if (req.headers.authorization === undefined) {
             return res.status(401).json({ message: "Не авторизован" });
         }

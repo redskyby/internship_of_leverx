@@ -1,21 +1,14 @@
-import serviceForUserRegistration from "../service/userService";
 import { Request, Response } from "express";
 import jwtService from "../service/jwtService";
-import postService from "../service/postService";
-import posts from "../simpleDatabase/simpleDatabaseOfPosts";
 import userService from "../service/userService";
 class UserController {
     async registration(req: Request, res: Response) {
         try {
             const { name, lastName, password, email } = req.body;
 
-            const candidate = await userService.checkUser("email", email);
+            await userService.checkUser("email", email);
 
-            if (candidate) {
-                return res.status(403).json({ message: "Пользователь с таким email существует!" });
-            }
-
-            const token = await serviceForUserRegistration.createUser(name, lastName, password, email);
+            const token = await userService.createUser(name, lastName, password, email);
 
             return res.status(200).json({ token });
         } catch (error: any) {
@@ -59,96 +52,9 @@ class UserController {
         try {
             const { newName, newLastName, sendToEmail } = req.body;
 
-            const candidate = await userService.checkUser("name", req.user!.name);
-
-            if (!candidate) {
-                return res.status(403).json({ message: "Пользователь с таким именем не существует!" });
-            }
-
-            const user = await userService.updateInformation(
-                candidate,
-                newName,
-                newLastName,
-                sendToEmail,
-                req.user!.email,
-            );
+            const user = await userService.updateInformation(req.user!, newName, newLastName, sendToEmail);
 
             return res.status(200).json(user);
-        } catch (error: any) {
-            console.error(error);
-            res.status(404).json(error.message);
-        }
-    }
-
-    async createPost(req: Request, res: Response) {
-        try {
-            const { title, description } = req.body;
-            const userName = req.user!.name;
-
-            const candidate = await postService.checkPost("title", title);
-            if (candidate) {
-                return res.status(403).json({ message: "Пост с таким названием уже существует!" });
-            }
-
-            const newPost = await postService.createPost(title, description, userName);
-
-            return res.status(200).json(newPost);
-        } catch (error: any) {
-            console.error(error);
-            res.status(404).json(error.message);
-        }
-    }
-
-    async showPostByAuthor(req: Request, res: Response) {
-        try {
-            const { name } = req.user!;
-
-            const candidate = await postService.checkPost("authorName", name);
-
-            if (!candidate) {
-                return res.status(403).json({ message: "Постов с таким не автором  существует!" });
-            }
-
-            const result = await postService.filter("authorName", name);
-
-            return res.status(200).json(result);
-        } catch (error: any) {
-            console.error(error);
-            res.status(404).json(error.message);
-        }
-    }
-
-    async deletePostById(req: Request, res: Response) {
-        try {
-            const id = parseInt(req.params.id);
-
-            const candidate = postService.findIndex(id);
-
-            if (candidate) {
-                return res.status(403).json({ message: "Постов с таким не id  существует!" });
-            }
-
-            postService.deletePost(candidate);
-
-            return res.status(200).json({ message: "Пост успешно удален.", posts });
-        } catch (error: any) {
-            console.error(error);
-            res.status(404).json(error.message);
-        }
-    }
-    async updatePostById(req: Request, res: Response) {
-        try {
-            const { id, title, description } = req.body;
-
-            const candidate = await postService.checkPost("id", id);
-
-            if (!candidate) {
-                return res.status(403).json({ message: "Постов с таким не id  существует!" });
-            }
-
-            postService.updatePost(candidate, title, description);
-
-            return res.status(200).json({ message: "Пост успешно обновлен.", posts });
         } catch (error: any) {
             console.error(error);
             res.status(404).json(error.message);

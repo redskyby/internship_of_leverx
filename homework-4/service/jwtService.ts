@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../interfaces/interfaceOfUser";
+import { User } from "../interfaces/user";
 
 class JwtService {
     async generateToken(id: number, name: string, lastName: string, email: string): Promise<string> {
