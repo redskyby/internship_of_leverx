@@ -12,7 +12,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(userDto: LoginUserDto) {}
+  async login(userDto: LoginUserDto) {
+    const user = await this.validateUser(userDto);
+    return this.generateToken(user);
+  }
 
   async registration(userDto: CreateUserDto) {
     const candidate = await this.userService.getUserByEmail(userDto.email);
@@ -33,10 +36,8 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-
-
   //Переписать ниже функцию
-  async generateToken(user) {
+  private async generateToken(user) {
     const payload = {
       email: user.email,
       id: user.id,
@@ -47,5 +48,26 @@ export class AuthService {
     return {
       token: this.jwtService.sign(payload),
     };
+  }
+
+  private async validateUser(userDto: LoginUserDto) {
+    const user = await this.userService.getUserByEmail(userDto.email);
+
+    if (!user) {
+      throw new HttpException(
+        'Пользователь с таким email не существует.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const passwordCompare = await bcrypt.compare(
+      userDto.password,
+      user.password,
+    );
+
+    if (!passwordCompare) {
+      throw new HttpException('Неверный пароль.', HttpStatus.BAD_REQUEST);
+    }
+    return user;
   }
 }
