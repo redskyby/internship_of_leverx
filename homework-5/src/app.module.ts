@@ -11,9 +11,7 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-
     UsersModule,
-
     AuthModule,
   ],
 })
