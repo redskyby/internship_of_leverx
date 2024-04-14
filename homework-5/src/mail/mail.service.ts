@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
 interface CustomTransportOptions {
@@ -51,8 +51,9 @@ export class MailService {
       });
     } catch (e) {
       console.error(e);
-      throw new Error(
-        'Произошла ошибка при отправке обновленных данных на почту',
+      throw new HttpException(
+        'Произошла ошибка при отправке обновленных данных на почту.',
+        HttpStatus.FORBIDDEN,
       );
     }
   }
