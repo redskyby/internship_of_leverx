@@ -7,7 +7,6 @@ export class LoginUserDto {
   })
   readonly password: string;
 
-  // @IsEmail({ require_tld: true}, { message: 'Некорректный формат email' })
   @IsEmail({ require_tld: true }, { message: 'Некорректный формат email' })
   @IsNotEmpty({ message: 'Поле email не может быть пустым' })
   readonly email: string;

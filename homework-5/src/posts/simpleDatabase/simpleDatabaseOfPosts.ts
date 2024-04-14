@@ -6,6 +6,7 @@ export interface Post {
   description: string;
   createdDate: string;
   authorName: string;
+  like: boolean;
 }
 
 export const postsProvider: Provider = {
@@ -17,6 +18,7 @@ export const postsProvider: Provider = {
       description: 'Description of the first post',
       createdDate: '2022-04-05',
       authorName: 'Pasha',
+      like: false,
     },
     {
       id: 2,
@@ -24,6 +26,7 @@ export const postsProvider: Provider = {
       description: 'Description of the first post',
       createdDate: '2022-04-05',
       authorName: 'Pasha',
+      like: true,
     },
     {
       id: 3,
@@ -31,6 +34,7 @@ export const postsProvider: Provider = {
       description: 'Description of the second post',
       createdDate: '2022-04-04',
       authorName: 'Jon',
+      like: true,
     },
   ],
 };

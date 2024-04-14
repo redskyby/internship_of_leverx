@@ -1,4 +1,4 @@
-import { IsString, Length } from 'class-validator';
+import { IsBoolean,  IsString, Length } from 'class-validator';
 
 export class CreatePostDto {
   @IsString({ message: 'Заголовок должен быть строкой' })
@@ -18,4 +18,7 @@ export class CreatePostDto {
     message: 'Автор должно быть длиннее 3х символов и короче 10',
   })
   readonly authorName: string;
+
+  @IsBoolean({ message: 'Нравится -true  , не нравиться -false' })
+  readonly like: boolean;
 }
