@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './simpleDatabase/simpleDatabaseOfPosts';
@@ -6,8 +6,23 @@ import { Post } from './simpleDatabase/simpleDatabaseOfPosts';
 @Injectable()
 export class PostsService {
   constructor(@Inject('POSTS') private posts: Post[]) {}
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  async createPost(createPostDto: CreatePostDto) {
+    const post = this.posts.find((post) => post.title === createPostDto.title);
+
+    if (post) {
+      throw new HttpException(
+        'Пост с таким заголовком уже существует.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const newId = this.posts.length + 1;
+    const date: string = new Date().toDateString();
+    const newPost = { id: newId, ...createPostDto, createdDate: date };
+
+    this.posts.push(newPost);
+
+    return newPost;
   }
 
   findAll() {

@@ -19,8 +19,8 @@ export class UsersService {
   ) {}
 
   async createUser(dto: CreateUserDto) {
-    const id = this.users.length + 1;
-    const newUser = { id, ...dto };
+    const newId = this.users.length + 1;
+    const newUser = { id: newId, ...dto };
     this.users.push(newUser);
 
     return newUser;

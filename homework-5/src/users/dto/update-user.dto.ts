@@ -5,13 +5,14 @@ export class UpdateUserDto {
   @Length(3, 10, {
     message: 'Имя должно быть длиннее 3х символов и короче 10 ',
   })
+  readonly newName: string;
+
   @IsString({ message: 'Новая фамилия должно быть строкой' })
   @Length(3, 10, {
     message: 'Фамилия должно быть длиннее 3х символов и короче 10 ',
   })
-  newName: string;
-  newLastName: string;
+  readonly newLastName: string;
 
   @IsEmail({}, { message: 'Некорректный формат email' })
-  sendToEmail: string;
+  readonly sendToEmail: string;
 }

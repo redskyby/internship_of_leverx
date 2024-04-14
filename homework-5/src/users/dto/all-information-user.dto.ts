@@ -1,8 +1,8 @@
 export class AllInformationUserDto {
-  id: number;
-  name: string;
-  lastName: string;
-  email: string;
-  iat: number;
-  exp: number;
+  readonly id: number;
+  readonly name: string;
+  readonly lastName: string;
+  readonly email: string;
+  readonly iat: number;
+  readonly exp: number;
 }
