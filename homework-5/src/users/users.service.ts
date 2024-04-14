@@ -6,6 +6,7 @@ import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './simpleDatabase/simpeDatabaseOfUsers';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,7 @@ export class UsersService {
   constructor(
     @Inject('USERS') private users: User[],
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async createUser(dto: CreateUserDto) {
@@ -63,9 +65,14 @@ export class UsersService {
       email: candidate.email,
     });
 
+    await this.mailService.sendNewInformation(
+      newInfo.sendToEmail,
+      candidate.name,
+      candidate.lastName,
+    );
+
     const newUser = await this.jwtService.verify(token);
 
-    console.log(this.users);
     return newUser;
   }
 }
