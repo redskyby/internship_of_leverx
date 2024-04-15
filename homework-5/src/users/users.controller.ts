@@ -46,6 +46,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   @Put('/information')
   updateSomeInformation(
     @Req() req: Request,

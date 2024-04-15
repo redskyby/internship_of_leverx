@@ -4,7 +4,6 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './simpleDatabase/simpleDatabaseOfPosts';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 
-
 @Injectable()
 export class PostsService {
   constructor(@Inject('POSTS') private posts: Post[]) {}
@@ -42,11 +41,23 @@ export class PostsService {
     return result;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  updatePost(updatePostDto: UpdatePostDto) {
+    const post = this.posts.find((post) => post.id === updatePostDto.id);
+
+    if (!post) {
+      throw new HttpException(
+        'Постов с таким id не существует.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    post.title = updatePostDto.title;
+    post.description = updatePostDto.description;
+
+    return this.posts;
   }
 
-  remove(id: number) {
+  removePost(id: number) {
     const post = this.posts.findIndex((post) => post.id === id);
 
     if (post === -1) {

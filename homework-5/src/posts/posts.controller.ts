@@ -9,6 +9,7 @@ import {
   UsePipes,
   Req,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { Request } from 'express';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 declare module 'express' {
   interface Request {
@@ -30,7 +32,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Post('/post')
-  create(@Body() createPostDto: CreatePostDto) {
+  createPost(@Body() createPostDto: CreatePostDto) {
     return this.postsService.createPost(createPostDto);
   }
 
@@ -42,8 +44,15 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ParseIntPipe)
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.postsService.remove(id);
+  @Delete('/:id')
+  removePost(@Param('id') id: number) {
+    return this.postsService.removePost(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @Put('/post')
+  updatePost(@Body() newPostDto: UpdatePostDto) {
+    return this.postsService.updatePost(newPostDto);
   }
 }
