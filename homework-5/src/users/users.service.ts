@@ -1,17 +1,14 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-// import userRepository from './simpleDatabase/simpeDatabaseOfUsers';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './simpleDatabase/simpeDatabaseOfUsers';
+import { User } from './simpleDatabase/simpe-database-of-users';
 import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UsersService {
-  // private users = userRepository;
-
   constructor(
     @Inject('USERS') private users: User[],
     private jwtService: JwtService,

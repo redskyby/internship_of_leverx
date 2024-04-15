@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Post } from './simpleDatabase/simpleDatabaseOfPosts';
+import { Post } from './simple-database/simple-database-of-posts';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { SetLikePostDto } from './dto/set-like-post.dto';
 
