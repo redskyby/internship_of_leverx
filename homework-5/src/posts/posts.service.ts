@@ -3,6 +3,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './simpleDatabase/simpleDatabaseOfPosts';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
+import { SetLikePostDto } from './dto/set-like-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -79,5 +80,27 @@ export class PostsService {
     }
 
     return this.posts;
+  }
+
+  async setLike(like: SetLikePostDto) {
+    const post = this.posts.find((post) => post.id === like.id);
+
+    if (!post) {
+      throw new HttpException(
+        'Постов с таким id не существует.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (post.like === like.like) {
+      throw new HttpException(
+        `Посту уже присвоен ${like.like}.`,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    post.like = like.like;
+
+    return post;
   }
 }

@@ -17,6 +17,7 @@ import { Request } from 'express';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PostsService } from '../posts/posts.service';
+import { SetLikePostDto } from '../posts/dto/set-like-post.dto';
 
 declare module 'express' {
   interface Request {
@@ -63,5 +64,12 @@ export class UsersController {
   @Get('/getAll')
   getAllPost() {
     return this.postService.getAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @Put('/likes')
+  setLike(@Body() like: SetLikePostDto) {
+    return this.postService.setLike(like);
   }
 }
