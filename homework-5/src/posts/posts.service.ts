@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './simpleDatabase/simpleDatabaseOfPosts';
+import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 
 @Injectable()
 export class PostsService {
@@ -25,12 +26,19 @@ export class PostsService {
     return newPost;
   }
 
-  findAll() {
-    return `This action returns all posts`;
-  }
+  async findByAuthor(user: AllInformationUserDto) {
+    const post = this.posts.find((post) => post.authorName === user.name);
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+    if (!post) {
+      throw new HttpException(
+        'Постов с таким автором не существует.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const result = this.posts.filter((post) => post.authorName === user.name);
+
+    return result;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

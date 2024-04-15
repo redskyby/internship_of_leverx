@@ -1,4 +1,4 @@
-import { IsBoolean,  IsString, Length } from 'class-validator';
+import { IsBoolean, IsString, Length } from 'class-validator';
 
 export class CreatePostDto {
   @IsString({ message: 'Заголовок должен быть строкой' })

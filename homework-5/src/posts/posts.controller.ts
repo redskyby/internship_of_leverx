@@ -8,12 +8,21 @@ import {
   Delete,
   UseGuards,
   UsePipes,
+  Req,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { Request } from 'express';
+import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
+
+declare module 'express' {
+  interface Request {
+    user?: AllInformationUserDto;
+  }
+}
 
 @Controller('posts')
 export class PostsController {
@@ -26,14 +35,10 @@ export class PostsController {
     return this.postsService.createPost(createPostDto);
   }
 
-  @Get()
-  findAll() {
-    return this.postsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get('/author')
+  postByAuthor(@Req() req: Request) {
+    return this.postsService.findByAuthor(req.user);
   }
 
   @Patch(':id')
