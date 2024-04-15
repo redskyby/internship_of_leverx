@@ -4,11 +4,12 @@ import { UsersController } from './users.controller';
 import { AuthModule } from '../auth/auth.module';
 import { usersProvider } from './simpleDatabase/simpeDatabaseOfUsers';
 import { MailModule } from '../mail/mail.module';
+import { PostsModule } from '../posts/posts.module';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService, usersProvider],
-  imports: [forwardRef(() => AuthModule), MailModule],
+  imports: [forwardRef(() => AuthModule), MailModule, PostsModule],
   exports: [UsersService],
 })
 export class UsersModule {}

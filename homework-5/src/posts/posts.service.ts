@@ -69,4 +69,15 @@ export class PostsService {
 
     return this.posts.splice(post, 1);
   }
+
+  async getAll() {
+    if (this.posts.length === 0) {
+      throw new HttpException(
+        'Список постов отсутствует.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.posts;
+  }
 }

@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PostsService } from '../posts/posts.service';
 
 declare module 'express' {
   interface Request {
@@ -25,7 +26,10 @@ declare module 'express' {
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly postService: PostsService,
+  ) {}
 
   @UsePipes(ValidationPipe)
   @Post()
@@ -53,5 +57,11 @@ export class UsersController {
     @Body() newUserDto: UpdateUserDto,
   ) {
     return this.usersService.updateSomeInformation(req.user, newUserDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/getAll')
+  getAllPost() {
+    return this.postService.getAll();
   }
 }
