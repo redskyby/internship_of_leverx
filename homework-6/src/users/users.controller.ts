@@ -35,6 +35,8 @@ export class UsersController {
     private readonly likeService: LikesService,
   ) {}
 
+
+
   @UsePipes(ValidationPipe)
   @Post()
   registration(@Body() userDto: CreateUserDto) {
