@@ -6,7 +6,7 @@ export interface Post {
   description: string;
   createdDate: string;
   authorName: string;
-  like: boolean;
+  // like: boolean;
 }
 
 export const postsProvider: Provider = {

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './simpleDatabase/simpe-database-of-users';
 import { MailService } from '../mail/mail.service';
+import { NotFoundException } from '../exceptions/not-found.exception';
 
 @Injectable()
 export class UsersService {
@@ -15,41 +16,39 @@ export class UsersService {
     private mailService: MailService,
   ) {}
 
-  async createUser(dto: CreateUserDto) {
+  public async createUser(dto: CreateUserDto) {
     const newId = this.users.length + 1;
     const newUser = { id: newId, ...dto };
+
     this.users.push(newUser);
 
     return newUser;
   }
 
-  async login(dto: LoginUserDto) {
+  public async login(dto: LoginUserDto) {
     const result = this.users.find((item) => item.email === dto.email);
 
     return result;
   }
 
-  async getUserByEmail(email: string) {
+  public async getUserByEmail(email: string) {
     const user = await this.users.find((item) => item.email === email);
 
     return user;
   }
 
-  async getAllInformation(user: AllInformationUserDto) {
+  public async getAllInformation(user: AllInformationUserDto) {
     return user;
   }
 
-  async updateSomeInformation(
+  public async updateSomeInformation(
     user: AllInformationUserDto,
     newInfo: UpdateUserDto,
   ) {
     const candidate = this.users.find((item) => item.name === user.name);
 
     if (!candidate) {
-      throw new HttpException(
-        'Пользователь не найден.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new NotFoundException('Пользователь не найден.');
     }
 
     candidate.name = newInfo.newName;

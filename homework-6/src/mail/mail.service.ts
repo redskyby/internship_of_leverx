@@ -1,5 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { ConfigService } from '@nestjs/config';
 
 interface CustomTransportOptions {
   host: string;
@@ -15,31 +17,30 @@ interface CustomTransportOptions {
 export class MailService {
   private transporter: nodemailer.Transporter;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     const options: CustomTransportOptions = {
-      host: process.env.SMTP_HOST!,
-      port: Number(process.env.SMTP_PORT),
+      host: this.configService.get<string>('SMTP_HOST'),
+      port: this.configService.get<number>('SMTP_PORT'),
       secure: false,
       auth: {
-        user: process.env.SMTP_USER!,
-        pass: process.env.SMTP_PASSWORD!,
+        user: this.configService.get<string>('SMTP_USER'),
+        pass: this.configService.get<string>('SMTP_PASSWORD'),
       },
     };
 
     this.transporter = nodemailer.createTransport(options);
   }
 
-  async sendNewInformation(
+  public async sendNewInformation(
     sendToEmail: string,
     name: string,
     lastName: string,
   ) {
     try {
       await this.transporter.sendMail({
-        from: process.env.SMTP_USER,
+        from: this.configService.get<string>('SMTP_USER'),
         to: sendToEmail,
         subject: 'Новые данные',
-        text: '',
         html: `
                     <div>
                         <h1>Новые данные.</h1>
@@ -51,9 +52,8 @@ export class MailService {
       });
     } catch (e) {
       console.error(e);
-      throw new HttpException(
+      throw new ForbiddenException(
         'Произошла ошибка при отправке обновленных данных на почту.',
-        HttpStatus.FORBIDDEN,
       );
     }
   }

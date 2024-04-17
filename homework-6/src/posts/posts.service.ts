@@ -1,21 +1,19 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './simple-database/simple-database-of-posts';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
-import { SetLikePostDto } from './dto/set-like-post.dto';
+import { NotFoundException } from '../exceptions/not-found.exception';
+import { DuplicateException } from '../exceptions/duplicate.exception';
 
 @Injectable()
 export class PostsService {
   constructor(@Inject('POSTS') private posts: Post[]) {}
-  async createPost(createPostDto: CreatePostDto) {
+  public async createPost(createPostDto: CreatePostDto) {
     const post = this.posts.find((post) => post.title === createPostDto.title);
 
     if (post) {
-      throw new HttpException(
-        'Пост с таким заголовком уже существует.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new DuplicateException('Пост с таким заголовком уже существует.');
     }
 
     const newId = this.posts.length + 1;
@@ -27,14 +25,11 @@ export class PostsService {
     return newPost;
   }
 
-  async findByAuthor(user: AllInformationUserDto) {
+  public async findByAuthor(user: AllInformationUserDto) {
     const post = this.posts.find((post) => post.authorName === user.name);
 
     if (!post) {
-      throw new HttpException(
-        'Постов с таким автором не существует.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new NotFoundException('Постов с таким автором не существует.');
     }
 
     const result = this.posts.filter((post) => post.authorName === user.name);
@@ -42,14 +37,11 @@ export class PostsService {
     return result;
   }
 
-  updatePost(updatePostDto: UpdatePostDto) {
+  public async updatePost(updatePostDto: UpdatePostDto) {
     const post = this.posts.find((post) => post.id === updatePostDto.id);
 
     if (!post) {
-      throw new HttpException(
-        'Постов с таким id не существует.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new NotFoundException('Постов с таким id не существует.');
     }
 
     post.title = updatePostDto.title;
@@ -58,49 +50,21 @@ export class PostsService {
     return this.posts;
   }
 
-  removePost(id: number) {
+  public async removePost(id: number) {
     const post = this.posts.findIndex((post) => post.id === id);
 
     if (post === -1) {
-      throw new HttpException(
-        'Постов с таким id не существует.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new NotFoundException('Постов с таким id не существует.');
     }
 
     return this.posts.splice(post, 1);
   }
 
-  async getAll() {
+  public async getAll() {
     if (this.posts.length === 0) {
-      throw new HttpException(
-        'Список постов отсутствует.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new NotFoundException('Список постов отсутствует.');
     }
 
     return this.posts;
-  }
-
-  async setLike(like: SetLikePostDto) {
-    const post = this.posts.find((post) => post.id === like.id);
-
-    if (!post) {
-      throw new HttpException(
-        'Постов с таким id не существует.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (post.like === like.like) {
-      throw new HttpException(
-        `Посту уже присвоен ${like.like}.`,
-        HttpStatus.FORBIDDEN,
-      );
-    }
-
-    post.like = like.like;
-
-    return post;
   }
 }

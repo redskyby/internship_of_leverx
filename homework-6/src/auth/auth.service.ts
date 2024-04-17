@@ -1,9 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { CheckException } from '../exceptions/check.exception';
 
 @Injectable()
 export class AuthService {
@@ -12,19 +13,16 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(userDto: LoginUserDto) {
+  public async login(userDto: LoginUserDto) {
     const user = await this.validateUser(userDto);
     return this.generateToken(user);
   }
 
-  async registration(userDto: CreateUserDto) {
+  public async registration(userDto: CreateUserDto) {
     const candidate = await this.userService.getUserByEmail(userDto.email);
 
     if (candidate) {
-      throw new HttpException(
-        'Пользователь с таким email уже существует.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new CheckException('Пользователь с таким email уже существует.');
     }
     const hashPassword = await bcrypt.hash(userDto.password, 3);
 
@@ -36,7 +34,6 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  //Переписать ниже функцию
   private async generateToken(user) {
     const payload = {
       email: user.email,
@@ -54,9 +51,8 @@ export class AuthService {
     const user = await this.userService.getUserByEmail(userDto.email);
 
     if (!user) {
-      throw new HttpException(
+      throw new BadRequestException(
         'Пользователь с таким email не существует.',
-        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -66,7 +62,7 @@ export class AuthService {
     );
 
     if (!passwordCompare) {
-      throw new HttpException('Неверный пароль.', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Неверный пароль.');
     }
     return user;
   }
