@@ -8,13 +8,14 @@ import { PostsModule } from '../posts/posts.module';
 import { LikesModule } from '../likes/likes.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
+import { Post } from '../posts/entities/post.entity';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService, usersProvider],
   imports: [
     forwardRef(() => AuthModule),
-    SequelizeModule.forFeature([User]),
+    SequelizeModule.forFeature([User, Post]),
     MailModule,
     PostsModule,
     LikesModule,
