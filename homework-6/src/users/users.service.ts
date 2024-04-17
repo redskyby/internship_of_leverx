@@ -8,6 +8,7 @@ import { MailService } from '../mail/mail.service';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
+import { where } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -48,6 +49,7 @@ export class UsersService {
     newInfo: UpdateUserDto,
   ) {
     const { email } = user;
+    const { newName, newLastName } = newInfo;
     const candidate = await this.userRepository.findOne({ where: { email } });
 
     if (!candidate) {
@@ -57,7 +59,15 @@ export class UsersService {
     candidate.name = newInfo.newName;
     candidate.lastName = newInfo.newLastName;
 
-    // await this.userRepository.save(candidate);
+    await this.userRepository.update(
+      {
+        name: newName,
+        lastName: newLastName,
+      },
+      {
+        where: { email },
+      },
+    );
 
     await this.mailService.sendNewInformation(
       newInfo.sendToEmail,

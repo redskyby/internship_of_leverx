@@ -1,70 +1,88 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Post } from './simple-database/simple-database-of-posts';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { DuplicateException } from '../exceptions/duplicate.exception';
+import { InjectModel } from '@nestjs/sequelize';
+
+import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
-  constructor(@Inject('POSTS') private posts: Post[]) {}
-  public async createPost(createPostDto: CreatePostDto) {
-    const post = this.posts.find((post) => post.title === createPostDto.title);
+  // constructor(@Inject('POSTS') private posts: Post[]) {}
+  constructor(@InjectModel(Post) private postRepository: typeof Post) {}
+  public async createPost(dto: CreatePostDto): Promise<Post> {
+    const { title } = dto;
+
+    const post = await this.postRepository.findOne({ where: { title } });
 
     if (post) {
       throw new DuplicateException('Пост с таким заголовком уже существует.');
     }
 
-    const newId = this.posts.length + 1;
-    const date: string = new Date().toDateString();
-    const newPost = { id: newId, ...createPostDto, createdDate: date };
-
-    this.posts.push(newPost);
+    const newPost = await this.postRepository.create(dto);
 
     return newPost;
   }
 
-  public async findByAuthor(user: AllInformationUserDto) {
-    const post = this.posts.find((post) => post.authorName === user.name);
+  public async findByAuthor(
+    user: AllInformationUserDto,
+  ): Promise<Post[] | undefined> {
+    const { id } = user;
 
-    if (!post) {
+    const posts = await this.postRepository.findAll({ where: { userId: id } });
+
+    if (!posts) {
       throw new NotFoundException('Постов с таким автором не существует.');
     }
 
-    const result = this.posts.filter((post) => post.authorName === user.name);
-
-    return result;
+    return posts;
   }
 
-  public async updatePost(updatePostDto: UpdatePostDto) {
-    const post = this.posts.find((post) => post.id === updatePostDto.id);
+  public async updatePost(dto: UpdatePostDto) {
+    const { id, title, description } = dto;
+
+    const post = await this.postRepository.findOne({ where: { id } });
 
     if (!post) {
       throw new NotFoundException('Постов с таким id не существует.');
     }
 
-    post.title = updatePostDto.title;
-    post.description = updatePostDto.description;
+    const newPost = await this.postRepository.update(
+      {
+        title,
+        description,
+      },
+      {
+        where: { id },
+      },
+    );
 
-    return this.posts;
+    return newPost;
   }
 
   public async removePost(id: number) {
-    const post = this.posts.findIndex((post) => post.id === id);
+    const post = await this.postRepository.findOne({ where: { id } });
 
-    if (post === -1) {
+    if (!post) {
       throw new NotFoundException('Постов с таким id не существует.');
     }
 
-    return this.posts.splice(post, 1);
+    await this.postRepository.destroy({ where: { id } });
+
+    const allPost = await this.postRepository.findAll();
+
+    return allPost;
   }
 
   public async getAll() {
-    if (this.posts.length === 0) {
-      throw new NotFoundException('Список постов отсутствует.');
+    const allPost = await this.postRepository.findAll();
+
+    if (allPost.length === 0) {
+      return { message: 'Список постов пуст.' };
     }
 
-    return this.posts;
+    return allPost;
   }
 }

@@ -1,9 +1,9 @@
-import { IsString, Length } from 'class-validator';
+import { IsNumber, IsPositive, IsString, Length } from 'class-validator';
 
 export class CreatePostDto {
   @IsString({ message: 'Заголовок должен быть строкой' })
-  @Length(3, 10, {
-    message: 'Заголовок должен быть длиннее 3х символов и короче 10 ',
+  @Length(3, 20, {
+    message: 'Заголовок должен быть длиннее 3х символов и короче 20 ',
   })
   readonly title: string;
 
@@ -13,9 +13,7 @@ export class CreatePostDto {
   })
   readonly description: string;
 
-  @IsString({ message: 'Автор должно быть строкой' })
-  @Length(3, 10, {
-    message: 'Автор должно быть длиннее 3х символов и короче 10',
-  })
-  readonly authorName: string;
+  @IsNumber({}, { message: 'userId должно быть числом' })
+  @IsPositive({ message: 'userId должно быть положительным числом' })
+  readonly userId: number;
 }

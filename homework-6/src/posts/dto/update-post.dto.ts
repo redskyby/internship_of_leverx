@@ -6,8 +6,8 @@ export class UpdatePostDto {
   readonly id: number;
 
   @IsString({ message: 'Заголовок должен быть строкой' })
-  @Length(3, 10, {
-    message: 'Заголовок должен быть длиннее 3х символов и короче 10 ',
+  @Length(3, 20, {
+    message: 'Заголовок должен быть длиннее 3х символов и короче 20 ',
   })
   readonly title: string;
 
