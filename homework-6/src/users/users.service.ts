@@ -1,4 +1,4 @@
-import {  Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
@@ -6,39 +6,40 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from '../mail/mail.service';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import {InjectModel} from "@nestjs/sequelize";
-import {User} from "./entities/user.entity";
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-
   constructor(
-      @InjectModel(User) private userRepository : typeof User,
-      private jwtService: JwtService,
-      private mailService: MailService,
+    @InjectModel(User) private userRepository: typeof User,
+    private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   public async createUser(dto: CreateUserDto) {
-    const user = await  this.userRepository.create(dto);
+    const user = await this.userRepository.create(dto);
 
     return user;
   }
 
   public async login(dto: LoginUserDto) {
-    const {email} = dto;
+    const { email } = dto;
 
-    const user = await this.userRepository.findOne({where : {email} })
+    const user = await this.userRepository.findOne({ where: { email } });
 
     return user;
   }
 
   public async getUserByEmail(email: string): Promise<User | undefined> {
-    const user = await this.userRepository.findOne({where : {email} })
+    const user = await this.userRepository.findOne({ where: { email } });
 
     return user;
   }
 
-  public async getAllInformation(user: AllInformationUserDto) :  Promise<AllInformationUserDto>{
+  public async getAllInformation(
+    user: AllInformationUserDto,
+  ): Promise<AllInformationUserDto> {
     return user;
   }
 
@@ -46,9 +47,8 @@ export class UsersService {
     user: AllInformationUserDto,
     newInfo: UpdateUserDto,
   ) {
-    const {email} = user;
-    const candidate = await this.userRepository.findOne({where : {email} })
-
+    const { email } = user;
+    const candidate = await this.userRepository.findOne({ where: { email } });
 
     if (!candidate) {
       throw new NotFoundException('Пользователь не найден.');
@@ -60,9 +60,9 @@ export class UsersService {
     // await this.userRepository.save(candidate);
 
     await this.mailService.sendNewInformation(
-        newInfo.sendToEmail,
-        candidate.name,
-        candidate.lastName,
+      newInfo.sendToEmail,
+      candidate.name,
+      candidate.lastName,
     );
 
     const token = await this.jwtService.sign({
@@ -72,7 +72,7 @@ export class UsersService {
       email: candidate.email,
     });
 
-    const newUser =await this.jwtService.verify(token);
+    const newUser = await this.jwtService.verify(token);
 
     return newUser;
   }
