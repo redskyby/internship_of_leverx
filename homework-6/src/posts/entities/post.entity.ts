@@ -4,7 +4,7 @@ import {
   Table,
   DataType,
   BelongsTo,
-  ForeignKey
+  ForeignKey,
 } from 'sequelize-typescript';
 import { PostCreate } from './post-create';
 import { User } from '../../users/entities/user.entity';
@@ -29,7 +29,7 @@ export class Post extends Model<Post, PostCreate> {
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
-  userId : number;
+  userId: number;
 
   @BelongsTo(() => User)
   authorName: User;
