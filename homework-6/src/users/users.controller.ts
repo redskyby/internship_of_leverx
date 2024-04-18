@@ -7,6 +7,8 @@ import {
   UseGuards,
   Req,
   Put,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -63,9 +65,10 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/getAll')
-  getAllPost() {
-    return this.postService.getAll();
+  @UsePipes(ParseIntPipe)
+  @Get('/posts/:offset/:limit')
+  getAllPost(@Param('offset') offset: number, @Param('limit') limit: number) {
+    return this.postService.getAll(offset, limit);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -83,8 +86,8 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/test')
-  test() {
+  @Get('/likes')
+  getPostWithLikes() {
     return this.usersService.getUsersWithFirstPostAndLikes();
   }
 }

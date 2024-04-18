@@ -26,13 +26,25 @@ export class PostsService {
 
   public async findByAuthor(
     user: AllInformationUserDto,
+    offset: number,
+    limit: number,
   ): Promise<Post[] | undefined> {
     const { id } = user;
 
-    const posts = await this.postRepository.findAll({ where: { userId: id } });
+    const posts = await this.postRepository.findAll({
+      where: { userId: id },
+      limit: limit,
+      offset: offset,
+    });
 
     if (!posts) {
       throw new NotFoundException('Постов с таким автором не существует.');
+    }
+
+    if (posts.length === 0) {
+      throw new NotFoundException(
+        'Задайте другие настройки поиска или список пуст.',
+      );
     }
 
     return posts;
@@ -74,8 +86,11 @@ export class PostsService {
     return allPost;
   }
 
-  public async getAll() {
-    const allPost = await this.postRepository.findAll();
+  public async getAll(offset: number, limit: number) {
+    const allPost = await this.postRepository.findAll({
+      limit: limit,
+      offset: offset,
+    });
 
     if (allPost.length === 0) {
       return { message: 'Список постов пуст.' };

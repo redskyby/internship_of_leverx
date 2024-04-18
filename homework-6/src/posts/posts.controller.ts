@@ -37,9 +37,14 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/author')
-  postByAuthor(@Req() req: Request) {
-    return this.postsService.findByAuthor(req.user);
+  @UsePipes(ParseIntPipe)
+  @Get('/author/:offset/:limit')
+  postByAuthor(
+    @Req() req: Request,
+    @Param('offset') offset: number,
+    @Param('limit') limit: number,
+  ) {
+    return this.postsService.findByAuthor(req.user, offset, limit);
   }
 
   @UseGuards(JwtAuthGuard)
