@@ -4,7 +4,7 @@ import { Post } from '../../posts/entities/post.entity';
 
 // UserCreate - шаблон для создания пользователя
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'user' })
 export class User extends Model<User, UserCreate> {
   @Column({
     type: DataType.INTEGER,

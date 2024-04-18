@@ -82,11 +82,9 @@ export class UsersController {
     return this.likeService.update(like);
   }
 
-
-@UseGuards(JwtAuthGuard)
-  @Get("/test")
-  test(){
-    return this.usersService.getUsersWithFirstPostAndLikes()
-}
-
+  @UseGuards(JwtAuthGuard)
+  @Get('/test')
+  test() {
+    return this.usersService.getUsersWithFirstPostAndLikes();
+  }
 }
