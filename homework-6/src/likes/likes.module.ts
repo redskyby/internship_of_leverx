@@ -3,7 +3,6 @@ import { LikesService } from './likes.service';
 import { LikesController } from './likes.controller';
 import { UsersModule } from '../users/users.module';
 import { PostsModule } from '../posts/posts.module';
-import { likesProvider } from './simple-database/simple-database-of-likes';
 import { AuthModule } from '../auth/auth.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Post } from '../posts/entities/post.entity';
@@ -12,7 +11,7 @@ import { Like } from './entities/like.entity';
 
 @Module({
   controllers: [LikesController],
-  providers: [LikesService, likesProvider],
+  providers: [LikesService],
   imports: [
     forwardRef(() => UsersModule),
     PostsModule,

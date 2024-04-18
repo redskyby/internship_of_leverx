@@ -8,11 +8,17 @@ import { MailService } from '../mail/mail.service';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
+import { Post } from '../posts/entities/post.entity';
+import { Like } from '../likes/entities/like.entity';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
+    @InjectModel(Post) private postRepository: typeof Post,
+    @InjectModel(Like) private likeRepository: typeof Like,
+    private readonly sequelize: Sequelize,
     private jwtService: JwtService,
     private mailService: MailService,
   ) {}
@@ -84,5 +90,32 @@ export class UsersService {
     const newUser = await this.jwtService.verify(token);
 
     return newUser;
+  }
+
+  async getUsersWithFirstPostAndLikes(): Promise<any[]> {
+    const query = `
+      SELECT u.id        AS user_id,
+             u.name      AS user_name,
+             p.id        AS post_id,
+             p.title     AS post_title,
+             COUNT(l.id) AS likes_count
+      FROM users u
+             LEFT JOIN
+           post p ON u.id = p.userId
+             LEFT JOIN
+           \`like\` l ON p.id = l.postId
+      WHERE p.id = (SELECT MIN(p2.id)
+                    FROM post p2
+                    WHERE p2.userId = u.id)
+      GROUP BY u.id, u.name, p.id, p.title;
+    `;
+    // Он выбирает столбцы id и name из таблицы users, а также столбцы id и title из таблицы post. Вместе с этим, он подсчитывает количество записей в таблице like для каждого сообщения и возвращает его как likes_count.
+    //     Затем запрос объединяет таблицы users и post с помощью оператора LEFT JOIN, чтобы получить доступ к данным пользователей и их первому сообщению.
+    //     Также таблица post объединяется с таблицей like с помощью LEFT JOIN, чтобы подсчитать количество лайков для каждого сообщения.
+    //     В подзапросе в WHERE он выбирает минимальный id сообщения (p2.id) для каждого пользователя (u.id), чтобы получить первое сообщение каждого пользователя.
+    //     Результаты группируются по user_id, user_name, post_id и post_title с помощью GROUP BY, чтобы каждая группа содержала уникальную комбинацию этих значений.
+
+    const [results, _metadata] = await this.sequelize.query(query);
+    return results;
   }
 }
