@@ -5,12 +5,10 @@ import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { DuplicateException } from '../exceptions/duplicate.exception';
 import { InjectModel } from '@nestjs/sequelize';
-
 import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
-  // constructor(@Inject('POSTS') private posts: Post[]) {}
   constructor(@InjectModel(Post) private postRepository: typeof Post) {}
   public async createPost(dto: CreatePostDto): Promise<Post> {
     const { title } = dto;

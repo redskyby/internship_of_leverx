@@ -8,7 +8,6 @@ import { MailService } from '../mail/mail.service';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
-import { where } from 'sequelize';
 
 @Injectable()
 export class UsersService {

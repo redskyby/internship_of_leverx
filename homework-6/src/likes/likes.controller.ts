@@ -7,8 +7,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { LikesService } from './likes.service';
-import { CreateLikeDto } from './dto/create-like.dto';
-import { UpdateLikeDto } from './dto/update-like.dto';
+import { LikeDto } from './dto/like.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
 
@@ -19,14 +18,14 @@ export class LikesController {
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Post()
-  create(@Body() createLikeDto: CreateLikeDto) {
+  create(@Body() createLikeDto: LikeDto) {
     return this.likesService.create(createLikeDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Put()
-  update(@Body() dto: UpdateLikeDto) {
+  update(@Body() dto: LikeDto) {
     return this.likesService.update(dto);
   }
 }

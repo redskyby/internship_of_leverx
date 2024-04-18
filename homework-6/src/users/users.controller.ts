@@ -17,9 +17,8 @@ import { Request } from 'express';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PostsService } from '../posts/posts.service';
-import { CreateLikeDto } from '../likes/dto/create-like.dto';
+import { LikeDto } from '../likes/dto/like.dto';
 import { LikesService } from '../likes/likes.service';
-import { UpdateLikeDto } from '../likes/dto/update-like.dto';
 
 declare module 'express' {
   interface Request {
@@ -72,14 +71,14 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Post('/likes')
-  setLike(@Body() like: CreateLikeDto) {
+  setLike(@Body() like: LikeDto) {
     return this.likeService.create(like);
   }
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Put('/likes')
-  updateLike(@Body() like: UpdateLikeDto) {
+  updateLike(@Body() like: LikeDto) {
     return this.likeService.update(like);
   }
 }
