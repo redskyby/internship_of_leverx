@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Post } from '../posts/entities/post.entity';
 import { Document } from 'mongoose';
+import { Post } from './post.schema';
 
 @Schema({ collection: 'user' })
 export class User extends Document {

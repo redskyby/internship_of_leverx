@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { User } from './user.schema';
+import { Post } from './post.schema';
 
 @Schema({ collection: 'like' })
 export class Like extends Document {
@@ -7,10 +9,10 @@ export class Like extends Document {
   id: number;
 
   @Prop({ type: 'ObjectId', ref: 'user', required: true })
-  userId: string;
+  userId: User;
 
   @Prop({ type: 'ObjectId', ref: 'post', required: true })
-  postId: string;
+  postId: Post;
 }
 
 export const LikeSchema = SchemaFactory.createForClass(Like);
