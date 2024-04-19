@@ -32,18 +32,17 @@ import { MongooseModule } from '@nestjs/mongoose';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-          uri : configService.get<string>("MONGO_DB_URL")
-        }
-      )
+        uri: configService.get<string>('MONGO_DB_URL'),
+      }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ".env"
+      envFilePath: '.env',
     }),
     UsersModule,
     AuthModule,
     PostsModule,
-    LikesModule
+    LikesModule,
   ],
 })
 export class AppModule {}
