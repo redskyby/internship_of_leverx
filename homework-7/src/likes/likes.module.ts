@@ -8,6 +8,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Post } from '../posts/entities/post.entity';
 import { User } from '../users/entities/user.entity';
 import { Like } from './entities/like.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { LikeSchema } from '../schemas/like.schema';
 
 @Module({
   controllers: [LikesController],
@@ -17,6 +19,12 @@ import { Like } from './entities/like.entity';
     PostsModule,
     AuthModule,
     SequelizeModule.forFeature([Post, User, Like]),
+    MongooseModule.forFeature([
+      {
+        name: 'like',
+        schema: LikeSchema,
+      },
+    ]),
   ],
   exports: [LikesService],
 })

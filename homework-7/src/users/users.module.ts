@@ -10,7 +10,7 @@ import { User } from './entities/user.entity';
 import { Post } from '../posts/entities/post.entity';
 import { Like } from '../likes/entities/like.entity';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from '../schemas/user.schema';
+import { UserSchema, User as UserMongo } from '../schemas/user.schema';
 
 @Module({
   controllers: [UsersController],
@@ -20,7 +20,7 @@ import { UserSchema } from '../schemas/user.schema';
     SequelizeModule.forFeature([User, Post, Like]),
     MongooseModule.forFeature([
       {
-        name: User.name,
+        name: UserMongo.name,
         schema: UserSchema,
       },
     ]),
