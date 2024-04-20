@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
-import { NotFoundException } from '../exceptions/not-found.exception';
 import { DuplicateException } from '../exceptions/duplicate.exception';
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './entities/post.entity';

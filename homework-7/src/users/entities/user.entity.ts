@@ -1,11 +1,12 @@
 import { Column, Model, Table, HasMany, DataType } from 'sequelize-typescript';
-import { UserCreate } from './user-create';
-import { Post } from '../../posts/entities/post.entity';
+import { UserCreateInterface } from "../../interfaces/user-create.interface";
+import { Post } from "../../posts/entities/post.entity";
 
-// UserCreate - шаблон для создания пользователя
+
+// UserCreateInterface -  template for creating a user
 
 @Table({ tableName: 'user' })
-export class User extends Model<User, UserCreate> {
+export class User extends Model<User, UserCreateInterface> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,

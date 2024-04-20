@@ -1,4 +1,4 @@
-export interface PostCreate {
+export interface PostCreateInterface {
   title: string;
   description: string;
 }

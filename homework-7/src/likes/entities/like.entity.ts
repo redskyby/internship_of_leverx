@@ -5,14 +5,14 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
-import { LikeCreate } from './like-create';
+import { LikeCreateInterface } from '../../interfaces/like-create.interface';
 import { User } from '../../users/entities/user.entity';
 import { Post } from '../../posts/entities/post.entity';
 
-// LikeCreate - шаблон для создания пользователя
+// LikeCreateInterface -  template for creating a like
 
 @Table({ tableName: 'like' })
-export class Like extends Model<Like, LikeCreate> {
+export class Like extends Model<Like, LikeCreateInterface> {
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 

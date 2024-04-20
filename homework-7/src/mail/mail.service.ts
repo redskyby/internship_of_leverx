@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { ConfigService } from '@nestjs/config';
 
 interface CustomTransportOptions {

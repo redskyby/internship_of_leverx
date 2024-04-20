@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from '../mail/mail.service';
-import { NotFoundException } from '../exceptions/not-found.exception';
 import { InjectModel as InjectMongooseModel } from '@nestjs/mongoose';
 import { InjectModel as InjectSequelizeModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';

@@ -6,13 +6,13 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
-import { PostCreate } from './post-create';
+import { PostCreateInterface } from '../../interfaces/post-create.interface';
 import { User } from '../../users/entities/user.entity';
 
-// PostCreate - шаблон для создания пользователя
+// PostCreateInterface -  template for creating a post
 
 @Table({ tableName: 'post' })
-export class Post extends Model<Post, PostCreate> {
+export class Post extends Model<Post, PostCreateInterface> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,

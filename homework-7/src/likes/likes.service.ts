@@ -1,6 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { LikeDto } from './dto/like.dto';
-import { NotFoundException } from '../exceptions/not-found.exception';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '../users/entities/user.entity';
 import { Post } from '../posts/entities/post.entity';
