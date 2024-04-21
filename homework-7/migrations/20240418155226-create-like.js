@@ -14,14 +14,18 @@ module.exports = {
         references: {
           model: 'user',
           key: 'id',
-        }},
+        },
+        onDelete: 'CASCADE',
+      },
       postId: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'post',
           key: 'id',
-        }},
+        },
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         type : Sequelize.DataTypes.DATE,
         defaultValue : new Date(),

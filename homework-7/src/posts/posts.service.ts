@@ -68,15 +68,27 @@ export class PostsService {
   }
 
   public async updatePost(dto: UpdatePostDto) {
-    const { id, title, description } = dto;
-
-    const post = await this.postRepository.findOne({ where: { id } });
+    const { title, description } = dto;
+    const post = await this.postModel.findOne({ title: title });
 
     if (!post) {
-      throw new NotFoundException('Постов с таким id не существует.');
+      throw new NotFoundException('Постов с таким названием не существует.');
     }
 
-    const newPost = await this.postRepository.update(
+    const { id } = post;
+
+    await this.postModel.updateOne(
+      { id: id },
+      {
+        $set: {
+          title: title,
+          description: description,
+        },
+      },
+      { new: true },
+    );
+
+    await this.postRepository.update(
       {
         title,
         description,
@@ -86,28 +98,32 @@ export class PostsService {
       },
     );
 
-    return newPost;
+    return { message: 'Пост успешно обновлен.' };
   }
 
   public async removePost(id: number) {
-    const post = await this.postRepository.findOne({ where: { id } });
+    const post = await this.postModel.findOne({ id: id });
 
     if (!post) {
       throw new NotFoundException('Постов с таким id не существует.');
     }
 
+    await this.postModel.deleteOne({ id: id });
+
     await this.postRepository.destroy({ where: { id } });
 
-    const allPost = await this.postRepository.findAll();
+    const allPost = await this.postModel.find();
 
     return allPost;
   }
 
   public async getAll(offset: number, limit: number) {
-    const allPost = await this.postRepository.findAll({
-      limit: limit,
-      offset: offset,
-    });
+    // const allPost = await this.postRepository.findAll({
+    //   limit: limit,
+    //   offset: offset,
+    // });
+
+    const allPost = await this.postModel.find().skip(offset).limit(limit);
 
     if (allPost.length === 0) {
       return { message: 'Список постов пуст.' };

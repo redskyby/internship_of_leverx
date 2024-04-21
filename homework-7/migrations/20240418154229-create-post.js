@@ -7,21 +7,24 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.INTEGER,
       },
       title: {
         type: Sequelize.DataTypes.STRING,
-        unique : true
+        unique: true,
       },
       description: {
-        type: Sequelize.DataTypes.STRING
-      },  userId: {
+        type: Sequelize.DataTypes.STRING,
+      },
+      userId: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'user',
           key: 'id',
-      }},
+        },
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         allowNull: false,
         type : Sequelize.DataTypes.DATE,
