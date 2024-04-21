@@ -142,45 +142,80 @@ export class UsersService {
     // const [results, _metadata] = await this.sequelize.query(query);
     // return results;
 
+    // const result = await this.userModel.aggregate([
+    //   {
+    //     // Присоединяем посты к пользователям
+    //     $lookup: {
+    //       from: 'post', // Название коллекции с постами
+    //       localField: 'posts',
+    //       foreignField: '_id',
+    //       as: 'userPosts',
+    //     },
+    //   },
+    //   {
+    //     // Раскручиваем массив постов
+    //     $unwind: '$userPosts',
+    //   },
+    //   {
+    //     // Сортируем по времени добавления (предполагая, что более ранние ID означают первый пост)
+    //     $sort: { 'userPosts.id': 1 },
+    //   },
+    //   {
+    //     // Группируем по пользователям и берем первый пост
+    //     $group: {
+    //       _id: '$id', // Группируем по ID пользователя
+    //       name: { $first: '$name' },
+    //       firstPost: { $first: '$userPosts' },
+    //     },
+    //   },
+    //   {
+    //     // Присоединяем лайки, чтобы подсчитать их количество
+    //     $lookup: {
+    //       from: 'like', // Название коллекции с лайками
+    //       localField: 'firstPost._id',
+    //       foreignField: 'postId',
+    //       as: 'postLikes',
+    //     },
+    //   },
+    //   {
+    //     // Подсчитываем количество лайков для первого поста
+    //     $addFields: {
+    //       likeCount: { $size: '$postLikes' },
+    //     },
+    //   },
+    // ]);
     const result = await this.userModel.aggregate([
       {
-        // Присоединяем посты к пользователям
+        // Соединяем коллекцию постов с коллекцией пользователей
         $lookup: {
-          from: 'post', // Название коллекции с постами
+          from: 'post',
           localField: 'posts',
           foreignField: '_id',
           as: 'userPosts',
         },
       },
       {
-        // Раскручиваем массив постов
-        $unwind: '$userPosts',
-      },
-      {
-        // Сортируем по времени добавления (предполагая, что более ранние ID означают первый пост)
-        $sort: { 'userPosts.id': 1 },
-      },
-      {
-        // Группируем по пользователям и берем первый пост
-        $group: {
-          _id: '$id', // Группируем по ID пользователя
-          name: { $first: '$name' },
-          firstPost: { $first: '$userPosts' },
+        // Проектируем, чтобы получить первый пост
+        $project: {
+          name: 1, // Оставляем имя пользователя
+          firstPost: { $arrayElemAt: ['$userPosts', 0] }, // Берем первый элемент массива
         },
       },
       {
-        // Присоединяем лайки, чтобы подсчитать их количество
+        // Соединяем первый пост с лайками
         $lookup: {
-          from: 'like', // Название коллекции с лайками
-          localField: 'firstPost._id',
+          from: 'like',
+          localField: 'firstPost.id',
           foreignField: 'postId',
           as: 'postLikes',
         },
       },
       {
-        // Подсчитываем количество лайков для первого поста
-        $addFields: {
-          likeCount: { $size: '$postLikes' },
+        // Добавляем количество лайков для первого поста
+        $project: {
+          name: 1, // Имя пользователя
+          firstPost: 1, // Первый пост
+          likeCount: { $size: '$postLikes' }, // Подсчитываем лайки
         },
       },
     ]);
