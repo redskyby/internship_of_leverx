@@ -19,13 +19,13 @@ export class LikesController {
   @UsePipes(ValidationPipe)
   @Post()
   create(@Body() createLikeDto: LikeDto) {
-    return this.likesService.create(createLikeDto);
+    return this.likesService.addLike(createLikeDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Put()
   update(@Body() dto: LikeDto) {
-    return this.likesService.update(dto);
+    return this.likesService.removeLike(dto);
   }
 }

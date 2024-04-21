@@ -75,14 +75,14 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   @Post('/likes')
   setLike(@Body() like: LikeDto) {
-    return this.likeService.create(like);
+    return this.likeService.addLike(like);
   }
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Put('/likes')
   updateLike(@Body() like: LikeDto) {
-    return this.likeService.update(like);
+    return this.likeService.removeLike(like);
   }
 
   @UseGuards(JwtAuthGuard)

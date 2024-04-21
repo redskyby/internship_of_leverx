@@ -25,7 +25,7 @@ export class LikesService {
     @InjectMongooseModel(LikeMongo.name) private likeModel: Model<LikeMongo>,
   ) {}
 
-  public async create(dto: LikeDto) {
+  public async addLike(dto: LikeDto) {
     const { userId, postId } = dto;
 
     const candidate = await this.userModel.findOne({ id: userId });
@@ -43,6 +43,7 @@ export class LikesService {
       userId: candidate.id,
       postId: post.id,
     });
+
     if (existingLike) {
       throw new BadRequestException(
         'Лайк уже установлен для данного пользователя и поста.',
@@ -51,40 +52,42 @@ export class LikesService {
 
     const { dataValues } = await this.likeRepository.create(dto);
 
-    const newLike1 = await new this.likeModel(dataValues);
+    const newLike = await new this.likeModel(dataValues);
 
-    await newLike1.save();
+    await newLike.save();
 
-    return newLike1;
+    return newLike;
   }
 
-  public async update(dto: LikeDto) {
+  public async removeLike(dto: LikeDto) {
     const { userId, postId } = dto;
 
-    const candidate = await this.userRepository.findOne({
-      where: { id: userId },
-    });
+    const candidate = await this.userModel.findOne({ id: userId });
+
     if (!candidate) {
       throw new NotFoundException('Пользователь не найден.');
     }
 
-    const post = await this.postRepository.findOne({ where: { id: postId } });
+    const post = await this.postModel.findOne({ id: postId });
 
     if (!post) {
       throw new NotFoundException('Пост с таким id не существует.');
     }
 
-    // Поиск индекса лайка в массиве this.likes
-    const existingLike = await this.likeRepository.findOne({
-      where: { userId, postId },
+    const existingLike = await this.likeModel.findOne({
+      userId: candidate.id,
+      postId: post.id,
     });
+
     if (!existingLike) {
       throw new BadRequestException(
         'Лайк не найден для данного пользователя и поста.',
       );
     }
 
-    const { id } = existingLike.dataValues;
+    const { id } = existingLike;
+
+    await this.likeModel.deleteOne({ id: id });
 
     const deleteLike = await this.likeRepository.destroy({ where: { id } });
 
