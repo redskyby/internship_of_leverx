@@ -5,20 +5,37 @@ import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { DuplicateException } from '../exceptions/duplicate.exception';
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './entities/post.entity';
+import { InjectModel as InjectMongooseModel } from '@nestjs/mongoose/dist/common/mongoose.decorators';
+import { User as UserMongo } from '../schemas/user.schema';
+import { Model, Types } from 'mongoose';
+import { Post as PostMongo } from '../schemas/post.schema';
 
 @Injectable()
 export class PostsService {
-  constructor(@InjectModel(Post) private postRepository: typeof Post) {}
-  public async createPost(dto: CreatePostDto): Promise<Post> {
-    const { title } = dto;
+  constructor(
+    @InjectModel(Post) private postRepository: typeof Post,
+    @InjectMongooseModel(UserMongo.name) private userModel: Model<UserMongo>,
+    @InjectMongooseModel(PostMongo.name) private postModel: Model<PostMongo>,
+  ) {}
+  public async createPost(dto: CreatePostDto) {
+    const { title, userId } = dto;
 
-    const post = await this.postRepository.findOne({ where: { title } });
+    const post = await this.postModel.findOne({ title: title });
 
     if (post) {
       throw new DuplicateException('Пост с таким заголовком уже существует.');
     }
 
-    const newPost = await this.postRepository.create(dto);
+    const { dataValues } = await this.postRepository.create(dto);
+
+    const currentDto = { ...dataValues, userId: new Types.ObjectId(userId) };
+
+    const newPost = await this.postModel.create(currentDto);
+
+    await this.userModel.updateOne(
+      { id: userId },
+      { $push: { posts: newPost._id } },
+    );
 
     return newPost;
   }
@@ -27,18 +44,19 @@ export class PostsService {
     user: AllInformationUserDto,
     offset: number,
     limit: number,
-  ): Promise<Post[] | undefined> {
+  ) {
     const { id } = user;
 
-    const posts = await this.postRepository.findAll({
-      where: { userId: id },
-      limit: limit,
-      offset: offset,
-    });
+    const userFromDb = await this.userModel.findOne({ id: id });
 
-    if (!posts) {
+    if (!userFromDb) {
       throw new NotFoundException('Постов с таким автором не существует.');
     }
+
+    const posts = await this.postModel
+      .find({ userId: userFromDb._id })
+      .skip(offset)
+      .limit(limit);
 
     if (posts.length === 0) {
       throw new NotFoundException(

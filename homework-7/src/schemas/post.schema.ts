@@ -17,9 +17,6 @@ export class Post extends Document {
 
   @Prop({ type: Types.ObjectId, ref: 'user', required: true })
   userId: User;
-
-  // @Prop({ type: [{ type: 'ObjectId', ref: 'user' }] })
-  // authorName: string;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
