@@ -1,21 +1,21 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { TransferService } from './transfer.service';
+import { TransferController } from './transfer.controller';
 import { AuthModule } from '../auth/auth.module';
-import { MailModule } from '../mail/mail.module';
-import { PostsModule } from '../posts/posts.module';
-import { LikesModule } from '../likes/likes.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from './entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { Post } from '../posts/entities/post.entity';
 import { Like } from '../likes/entities/like.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User as UserMongo, UserSchema } from '../schemas/user.schema';
 import { Like as LikeMongo, LikeSchema } from '../schemas/like.schema';
 import { Post as PostMongo, PostSchema } from '../schemas/post.schema';
+import { PostsModule } from '../posts/posts.module';
+import { LikesModule } from '../likes/likes.module';
+
 @Module({
-  controllers: [UsersController],
-  providers: [UsersService],
+  controllers: [TransferController],
+  providers: [TransferService],
   imports: [
     forwardRef(() => AuthModule),
     SequelizeModule.forFeature([User, Post, Like]),
@@ -33,10 +33,9 @@ import { Post as PostMongo, PostSchema } from '../schemas/post.schema';
         schema: PostSchema,
       },
     ]),
-    MailModule,
     PostsModule,
     LikesModule,
   ],
-  exports: [UsersService],
+  exports: [TransferService],
 })
-export class UsersModule {}
+export class TransferModule {}

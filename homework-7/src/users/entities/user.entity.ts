@@ -1,7 +1,6 @@
 import { Column, Model, Table, HasMany, DataType } from 'sequelize-typescript';
-import { UserCreateInterface } from "../../interfaces/user-create.interface";
-import { Post } from "../../posts/entities/post.entity";
-
+import { UserCreateInterface } from '../../interfaces/user-create.interface';
+import { Post } from '../../posts/entities/post.entity';
 
 // UserCreateInterface -  template for creating a user
 

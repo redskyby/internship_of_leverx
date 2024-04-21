@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { User } from './user.schema';
 
 @Schema({ collection: 'post' })
 export class Post extends Document {
@@ -11,11 +12,14 @@ export class Post extends Document {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ type: Number, required: true })
-  userId: number;
+  // @Prop({ type: Number, required: true })
+  // userId: number;
 
-  @Prop({ type: [{ type: 'ObjectId', ref: 'user' }] })
-  authorName: string;
+  @Prop({ type: Types.ObjectId, ref: 'user', required: true })
+  userId: User;
+
+  // @Prop({ type: [{ type: 'ObjectId', ref: 'user' }] })
+  // authorName: string;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

@@ -12,6 +12,8 @@ import { Post } from '../posts/entities/post.entity';
 import { Like } from '../likes/entities/like.entity';
 import { Sequelize } from 'sequelize-typescript';
 import { User as UserMongo } from '../schemas/user.schema';
+import { Post as PostMongo } from '../schemas/post.schema';
+import { Like as LikeMongo } from '../schemas/like.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -21,6 +23,8 @@ export class UsersService {
     @InjectSequelizeModel(Post) private postRepository: typeof Post,
     @InjectSequelizeModel(Like) private likeRepository: typeof Like,
     @InjectMongooseModel(UserMongo.name) private userModel: Model<UserMongo>,
+    @InjectMongooseModel(PostMongo.name) private postModel: Model<PostMongo>,
+    @InjectMongooseModel(LikeMongo.name) private likeModel: Model<LikeMongo>,
     private readonly sequelize: Sequelize,
     private jwtService: JwtService,
     private mailService: MailService,

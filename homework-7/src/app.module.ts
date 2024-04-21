@@ -9,6 +9,7 @@ import { User } from './users/entities/user.entity';
 import { Post } from './posts/entities/post.entity';
 import { Like } from './likes/entities/like.entity';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TransferModule } from './transfer/transfer.module';
 
 @Module({
   controllers: [],
@@ -43,6 +44,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     AuthModule,
     PostsModule,
     LikesModule,
+    TransferModule,
   ],
 })
 export class AppModule {}
