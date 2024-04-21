@@ -89,8 +89,8 @@ export class LikesService {
 
     await this.likeModel.deleteOne({ id: id });
 
-    const deleteLike = await this.likeRepository.destroy({ where: { id } });
+    await this.likeRepository.destroy({ where: { id } });
 
-    return deleteLike;
+    return { message: 'Лайк удален.' };
   }
 }
