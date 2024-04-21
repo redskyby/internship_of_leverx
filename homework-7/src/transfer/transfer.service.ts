@@ -8,7 +8,7 @@ import { InjectModel as InjectMongooseModel } from '@nestjs/mongoose/dist/common
 import { User as UserMongo } from '../schemas/user.schema';
 import { Like as LikeMongo } from '../schemas/like.schema';
 import { Post as PostMongo } from '../schemas/post.schema';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TransferService {
@@ -62,11 +62,12 @@ export class TransferService {
     // Переносим лайки
     // @ts-ignore
     const mysqlLikes = await this.sequelize.models.Like.findAll<Like>();
+
     for (const like of mysqlLikes) {
       await this.likeModel.create({
         id: like.id,
-        userId: new Types.ObjectId(like.userId),
-        postId: new Types.ObjectId(like.postId),
+        userId: like.userId,
+        postId: like.postId,
       });
     }
   }

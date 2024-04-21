@@ -43,16 +43,12 @@ export class UsersService {
   public async login(dto: LoginUserDto) {
     const { email } = dto;
 
-    // const user = await this.userRepository.findOne({ where: { email } });
-
     const user = await this.userModel.findOne({ email: email });
 
     return user;
   }
 
   public async getUserByEmail(email: string) {
-    // const user = await this.userRepository.findOne({ where: { email } });
-
     const user = await this.userModel.findOne({ email: email });
 
     return user;

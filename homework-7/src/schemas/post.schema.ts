@@ -12,9 +12,6 @@ export class Post extends Document {
   @Prop({ required: true })
   description: string;
 
-  // @Prop({ type: Number, required: true })
-  // userId: number;
-
   @Prop({ type: Types.ObjectId, ref: 'user', required: true })
   userId: User;
 }
