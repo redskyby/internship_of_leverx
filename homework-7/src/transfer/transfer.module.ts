@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TransferService } from './transfer.service';
 import { TransferController } from './transfer.controller';
 import { AuthModule } from '../auth/auth.module';
@@ -17,7 +17,7 @@ import { LikesModule } from '../likes/likes.module';
   controllers: [TransferController],
   providers: [TransferService],
   imports: [
-    forwardRef(() => AuthModule),
+    AuthModule,
     SequelizeModule.forFeature([User, Post, Like]),
     MongooseModule.forFeature([
       {

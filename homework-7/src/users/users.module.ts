@@ -13,6 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User as UserMongo, UserSchema } from '../schemas/user.schema';
 import { Like as LikeMongo, LikeSchema } from '../schemas/like.schema';
 import { Post as PostMongo, PostSchema } from '../schemas/post.schema';
+import { TransferModule } from '../transfer/transfer.module';
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
@@ -36,6 +37,7 @@ import { Post as PostMongo, PostSchema } from '../schemas/post.schema';
     MailModule,
     PostsModule,
     LikesModule,
+    TransferModule,
   ],
   exports: [UsersService],
 })

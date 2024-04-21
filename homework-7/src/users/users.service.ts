@@ -43,13 +43,17 @@ export class UsersService {
   public async login(dto: LoginUserDto) {
     const { email } = dto;
 
-    const user = await this.userRepository.findOne({ where: { email } });
+    // const user = await this.userRepository.findOne({ where: { email } });
+
+    const user = await this.userModel.findOne({ email: email });
 
     return user;
   }
 
-  public async getUserByEmail(email: string): Promise<User | undefined> {
-    const user = await this.userRepository.findOne({ where: { email } });
+  public async getUserByEmail(email: string) {
+    // const user = await this.userRepository.findOne({ where: { email } });
+
+    const user = await this.userModel.findOne({ email: email });
 
     return user;
   }
@@ -66,14 +70,15 @@ export class UsersService {
   ) {
     const { email } = user;
     const { newName, newLastName } = newInfo;
-    const candidate = await this.userRepository.findOne({ where: { email } });
+
+    const candidate = await this.userModel.findOne({ email: email });
 
     if (!candidate) {
       throw new NotFoundException('Пользователь не найден.');
     }
 
-    candidate.name = newInfo.newName;
-    candidate.lastName = newInfo.newLastName;
+    candidate.name = newName;
+    candidate.lastName = newLastName;
 
     await this.userRepository.update(
       {
@@ -83,6 +88,18 @@ export class UsersService {
       {
         where: { email },
       },
+    );
+
+    await this.userModel.updateOne(
+      { email },
+
+      {
+        $set: {
+          name: newName,
+          lastName: newLastName,
+        },
+      },
+      { new: true },
     );
 
     await this.mailService.sendNewInformation(

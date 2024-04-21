@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Post } from './post.schema';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 @Schema({ collection: 'user' })
 export class User extends Document {
   @Prop({ type: Number, required: true, unique: true })
