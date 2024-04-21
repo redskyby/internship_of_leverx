@@ -21,9 +21,6 @@ export class User extends Document {
   @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  // @Prop({ type: [{ type: 'ObjectId', ref: 'post' }] })
-  // posts: Post[];
-
   @Prop({ type: [{ type: Types.ObjectId, ref: 'post' }] })
   posts: Types.ObjectId[];
 }

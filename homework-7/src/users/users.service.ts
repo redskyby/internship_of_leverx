@@ -116,30 +116,76 @@ export class UsersService {
     return newUser;
   }
 
-  async getUsersWithFirstPostAndLikes(): Promise<any[]> {
-    const query = `
-      SELECT u.id        AS user_id,
-             u.name      AS user_name,
-             p.id        AS post_id,
-             p.title     AS post_title,
-             COUNT(l.id) AS likes_count
-      FROM users u
-             LEFT JOIN
-           post p ON u.id = p.userId
-             LEFT JOIN
-           \`like\` l ON p.id = l.postId
-      WHERE p.id = (SELECT MIN(p2.id)
-                    FROM post p2
-                    WHERE p2.userId = u.id)
-      GROUP BY u.id, u.name, p.id, p.title;
-    `;
-    // Он выбирает столбцы id и name из таблицы users, а также столбцы id и title из таблицы post. Вместе с этим, он подсчитывает количество записей в таблице like для каждого сообщения и возвращает его как likes_count.
-    //     Затем запрос объединяет таблицы users и post с помощью оператора LEFT JOIN, чтобы получить доступ к данным пользователей и их первому сообщению.
-    //     Также таблица post объединяется с таблицей like с помощью LEFT JOIN, чтобы подсчитать количество лайков для каждого сообщения.
-    //     В подзапросе в WHERE он выбирает минимальный id сообщения (p2.id) для каждого пользователя (u.id), чтобы получить первое сообщение каждого пользователя.
-    //     Результаты группируются по user_id, user_name, post_id и post_title с помощью GROUP BY, чтобы каждая группа содержала уникальную комбинацию этих значений.
+  async getUsersWithFirstPostAndLikes() {
+    // const query = `
+    //   SELECT u.id        AS user_id,
+    //          u.name      AS user_name,
+    //          p.id        AS post_id,
+    //          p.title     AS post_title,
+    //          COUNT(l.id) AS likes_count
+    //   FROM users u
+    //          LEFT JOIN
+    //        post p ON u.id = p.userId
+    //          LEFT JOIN
+    //        \`like\` l ON p.id = l.postId
+    //   WHERE p.id = (SELECT MIN(p2.id)
+    //                 FROM post p2
+    //                 WHERE p2.userId = u.id)
+    //   GROUP BY u.id, u.name, p.id, p.title;
+    // `;
+    // // Он выбирает столбцы id и name из таблицы users, а также столбцы id и title из таблицы post. Вместе с этим, он подсчитывает количество записей в таблице like для каждого сообщения и возвращает его как likes_count.
+    // //     Затем запрос объединяет таблицы users и post с помощью оператора LEFT JOIN, чтобы получить доступ к данным пользователей и их первому сообщению.
+    // //     Также таблица post объединяется с таблицей like с помощью LEFT JOIN, чтобы подсчитать количество лайков для каждого сообщения.
+    // //     В подзапросе в WHERE он выбирает минимальный id сообщения (p2.id) для каждого пользователя (u.id), чтобы получить первое сообщение каждого пользователя.
+    // //     Результаты группируются по user_id, user_name, post_id и post_title с помощью GROUP BY, чтобы каждая группа содержала уникальную комбинацию этих значений.
+    //
+    // const [results, _metadata] = await this.sequelize.query(query);
+    // return results;
 
-    const [results, _metadata] = await this.sequelize.query(query);
-    return results;
+    const result = await this.userModel.aggregate([
+      {
+        // Присоединяем посты к пользователям
+        $lookup: {
+          from: 'post', // Название коллекции с постами
+          localField: 'posts',
+          foreignField: '_id',
+          as: 'userPosts',
+        },
+      },
+      {
+        // Раскручиваем массив постов
+        $unwind: '$userPosts',
+      },
+      {
+        // Сортируем по времени добавления (предполагая, что более ранние ID означают первый пост)
+        $sort: { 'userPosts.id': 1 },
+      },
+      {
+        // Группируем по пользователям и берем первый пост
+        $group: {
+          _id: '$id', // Группируем по ID пользователя
+          name: { $first: '$name' },
+          firstPost: { $first: '$userPosts' },
+        },
+      },
+      {
+        // Присоединяем лайки, чтобы подсчитать их количество
+        $lookup: {
+          from: 'like', // Название коллекции с лайками
+          localField: 'firstPost._id',
+          foreignField: 'postId',
+          as: 'postLikes',
+        },
+      },
+      {
+        // Подсчитываем количество лайков для первого поста
+        $addFields: {
+          likeCount: { $size: '$postLikes' },
+        },
+      },
+    ]);
+
+    return result;
+
   }
 }
