@@ -9,6 +9,7 @@ import { User as UserMongo } from '../schemas/user.schema';
 import { Like as LikeMongo } from '../schemas/like.schema';
 import { Post as PostMongo } from '../schemas/post.schema';
 import { Model } from 'mongoose';
+import {ModelCtor} from "sequelize";
 
 @Injectable()
 export class TransferService {
@@ -23,10 +24,13 @@ export class TransferService {
   ) {}
 
   async transferDataToMongoDb() {
-    // @ts-ignore
-    const mysqlUsers = await this.sequelize.models.User.findAll<User>();
-    // @ts-ignore
-    const mysqlPosts = await this.sequelize.models.Post.findAll<Post>();
+
+    const UserModel: ModelCtor<User> = this.sequelize.models.User as ModelCtor<User>;
+    const mysqlUsers: User[] = await UserModel.findAll();
+
+
+    const PostModel: ModelCtor<Post> = this.sequelize.models.Post as ModelCtor<Post>;
+    const mysqlPosts : Post[] =   await PostModel.findAll();
 
     for (const user of mysqlUsers) {
       // Создаем пользователя в MongoDB и сохраняем результат, чтобы получить его _id
@@ -60,8 +64,9 @@ export class TransferService {
     }
 
     // Переносим лайки
-    // @ts-ignore
-    const mysqlLikes = await this.sequelize.models.Like.findAll<Like>();
+
+    const LikeModel: ModelCtor<Like> = this.sequelize.models.Like as ModelCtor<Like>;
+    const mysqlLikes : Like[] =   await LikeModel.findAll();
 
     for (const like of mysqlLikes) {
       await this.likeModel.create({
