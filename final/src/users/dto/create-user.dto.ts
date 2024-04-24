@@ -12,7 +12,7 @@ export class CreateUserDto {
   })
   readonly lastName: string;
 
-  @IsString({ message: 'Фамилия должно быть строкой' })
+  @IsString({ message: 'Пароль должен быть строкой' })
   @Length(3, 10, {
     message: 'Пароль должно быть длиннее 3х символов и короче 10 ',
   })
