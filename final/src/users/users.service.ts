@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(@InjectModel(User) private userRepository: typeof User) {}
   public async createUser(dto: CreateUserDto) {
+
     const user = await this.userRepository.create(dto);
 
     return user;
