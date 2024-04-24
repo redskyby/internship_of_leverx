@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './users/entities/user.entity';
 import { RolesModule } from './roles/roles.module';
+import { Role } from './roles/entities/role.entity';
+import { UserRoles } from './roles/entities/role-user.entity';
 
 @Module({
   controllers: [],
@@ -20,7 +22,7 @@ import { RolesModule } from './roles/roles.module';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         database: configService.get<string>('MYSQL_NAME'),
-        models: [User],
+        models: [User, Role, UserRoles],
         autoLoadModels: true,
       }),
     }),

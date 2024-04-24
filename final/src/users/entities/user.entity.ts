@@ -1,5 +1,13 @@
-import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  DataType,
+  BelongsToMany,
+} from 'sequelize-typescript';
 import { UserCreateInterface } from '../../interfaces/user-create.interface';
+import { Role } from '../../roles/entities/role.entity';
+import { UserRoles } from '../../roles/entities/role-user.entity';
 
 // UserCreateInterface -  template for creating a user
 
@@ -24,4 +32,7 @@ export class User extends Model<User, UserCreateInterface> {
 
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email: string;
+
+  @BelongsToMany(() => Role, () => UserRoles)
+  roles: Role[];
 }

@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Param,
-  Delete, UsePipes,
-} from '@nestjs/common';
+import { Controller, Post, Body, Param, UsePipes, Get } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
-import {RolesService} from "./roles.service";
-import {ValidationPipe} from "../pipes/validation.pipe";
-
-
+import { RolesService } from './roles.service';
+import { ValidationPipe } from '../pipes/validation.pipe';
 
 @Controller('roles')
 export class RolesController {
@@ -20,8 +12,9 @@ export class RolesController {
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.roleService.create(createRoleDto);
   }
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.roleService.remove(+id);
+
+  @Get('/:value')
+  getByValue(@Param('value') value: string) {
+    return this.roleService.getRoleByValue(value);
   }
 }
