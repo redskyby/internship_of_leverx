@@ -21,9 +21,6 @@ export class Vinyl extends Model<Vinyl, VinylCreateInterface> {
   @Column({ type: DataType.STRING, allowNull: false })
   description: string;
 
-  @Column({ type: DataType.FLOAT, allowNull: true })
-  average_score: number;
-
   @HasMany(() => Review)
   reviews: Review[];
 }

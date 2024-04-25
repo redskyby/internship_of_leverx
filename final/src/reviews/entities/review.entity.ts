@@ -19,7 +19,7 @@ export class Review extends Model<Review, ReviewCreateInterface> {
     unique: true,
   })
   id: number;
-  @Column({ type: DataType.INTEGER, allowNull: false, unique: true })
+  @Column({ type: DataType.INTEGER, allowNull: false })
   review: number;
 
   @ForeignKey(() => Vinyl)
