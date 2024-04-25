@@ -9,7 +9,7 @@ import { RoleCreationAttrs } from '../../interfaces/role-create.interface';
 import { User } from '../../users/entities/user.entity';
 import { UserRoles } from './role-user.entity';
 
-@Table({ tableName: 'roles' })
+@Table({ tableName: 'role' })
 export class Role extends Model<Role, RoleCreationAttrs> {
   @Column({
     type: DataType.INTEGER,
