@@ -42,7 +42,7 @@ export class JwtAuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
 
     try {
-      const authToken = req.cookies['auth_token']; // Извлекаем JWT из cookie
+      const authToken = req.cookies['auth_token'];
 
       if (!authToken) {
         throw new UnauthorizedException({
@@ -50,9 +50,8 @@ export class JwtAuthGuard implements CanActivate {
         });
       }
 
-      const user = this.jwtService.verify(authToken); // Проверяем JWT
+      const user = this.jwtService.verify(authToken);
 
-      // Добавляем информацию о пользователе в объект запроса
       req.user = user;
 
       return true;

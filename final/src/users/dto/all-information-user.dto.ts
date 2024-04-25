@@ -1,8 +1,8 @@
 interface Role {
   id: number;
   value: string;
-  createdAt: string; // ISO формат даты
-  updatedAt: string; // ISO формат даты
+  createdAt: string;
+  updatedAt: string;
 }
 
 export class AllInformationUserDto {
@@ -10,7 +10,7 @@ export class AllInformationUserDto {
   id: number;
   name: string;
   lastName: string;
-  roles: Role[]; // Список ролей
-  iat: number; // Временная метка для "issued at"
-  exp: number; // Временная метка для "expiration"
+  roles: Role[];
+  iat: number;
+  exp: number;
 }

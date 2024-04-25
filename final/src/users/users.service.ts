@@ -28,7 +28,7 @@ export class UsersService {
         {
           model: Role,
           as: 'roles',
-          through: { attributes: [] }, //  Без промежуточной таблицы
+          through: { attributes: [] },
         },
       ],
     });

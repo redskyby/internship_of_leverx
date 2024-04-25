@@ -3,40 +3,39 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  UsePipes,
+  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { ValidationPipe } from '../pipes/validation.pipe';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  @Post()
-  create(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.create(createReviewDto);
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @Post('review')
+  create(@Body() dto: CreateReviewDto) {
+    return this.reviewsService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.reviewsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ParseIntPipe)
+  @Get('reviews')
+  findAll(@Param('offset') offset: number, @Param('limit') limit: number) {
+    return this.reviewsService.findAll(offset, limit);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewsService.update(+id, updateReviewDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewsService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @Delete('reviews/:id')
+  remove(@Param('id') id: number) {
+    return this.reviewsService.remove(id);
   }
 }
