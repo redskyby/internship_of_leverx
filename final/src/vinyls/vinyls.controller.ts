@@ -6,23 +6,31 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  UsePipes,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { VinylsService } from './vinyls.service';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ValidationPipe } from '../pipes/validation.pipe';
 
 @Controller('vinyls')
 export class VinylsController {
   constructor(private readonly vinylsService: VinylsService) {}
 
-  @Post()
-  create(@Body() createVinylDto: CreateVinylDto) {
-    return this.vinylsService.create(createVinylDto);
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Post('vinyl')
+  create(@Body() dto: CreateVinylDto) {
+    return this.vinylsService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.vinylsService.findAll();
+  @UsePipes(ParseIntPipe)
+  @Get('vinyls/:offset/:limit')
+  findAll(@Param('offset') offset: number, @Param('limit') limit: number) {
+    return this.vinylsService.findAll(offset, limit);
   }
 
   @Get(':id')

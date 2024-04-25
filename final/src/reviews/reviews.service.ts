@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -40,7 +41,7 @@ export class ReviewsService {
     });
 
     if (existingLike) {
-      throw new BadRequestException(
+      throw new ForbiddenException(
         'Лайк уже установлен для данного пользователя и поста.',
       );
     }

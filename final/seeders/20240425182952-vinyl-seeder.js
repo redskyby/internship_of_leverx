@@ -31,7 +31,7 @@ module.exports = {
             updatedAt: new Date(),
           },
           {
-            name: 'Back in Black',
+            name: 'Back in Black1',
             price: 28,
             author: 'AC/DC',
             description: 'A high-energy rock album.',
@@ -55,7 +55,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Abbey Road",
+                name: "Abbey Road1",
                 price: 28,
                 author: "The Beatles",
                 description: "A classic album by The Beatles.",

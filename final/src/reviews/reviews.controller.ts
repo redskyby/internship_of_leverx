@@ -27,13 +27,13 @@ export class ReviewsController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ParseIntPipe)
-  @Get('reviews')
+  @Get('reviews/:offset/:limit')
   findAll(@Param('offset') offset: number, @Param('limit') limit: number) {
     return this.reviewsService.findAll(offset, limit);
   }
 
   @UseGuards(JwtAuthGuard)
-  @UsePipes(ValidationPipe)
+  @UsePipes(ParseIntPipe)
   @Delete('reviews/:id')
   remove(@Param('id') id: number) {
     return this.reviewsService.remove(id);
