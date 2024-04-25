@@ -4,10 +4,12 @@ import {
   Table,
   DataType,
   BelongsToMany,
+  HasMany,
 } from 'sequelize-typescript';
 import { UserCreateInterface } from '../../interfaces/user-create.interface';
 import { Role } from '../../roles/entities/role.entity';
 import { UserRoles } from '../../roles/entities/role-user.entity';
+import { Review } from '../../reviews/entities/review.entity';
 
 // UserCreateInterface -  template for creating a user
 
@@ -35,4 +37,7 @@ export class User extends Model<User, UserCreateInterface> {
 
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
+
+  @HasMany(() => Review)
+  reviews: Review[];
 }

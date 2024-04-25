@@ -9,6 +9,8 @@ import { Role } from './roles/entities/role.entity';
 import { UserRoles } from './roles/entities/role-user.entity';
 import { VinylsModule } from './vinyls/vinyls.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { Vinyl } from './vinyls/entities/vinyl.entity';
+import { Review } from './reviews/entities/review.entity';
 
 @Module({
   controllers: [],
@@ -24,7 +26,7 @@ import { ReviewsModule } from './reviews/reviews.module';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         database: configService.get<string>('MYSQL_NAME'),
-        models: [User, Role, UserRoles],
+        models: [User, Role, UserRoles, Vinyl, Review],
         autoLoadModels: true,
       }),
     }),
