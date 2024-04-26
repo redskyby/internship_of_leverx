@@ -8,7 +8,7 @@ import { UpdateVinylDto } from './dto/update-vinyl.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
-
+import { Sequelize } from 'sequelize';
 
 @Injectable()
 export class VinylsService {
@@ -31,14 +31,21 @@ export class VinylsService {
   }
 
   public async findAll(offset: number, limit: number) {
-    const vinyls = await Vinyl.findAll({
-      limit: limit,
-      offset: offset,
+    const vinyls = await this.vinylRepository.findAll({
       include: [
         {
           model: Review,
+          as: 'reviews',
+          attributes: [],
         },
       ],
+      attributes: {
+        include: [
+          [Sequelize.fn('AVG', Sequelize.col('reviews.review')), 'avgRating'],
+        ],
+      },
+      raw: true,
+      group: ['Vinyl.id'],
     });
 
     if (vinyls.length === 0) {
