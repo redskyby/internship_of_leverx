@@ -11,6 +11,14 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AllInformationUserDto } from './dto/all-information-user.dto';
+import { Request } from 'express';
+
+declare module 'express' {
+  interface Request {
+    user?: AllInformationUserDto;
+  }
+}
 
 @Controller('users')
 export class UsersController {
@@ -23,7 +31,7 @@ export class UsersController {
   }
   @UseGuards(JwtAuthGuard)
   @Get('/user')
-  profile(@Req() req) {
-    return this.usersService.showUser();
+  profile(@Req() req: Request) {
+    return this.usersService.showUser(req.user);
   }
 }

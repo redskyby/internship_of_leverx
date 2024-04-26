@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
 import { RolesService } from '../roles/roles.service';
 import { Role } from '../roles/entities/role.entity';
+import { AllInformationUserDto } from './dto/all-information-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,5 +37,7 @@ export class UsersService {
     return user;
   }
 
-  public async showUser() {}
+  public async showUser(user: AllInformationUserDto) {
+    return user;
+  }
 }

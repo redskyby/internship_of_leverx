@@ -10,6 +10,8 @@ export class AllInformationUserDto {
   id: number;
   name: string;
   lastName: string;
+  avatar: string;
+  birthdate: string;
   roles: Role[];
   iat: number;
   exp: number;
