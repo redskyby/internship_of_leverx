@@ -5,11 +5,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Review } from './entities/review.entity';
 import { User } from '../users/entities/user.entity';
 import { Vinyl } from '../vinyls/entities/vinyl.entity';
-import { JwtModule } from '@nestjs/jwt';
+import {AuthModule} from "../auth/auth.module";
 
 @Module({
   controllers: [ReviewsController],
   providers: [ReviewsService],
-  imports: [SequelizeModule.forFeature([Review, User, Vinyl]), JwtModule],
+  imports: [SequelizeModule.forFeature([Review, User, Vinyl]), AuthModule],
 })
 export class ReviewsModule {}

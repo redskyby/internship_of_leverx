@@ -30,7 +30,6 @@ import { Review } from './reviews/entities/review.entity';
         autoLoadModels: true,
       }),
     }),
-
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
