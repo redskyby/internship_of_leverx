@@ -6,18 +6,22 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     // Old
-    // const req = context.switchToHttp().getRequest();
-    //
+
     // try {
+    //   const req = context.switchToHttp().getRequest();
     //   const authHeader = req.headers.authorization;
     //
     //   if (!authHeader) {
@@ -32,16 +36,19 @@ export class JwtAuthGuard implements CanActivate {
     //     });
     //   }
     //
-    //   const user = this.jwtService.verify(token);
+    //
+    //   const user = this.jwtService.verify(token , {publicKey: "jwt-secret-key"});
+    //
+    //   console.log(user)
     //
     //   req.user = user;
     //
     //   return true;
 
     // New
-    const req = context.switchToHttp().getRequest();
 
     try {
+      const req = context.switchToHttp().getRequest();
       const authToken = req.cookies['auth_token'];
 
       if (!authToken) {
@@ -50,7 +57,12 @@ export class JwtAuthGuard implements CanActivate {
         });
       }
 
-      const user = this.jwtService.verify(authToken);
+      // const user = this.jwtService.verify(authToken);
+      const user = this.jwtService.verify(authToken, {
+        publicKey: this.configService.get<string>('SECRET'),
+      });
+
+      console.log(user);
 
       req.user = user;
 

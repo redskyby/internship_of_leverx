@@ -25,13 +25,6 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('Пользователь не найден.');
     }
-    // {
-    //   email: 'pashadocenko@gmail.com',
-    //       firstName: 'pasha',
-    //     lastName: 'dotcenko',
-    //     picture: 'https://lh3.googleusercontent.com/a/ACg8ocLoufMLYG9c-OKtvCjk6KZ0POniNrnr5FM86pcrXSLUcdBMAg=s96-c',
-    //     accessToken: 'ya29.a0Ad52N3-CVaCjyqk9PkVUg_hArjYE-FNPfNpWCY_mvPzmoi_sD0JJ0laVoqZnOQ9DXYH5e1cm5U4Jytc7btz6oE-caXvtvwOxHsflsu12QzTf1nXXFbkEKixUIKsXl-ppKPOB3qgEtjzgdLtuRCVaKWgR6gGqN5igs3riaCgYKATgSARMSFQHGX2MiDAH2rN2FCAbO13H4W4CItQ0171'
-    // }
 
     const candidate = await this.userService.getUserByEmail(user.email);
 
@@ -44,6 +37,8 @@ export class AuthService {
         lastName: user.lastName,
         password: hashPassword,
         email: user.email,
+        birthdate: new Date('2010-01-10'),
+        avatar: user.picture,
       });
 
       return this.generateToken(newUser);

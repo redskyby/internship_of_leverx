@@ -35,4 +35,6 @@ export class UsersService {
 
     return user;
   }
+
+  public async showUser() {}
 }

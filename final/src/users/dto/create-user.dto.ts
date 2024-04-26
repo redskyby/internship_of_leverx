@@ -20,4 +20,11 @@ export class CreateUserDto {
   @IsEmail({}, { message: 'Некорректный формат email' })
   @IsNotEmpty({ message: 'Поле email не может быть пустым' })
   readonly email: string;
+
+  @IsNotEmpty({ message: 'Поле даты не может быть пустым' })
+  readonly birthdate: Date;
+
+  @IsString({ message: 'Аватар должен быть строкой' })
+  @IsNotEmpty({ message: 'Аватар  не может быть пустым' })
+  readonly avatar: string;
 }

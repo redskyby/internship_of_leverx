@@ -6,11 +6,16 @@ import { User } from './entities/user.entity';
 import { Role } from '../roles/entities/role.entity';
 import { RolesModule } from '../roles/roles.module';
 import { Review } from '../reviews/entities/review.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
-  imports: [SequelizeModule.forFeature([User, Role, Review]), RolesModule],
+  imports: [
+    SequelizeModule.forFeature([User, Role, Review]),
+    RolesModule,
+    JwtModule,
+  ],
   exports: [UsersService],
 })
 export class UsersModule {}

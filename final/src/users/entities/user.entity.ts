@@ -32,6 +32,12 @@ export class User extends Model<User, UserCreateInterface> {
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;
 
+  @Column({ type: DataType.DATE, allowNull: true })
+  birthdate: Date;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  avatar: string;
+
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email: string;
 
