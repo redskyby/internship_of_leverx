@@ -6,14 +6,16 @@ import {
   Get,
   UseGuards,
   Req,
-  Put, Delete, Res,
+  Put,
+  Delete,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
-import { Request , Response } from 'express';
+import { Request, Response } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 declare module 'express' {
@@ -44,10 +46,9 @@ export class UsersController {
     return this.usersService.editProfile(req.user, userDto);
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Delete('/user')
-  deleteProfile(@Req() req: Request , @Res() res : Response) {
-    return this.usersService.deleteProfile(req.user , res);
+  deleteProfile(@Req() req: Request, @Res() res: Response) {
+    return this.usersService.deleteProfile(req.user, res);
   }
 }

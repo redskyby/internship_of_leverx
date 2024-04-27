@@ -5,7 +5,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Review } from './entities/review.entity';
 import { User } from '../users/entities/user.entity';
 import { Vinyl } from '../vinyls/entities/vinyl.entity';
-import {AuthModule} from "../auth/auth.module";
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [ReviewsController],

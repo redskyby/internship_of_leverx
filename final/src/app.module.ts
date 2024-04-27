@@ -11,6 +11,7 @@ import { VinylsModule } from './vinyls/vinyls.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { Vinyl } from './vinyls/entities/vinyl.entity';
 import { Review } from './reviews/entities/review.entity';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   controllers: [],
@@ -39,6 +40,7 @@ import { Review } from './reviews/entities/review.entity';
     RolesModule,
     VinylsModule,
     ReviewsModule,
+    StripeModule,
   ],
 })
 export class AppModule {}

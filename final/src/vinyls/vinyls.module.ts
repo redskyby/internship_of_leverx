@@ -4,7 +4,7 @@ import { VinylsController } from './vinyls.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
-import {AuthModule} from "../auth/auth.module";
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [VinylsController],

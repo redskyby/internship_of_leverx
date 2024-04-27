@@ -7,7 +7,7 @@ import { Role } from '../roles/entities/role.entity';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import {  Response } from 'express';
+import { Response } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -78,9 +78,9 @@ export class UsersService {
       ],
     });
 
-    const {dataValues} =newUser1
+    const { dataValues } = newUser1;
 
-     const payload = {
+    const payload = {
       email: dataValues.email,
       id: dataValues.id,
       name: dataValues.name,
@@ -92,13 +92,13 @@ export class UsersService {
 
     const token = await this.jwtService.sign(payload);
 
-     const newUser = await this.jwtService.verify(token );
+    const newUser = await this.jwtService.verify(token);
 
     return newUser;
   }
 
   public async deleteProfile(user: AllInformationUserDto, res: Response) {
-    const {email} = user;
+    const { email } = user;
 
     const candidate = await this.userRepository.findOne({ where: { email } });
 
@@ -106,8 +106,7 @@ export class UsersService {
       throw new NotFoundException('Пользователь не найден.');
     }
 
-    await this.userRepository.destroy({where : {id : candidate.id}});
-
+    await this.userRepository.destroy({ where: { id: candidate.id } });
 
     // And delete cookie
     res.cookie('auth_token', '', {
