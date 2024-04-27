@@ -13,15 +13,17 @@ import {
 import { VinylsService } from './vinyls.service';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { Roles } from '../decorators/roles.decorator';
+import { RoleGuard } from '../guards/role.guard';
 
 @Controller('vinyls')
 export class VinylsController {
   constructor(private readonly vinylsService: VinylsService) {}
 
   @UsePipes(ValidationPipe)
-  @UseGuards(JwtAuthGuard)
+  @Roles('admin')
+  @UseGuards(RoleGuard)
   @Post('vinyl')
   create(@Body() dto: CreateVinylDto) {
     return this.vinylsService.create(dto);

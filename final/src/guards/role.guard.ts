@@ -29,8 +29,6 @@ export class RoleGuard implements CanActivate {
         return true;
       }
 
-      console.log(requiredRoles);
-
       const req = context.switchToHttp().getRequest();
       const authToken = req.cookies['auth_token'];
 
