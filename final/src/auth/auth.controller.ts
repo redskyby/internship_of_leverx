@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {

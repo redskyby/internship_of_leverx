@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { CreateStripeDto } from './dto/create-stripe.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { Request } from 'express';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';

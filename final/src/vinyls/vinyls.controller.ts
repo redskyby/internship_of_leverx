@@ -13,7 +13,7 @@ import {
 import { VinylsService } from './vinyls.service';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
 
 @Controller('vinyls')

@@ -13,7 +13,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
 import { Request, Response } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -33,6 +33,7 @@ export class UsersController {
   registration(@Body() userDto: CreateUserDto) {
     return this.usersService.createUser(userDto);
   }
+
   @UseGuards(JwtAuthGuard)
   @Get('/user')
   profile(@Req() req: Request) {
