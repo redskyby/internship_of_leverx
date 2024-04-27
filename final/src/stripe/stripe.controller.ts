@@ -14,6 +14,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { Request } from 'express';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
+import { SendInformationDto } from './dto/send-information.dto';
 
 declare module 'express' {
   interface Request {
@@ -30,9 +31,10 @@ export class StripeController {
     return this.stripeService.createPayments(createStripeDto, req.user);
   }
 
+  @UsePipes(ValidationPipe)
   @Get('/success')
-  stripeSuccess(@Query() mail: string, @Query() name: string) {
-    return this.stripeService.success(mail, name);
+  stripeSuccess(@Query() dto: SendInformationDto) {
+    return this.stripeService.success(dto);
   }
 
   @Get('/cansel')

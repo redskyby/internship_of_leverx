@@ -3,12 +3,17 @@ import { CreateStripeDto } from './dto/create-stripe.dto';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
+import { MailService } from '../mail/mail.service';
+import { SendInformationDto } from './dto/send-information.dto';
 
 @Injectable()
 export class StripeService {
   private stripe;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private mailService: MailService,
+  ) {
     this.stripe = new Stripe(
       this.configService.get<string>('STRIPE_SECRET_KEY'),
     );
@@ -40,7 +45,10 @@ export class StripeService {
     return { url: session.url };
   }
 
-  public async success(email: string, name: string) {}
+  public async success(dto: SendInformationDto) {
+    await this.mailService.sendNewInformation(dto.email, dto.name);
+    return { message: 'Спасибо за оплату, ваш платеж обрабатывается.' };
+  }
 
   public async cansel() {
     return { message: 'Произошла ошибка' };
