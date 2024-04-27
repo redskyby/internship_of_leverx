@@ -12,6 +12,7 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { Vinyl } from './vinyls/entities/vinyl.entity';
 import { Review } from './reviews/entities/review.entity';
 import { StripeModule } from './stripe/stripe.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   controllers: [],
@@ -41,6 +42,7 @@ import { StripeModule } from './stripe/stripe.module';
     VinylsModule,
     ReviewsModule,
     StripeModule,
+    MailModule,
   ],
 })
 export class AppModule {}
