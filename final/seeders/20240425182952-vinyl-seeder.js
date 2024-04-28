@@ -7,7 +7,7 @@ module.exports = {
         'vinyl', // Название таблицы
         [
           {
-            name: 'Abbey Road',
+            name: 'Abbey Road-new',
             price: 25,
             author: 'The Beatles',
             description: 'A classic album by The Beatles.',
@@ -15,7 +15,7 @@ module.exports = {
             updatedAt: new Date(),
           },
           {
-            name: 'The Dark Side of the Moon',
+            name: 'The Dark Side of the Moon-new',
             price: 30,
             author: 'Pink Floyd',
             description: 'An iconic album by Pink Floyd.',
@@ -39,7 +39,7 @@ module.exports = {
             updatedAt: new Date(),
           },
           {
-            name: 'Hotel California',
+            name: 'Hotel California-new1',
             price: 27,
             author: 'The Eagles',
             description: 'A timeless album by The Eagles.',
@@ -71,7 +71,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Back in Black",
+                name: "Back in Black-new1",
                 price: 27,
                 author: "AC/DC",
                 description: "A rock classic by AC/DC.",
@@ -79,7 +79,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Hotel California",
+                name: "Hotel California2",
                 price: 29,
                 author: "Eagles",
                 description: "A legendary album by Eagles.",
@@ -87,7 +87,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "The Joshua Tree",
+                name: "The Joshua Tree-new",
                 price: 26,
                 author: "U2",
                 description: "An iconic album by U2.",
@@ -95,7 +95,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Led Zeppelin IV",
+                name: "Led Zeppelin IV-new",
                 price: 30,
                 author: "Led Zeppelin",
                 description: "A timeless album by Led Zeppelin.",
@@ -103,7 +103,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Thriller",
+                name: "Thriller-new1",
                 price: 32,
                 author: "Michael Jackson",
                 description: "The best-selling album of all time.",
@@ -111,7 +111,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Appetite for Destruction",
+                name: "Appetite for Destruction-new",
                 price: 27,
                 author: "Guns N' Roses",
                 description: "A debut album that took the world by storm.",
@@ -119,7 +119,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "The Rise and Fall of Ziggy Stardust",
+                name: "The Rise and Fall of Ziggy Stardust-new",
                 price: 25,
                 author: "David Bowie",
                 description: "A concept album by David Bowie.",
@@ -127,7 +127,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Dark Side of the Moon",
+                name: "Dark Side of the Moon2",
                 price: 30,
                 author: "Pink Floyd",
                 description: "An iconic album by Pink Floyd.",
@@ -135,7 +135,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Purple Rain",
+                name: "Purple Rain-new",
                 price: 33,
                 author: "Prince",
                 description: "A groundbreaking album by Prince.",
@@ -151,7 +151,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "1989",
+                name: "1989-new",
                 price: 30,
                 author: "Taylor Swift",
                 description: "A pop hit by Taylor Swift.",
@@ -175,7 +175,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Nevermind",
+                name: "Nevermind-new",
                 price: 27,
                 author: "Nirvana",
                 description: "An iconic grunge album by Nirvana.",
@@ -183,7 +183,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Bat Out of Hell",
+                name: "Bat Out of Hell-new",
                 price: 26,
                 author: "Meat Loaf",
                 description: "A rock opera by Meat Loaf.",
@@ -207,7 +207,7 @@ module.exports = {
                 updatedAt: new Date(),
             }
                 ,{
-            name: "The Wall",
+            name: "The Wall-new",
             price: 35,
             author: "Pink Floyd",
             description: "A rock opera by Pink Floyd.",
@@ -215,7 +215,7 @@ module.exports = {
             updatedAt: new Date(),
         },
             {
-                name: "Abbey Road",
+                name: "Abbey Road2",
                 price: 28,
                 author: "The Beatles",
                 description: "A classic album by The Beatles.",
@@ -223,7 +223,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Rumours",
+                name: "Rumours-new",
                 price: 25,
                 author: "Fleetwood Mac",
                 description: "One of the best-selling albums of all time.",
@@ -231,7 +231,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Back in Black",
+                name: "Back in Black-new",
                 price: 27,
                 author: "AC/DC",
                 description: "A rock classic by AC/DC.",
@@ -239,7 +239,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Hotel California",
+                name: "Hotel California1",
                 price: 29,
                 author: "Eagles",
                 description: "A legendary album by Eagles.",
@@ -263,7 +263,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Thriller",
+                name: "Thriller-new",
                 price: 32,
                 author: "Michael Jackson",
                 description: "The best-selling album of all time.",
@@ -303,7 +303,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "A Night at the Opera",
+                name: "A Night at the Opera-new",
                 price: 31,
                 author: "Queen",
                 description: "A classic album by Queen.",
@@ -319,7 +319,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Born in the U.S.A.",
+                name: "Born in the U.S.A.-new",
                 price: 28,
                 author: "Bruce Springsteen",
                 description: "A patriotic album by Bruce Springsteen.",
@@ -327,7 +327,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "OK Computer",
+                name: "OK Computer-new",
                 price: 29,
                 author: "Radiohead",
                 description: "A highly acclaimed album by Radiohead.",
@@ -351,7 +351,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Sticky Fingers",
+                name: "Sticky Fingers-new1",
                 price: 31,
                 author: "The Rolling Stones",
                 description: "A classic album by The Rolling Stones.",
@@ -359,7 +359,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                name: "Ten",
+                name: "Ten-new",
                 price: 28,
                 author: "Pearl Jam",
                 description: "A powerful grunge album by Pearl Jam.",

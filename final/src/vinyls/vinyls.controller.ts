@@ -38,13 +38,16 @@ export class VinylsController {
   @UsePipes(ValidationPipe)
   @Roles('admin')
   @UseGuards(RoleGuard)
-  @Put('/vinyls')
+  @Put('/vinyl')
   update(@Body() dto: UpdateVinylDto) {
     return this.vinylsService.update(dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vinylsService.remove(+id);
+  @UsePipes(ValidationPipe)
+  @Roles('admin')
+  @UsePipes(ParseIntPipe)
+  @Delete('/:id')
+  remove(@Param('id') id: number) {
+    return this.vinylsService.remove(id);
   }
 }

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
@@ -59,9 +60,36 @@ export class VinylsService {
     return vinyls;
   }
 
-  public async update(dto: UpdateVinylDto) {}
+  public async update(dto: UpdateVinylDto) {
+    const vinyl = await this.vinylRepository.findOne({
+      where: { id: dto.id },
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} vinyl`;
+    if (!vinyl) {
+      throw new NotFoundException('Пластинка с таким  именем не существует.');
+    }
+
+    await this.vinylRepository.update(
+      {
+        name: dto.newName,
+        price: dto.newPrice,
+        description: dto.newDescription,
+      },
+      { where: { id: vinyl.dataValues.id } },
+    );
+
+    return { message: 'Информация об пластинке изменена' };
+  }
+
+  public async remove(id: number) {
+    const vinyl = await this.vinylRepository.findOne({ where: { id } });
+
+    if (!vinyl) {
+      throw new NotFoundException('Пластинок с таким id не существует.');
+    }
+
+    await this.vinylRepository.destroy({ where: { id } });
+
+    return { message: 'Информация об пластинке удалена.' };
   }
 }
