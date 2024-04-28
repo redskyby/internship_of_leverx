@@ -46,6 +46,8 @@ export class VinylsService {
       },
       raw: true,
       group: ['Vinyl.id'],
+      limit,
+      offset,
     });
 
     if (vinyls.length === 0) {
@@ -57,13 +59,7 @@ export class VinylsService {
     return vinyls;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} vinyl`;
-  }
-
-  update(id: number, updateVinylDto: UpdateVinylDto) {
-    return `This action updates a #${id} vinyl`;
-  }
+  public async update(dto: UpdateVinylDto) {}
 
   remove(id: number) {
     return `This action removes a #${id} vinyl`;

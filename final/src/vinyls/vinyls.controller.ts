@@ -3,12 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
   UsePipes,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { VinylsService } from './vinyls.service';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
@@ -35,14 +35,12 @@ export class VinylsController {
     return this.vinylsService.findAll(offset, limit);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.vinylsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVinylDto: UpdateVinylDto) {
-    return this.vinylsService.update(+id, updateVinylDto);
+  @UsePipes(ValidationPipe)
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @Put('/vinyls')
+  update(@Body() dto: UpdateVinylDto) {
+    return this.vinylsService.update(dto);
   }
 
   @Delete(':id')
