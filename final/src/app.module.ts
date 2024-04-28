@@ -14,6 +14,7 @@ import { Review } from './reviews/entities/review.entity';
 import { StripeModule } from './stripe/stripe.module';
 import { MailModule } from './mail/mail.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PurchasesModule } from './purchases/purchases.module';
 
 @Module({
   controllers: [],
@@ -51,6 +52,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     ReviewsModule,
     StripeModule,
     MailModule,
+    PurchasesModule,
   ],
 })
 export class AppModule {}
