@@ -65,10 +65,22 @@ export class PurchasesService {
 
     await this.userModel.updateOne(
       { id: candidate.dataValues.id },
-      { $push: { purchases: newPurchase._id } },
+      { $push: { purchases: newPurchase.id } },
     );
 
     return newPurchase;
+  }
+
+  public async findUserByEmail(email: string) {
+    const user = await this.userModel.findOne({ email: email });
+
+    return user;
+  }
+
+  public async findPurchaseById(id: number) {
+    const purchase = await this.purchaseModel.findOne({ id: id });
+
+    return purchase;
   }
 
   public async remove(id: number) {
@@ -79,12 +91,12 @@ export class PurchasesService {
     }
 
     await this.userModel.updateOne(
-        { id: newPurchase.userId },
-        { $set: { purchases: [] } },
+      { id: newPurchase.userId },
+      { $set: { purchases: [] } },
     );
 
     await this.purchaseModel.deleteOne({ id: id });
 
-    return {message  :"Покупка успешна удалена"}
+    return { message: 'Покупка успешна удалена' };
   }
 }

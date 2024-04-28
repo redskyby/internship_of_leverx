@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateStripeDto } from './dto/create-stripe.dto';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { MailService } from '../mail/mail.service';
 import { SendInformationDto } from './dto/send-information.dto';
+import { PurchasesService } from '../purchases/purchases.service';
 
 @Injectable()
 export class StripeService {
@@ -13,6 +14,8 @@ export class StripeService {
   constructor(
     private configService: ConfigService,
     private mailService: MailService,
+
+    private purchasesService: PurchasesService,
   ) {
     this.stripe = new Stripe(
       this.configService.get<string>('STRIPE_SECRET_KEY'),
@@ -23,6 +26,21 @@ export class StripeService {
     createStripeDto: CreateStripeDto,
     user: AllInformationUserDto,
   ) {
+    const candidate = await this.purchasesService.findUserByEmail(user.email);
+
+    if (!candidate) {
+      throw new NotFoundException('Такого пользователя не существует.');
+    }
+    const { purchases } = candidate;
+
+    const purchase = await this.purchasesService.findPurchaseById(
+      Number(purchases),
+    );
+
+    if (!purchase) {
+      throw new NotFoundException('Корзина пуста');
+    }
+
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -31,11 +49,11 @@ export class StripeService {
           price_data: {
             currency: 'usd', // Валюта
             product_data: {
-              name: 'Wireless Headphones21', // Название продукта
+              name: purchase.name,
             },
-            unit_amount: 1999, // Цена за единицу в центах (19.99 доллара)
+            unit_amount: purchase.price * 100, // Цена за единицу в центах (19.99 доллара)
           },
-          quantity: 2, // Количество
+          quantity: purchase.count, // Количество
         },
       ],
       success_url: `http://localhost:5000/stripe/success?email=${user.email}&name=${user.name}`,
@@ -47,6 +65,13 @@ export class StripeService {
 
   public async success(dto: SendInformationDto) {
     await this.mailService.sendNewInformation(dto.email, dto.name);
+
+    const candidate = await this.purchasesService.findUserByEmail(dto.email);
+
+    const { purchases } = candidate;
+
+    await this.purchasesService.remove(Number(purchases));
+
     return { message: 'Спасибо за оплату, ваш платеж обрабатывается.' };
   }
 
