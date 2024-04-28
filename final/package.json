@@ -1,5 +1,5 @@
 {
-  "name": "homework-5",
+  "name": "final",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -27,6 +27,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "*",
+    "@nestjs/mongoose": "^10.0.6",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/sequelize": "^10.0.1",
@@ -35,6 +36,7 @@
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
+    "mongoose": "^8.3.2",
     "mysql2": "^3.9.5",
     "nodemailer": "^6.9.13",
     "passport": "^0.7.0",

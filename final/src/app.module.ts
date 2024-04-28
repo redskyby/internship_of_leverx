@@ -13,6 +13,7 @@ import { Vinyl } from './vinyls/entities/vinyl.entity';
 import { Review } from './reviews/entities/review.entity';
 import { StripeModule } from './stripe/stripe.module';
 import { MailModule } from './mail/mail.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   controllers: [],
@@ -35,6 +36,13 @@ import { MailModule } from './mail/mail.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_DB_URL'),
+      }),
     }),
     UsersModule,
     AuthModule,
