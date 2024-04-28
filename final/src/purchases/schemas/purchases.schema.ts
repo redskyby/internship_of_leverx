@@ -11,6 +11,10 @@ export class Purchase extends Document {
 
   @Prop({ type: Number, required: true })
   price: number;
+
+  @Prop({ type: Number, required: true })
+  count: number;
+
   @Prop({ type: String, required: true, unique: true })
   author: string;
   @Prop({ type: String, required: true, unique: true })
