@@ -22,6 +22,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Review } from './entities/review.entity';
+import {Roles} from "../decorators/roles.decorator";
+import {RoleGuard} from "../guards/role.guard";
 
 @ApiTags('Reviews')
 @Controller('reviews')
@@ -83,7 +85,8 @@ export class ReviewsController {
   @ApiResponse({ status: 200, description: 'Отзыв удален' })
   @ApiResponse({ status: 404, description: 'Отзывов с таким id не существует' })
   @ApiResponse({ status: 403, description: 'Нет авторизации' })
-  @UseGuards(JwtAuthGuard)
+  @Roles('admin')
+  @UseGuards(RoleGuard)
   @UsePipes(ParseIntPipe)
   @Delete('reviews/:id')
   remove(@Param('id') id: number) {
