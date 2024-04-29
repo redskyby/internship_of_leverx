@@ -11,6 +11,7 @@ import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
 import { Sequelize } from 'sequelize';
 import { FindVinylDto } from './dto/find-vinyl.dto';
+import { SortVinylDto } from './dto/sort-vinyl.dto';
 
 @Injectable()
 export class VinylsService {
@@ -112,5 +113,19 @@ export class VinylsService {
     return vinyls;
   }
 
-  public async sort(dto: FindVinylDto) {}
+  public async sort(dto: SortVinylDto) {
+    const { sort, offset, limit } = dto;
+
+    const vinyls = await this.vinylRepository.findAll({
+      order: [[sort, 'ASC']],
+      limit,
+      offset,
+    });
+
+    if (vinyls.length === 0) {
+      return { message: 'Записи не найдены или измените параметры поиска' };
+    }
+
+    return vinyls;
+  }
 }

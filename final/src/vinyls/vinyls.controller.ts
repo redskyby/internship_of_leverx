@@ -18,6 +18,7 @@ import { Roles } from '../decorators/roles.decorator';
 import { RoleGuard } from '../guards/role.guard';
 import { FindVinylDto } from './dto/find-vinyl.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { SortVinylDto } from './dto/sort-vinyl.dto';
 
 @Controller('vinyls')
 export class VinylsController {
@@ -63,7 +64,7 @@ export class VinylsController {
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
   @Post('sort')
-  sort(@Body() dto: FindVinylDto) {
+  sort(@Body() dto: SortVinylDto) {
     return this.vinylsService.sort(dto);
   }
 }
