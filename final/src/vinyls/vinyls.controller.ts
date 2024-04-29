@@ -16,6 +16,8 @@ import { UpdateVinylDto } from './dto/update-vinyl.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { Roles } from '../decorators/roles.decorator';
 import { RoleGuard } from '../guards/role.guard';
+import { FindVinylDto } from './dto/find-vinyl.dto';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @Controller('vinyls')
 export class VinylsController {
@@ -43,11 +45,25 @@ export class VinylsController {
     return this.vinylsService.update(dto);
   }
 
-  @UsePipes(ValidationPipe)
   @Roles('admin')
+  @UseGuards(RoleGuard)
   @UsePipes(ParseIntPipe)
   @Delete('/:id')
   remove(@Param('id') id: number) {
     return this.vinylsService.remove(id);
+  }
+
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Post('find')
+  findByAuthor(@Body() dto: FindVinylDto) {
+    return this.vinylsService.findByAuthor(dto);
+  }
+
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Post('sort')
+  sort(@Body() dto: FindVinylDto) {
+    return this.vinylsService.sort(dto);
   }
 }

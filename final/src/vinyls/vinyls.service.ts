@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
 import { Sequelize } from 'sequelize';
+import { FindVinylDto } from './dto/find-vinyl.dto';
 
 @Injectable()
 export class VinylsService {
@@ -47,8 +48,6 @@ export class VinylsService {
       },
       raw: true,
       group: ['Vinyl.id'],
-      limit,
-      offset,
     });
 
     if (vinyls.length === 0) {
@@ -92,4 +91,26 @@ export class VinylsService {
 
     return { message: 'Информация об пластинке удалена.' };
   }
+
+  public async findByAuthor(dto: FindVinylDto) {
+    const { name, author, limit, offset } = dto;
+
+    if (!name && !author) {
+      throw new ForbiddenException('Не задано условие поиска');
+    }
+
+    const vinyls = await this.vinylRepository.findAll({
+      where: { name, author },
+      limit,
+      offset,
+    });
+
+    if (vinyls.length === 0) {
+      return { message: 'Записи не найдены или измените параметры поиска' };
+    }
+
+    return vinyls;
+  }
+
+  public async sort(dto: FindVinylDto) {}
 }
