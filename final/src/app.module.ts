@@ -15,6 +15,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { MailModule } from './mail/mail.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PurchasesModule } from './purchases/purchases.module';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
   controllers: [],
@@ -53,6 +54,7 @@ import { PurchasesModule } from './purchases/purchases.module';
     StripeModule,
     MailModule,
     PurchasesModule,
+    TelegramModule,
   ],
 })
 export class AppModule {}
