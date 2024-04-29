@@ -1,9 +1,20 @@
-import { IsNumber, IsPositive, IsString, Length, Min } from 'class-validator';
+import {
+  IsIn,
+  IsNumber,
+  IsPositive,
+  IsString,
+  Length,
+  Min,
+} from 'class-validator';
 
 export class SortVinylDto {
   @IsString({ message: 'Метод сортировки должен быть строкой' })
   @Length(3, 10, {
     message: 'Метод сортировки должен быть длиннее 3х символов и короче 10 ',
+  })
+  @IsIn(['id', 'name', 'price', 'description'], {
+    message:
+      'Метод сортировки должен быть одним из: id , name,  price,  description',
   })
   readonly sort: string;
 
