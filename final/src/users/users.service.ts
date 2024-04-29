@@ -42,6 +42,14 @@ export class UsersService {
   }
 
   public async showUser(user: AllInformationUserDto) {
+    const candidate = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
+
+    if (!candidate) {
+      throw new NotFoundException('Пользователь не найден.');
+    }
+
     return user;
   }
 

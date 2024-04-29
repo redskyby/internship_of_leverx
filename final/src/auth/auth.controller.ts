@@ -16,18 +16,18 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   ApiBody,
-  ApiCookieAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { AuthSwaggerInterface } from '../interfaces/auth-swagger.interface';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiTags('Auth')
   @ApiOperation({
     summary: 'Вход в приложение users с помощью учетной записи google',
   })
@@ -37,7 +37,6 @@ export class AuthController {
   @Get('google')
   async googleAuth(@Req() req) {}
 
-  @ApiTags('Auth')
   @ApiOperation({ summary: 'Обработчик перенаправления Google' })
   @ApiResponse({
     status: 302,
@@ -50,7 +49,6 @@ export class AuthController {
     return this.authService.googleLogin(req);
   }
 
-  @ApiTags('Auth')
   @ApiOperation({ summary: 'Вход в систему посредством ввода данных' })
   @ApiBody({ type: LoginUserDto, description: 'Данные для входа' })
   @ApiResponse({

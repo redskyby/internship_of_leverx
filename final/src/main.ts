@@ -15,7 +15,7 @@ const start = async () => {
       .setDescription('Документация к серверному приложению.')
       .setVersion('1.0.0')
       .addTag('Auth', 'Эндпоинты, связанные с аутентификацией')
-      .addTag('Vinyls', 'Эндпоинты, связанные с пластинками')
+      .addTag('Users', 'Эндпоинты, связанные с пользователями')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
