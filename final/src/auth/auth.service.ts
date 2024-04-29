@@ -119,7 +119,7 @@ export class AuthService {
     });
 
     return res.status(200).json({
-      message: 'Successfully logged out',
+      message: 'спешный выход из системы',
     });
   }
 }
