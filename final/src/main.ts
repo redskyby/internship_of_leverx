@@ -16,6 +16,14 @@ const start = async () => {
       .setVersion('1.0.0')
       .addTag('Auth', 'Эндпоинты, связанные с аутентификацией')
       .addTag('Users', 'Эндпоинты, связанные с пользователями')
+      .addTag('Vinyls', 'Эндпоинты, связанные с пластинками')
+      .addTag('Roles', 'Эндпоинты, связанные с ролями')
+      .addTag('Reviews', 'Эндпоинты, связанные с отзывами')
+      .addTag('Stripe', 'Эндпоинты, связанные с сервисом оплаты')
+      .addTag(
+        'Purchases',
+        'Эндпоинты, связанные с добавлением товаров в корзину',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

@@ -12,7 +12,9 @@ import { PurchasesService } from './purchases.service';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Purchases')
 @Controller('purchases')
 export class PurchasesController {
   constructor(private readonly purchasesService: PurchasesService) {}

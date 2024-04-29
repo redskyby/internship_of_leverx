@@ -107,7 +107,9 @@ export class VinylsService {
     });
 
     if (vinyls.length === 0) {
-      return { message: 'Записи не найдены или измените параметры поиска' };
+      throw new BadRequestException(
+        'Записи не найдены или измените параметры поиска',
+      );
     }
 
     return vinyls;
@@ -123,7 +125,9 @@ export class VinylsService {
     });
 
     if (vinyls.length === 0) {
-      return { message: 'Записи не найдены или измените параметры поиска' };
+      throw new BadRequestException(
+        'Записи не найдены или измените параметры поиска',
+      );
     }
 
     return vinyls;

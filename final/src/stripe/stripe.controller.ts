@@ -15,12 +15,14 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { Request } from 'express';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { SendInformationDto } from './dto/send-information.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 declare module 'express' {
   interface Request {
     user?: AllInformationUserDto;
   }
 }
+@ApiTags('Stripe')
 @Controller('stripe')
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
