@@ -24,7 +24,7 @@ export class TelegramService {
     if (!vinyl) {
       throw new NotFoundException('Пластинок с таким id не существует.');
     }
-    const {dataValues} = vinyl;
+    const { dataValues } = vinyl;
 
     const message = `
 🎵 *Название*:  ${dataValues.name}
@@ -33,10 +33,10 @@ export class TelegramService {
 `;
 
     await this.bot.telegram.sendMessage(
-        this.configService.get<string>('TELEGRAM_CHANEL'),
-        message,
+      this.configService.get<string>('TELEGRAM_CHANEL'),
+      message,
     );
 
-    return {message: 'Сообщение успешно отправлено'};
+    return { message: 'Сообщение успешно отправлено' };
   }
 }

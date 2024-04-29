@@ -22,8 +22,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Review } from './entities/review.entity';
-import {Roles} from "../decorators/roles.decorator";
-import {RoleGuard} from "../guards/role.guard";
+import { Roles } from '../decorators/roles.decorator';
+import { RoleGuard } from '../guards/role.guard';
 
 @ApiTags('Reviews')
 @Controller('reviews')
