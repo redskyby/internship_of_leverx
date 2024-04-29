@@ -132,4 +132,10 @@ export class VinylsService {
 
     return vinyls;
   }
+
+  public async findById(id: number) {
+    const vinyl = await this.vinylRepository.findOne({ where: { id } });
+
+    return vinyl;
+  }
 }

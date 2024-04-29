@@ -10,5 +10,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [VinylsController],
   providers: [VinylsService],
   imports: [SequelizeModule.forFeature([Vinyl, Review]), AuthModule],
+  exports: [VinylsService],
 })
 export class VinylsModule {}
