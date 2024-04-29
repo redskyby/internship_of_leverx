@@ -12,6 +12,7 @@ import { RolesService } from './roles.service';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import {
   ApiBody,
+  ApiCookieAuth,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -31,6 +32,7 @@ export class RolesController {
   @ApiResponse({ status: 401, description: 'Такая роль уже существует' })
   @ApiResponse({ status: 403, description: 'Не авторизован' })
   @ApiBody({ type: CreateRoleDto })
+  @ApiCookieAuth('auth_token')
   @Roles('admin')
   @UseGuards(RoleGuard)
   @UsePipes(ValidationPipe)
