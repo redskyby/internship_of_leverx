@@ -35,6 +35,8 @@ export class VinylsService {
 
   public async findAll(offset: number, limit: number) {
     const vinyls = await this.vinylRepository.findAll({
+
+      subQuery: false,
       include: [
         {
           model: Review,
@@ -48,6 +50,8 @@ export class VinylsService {
         ],
       },
       raw: true,
+      limit,
+      offset,
       group: ['Vinyl.id'],
     });
 
