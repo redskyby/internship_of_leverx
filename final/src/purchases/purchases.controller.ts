@@ -2,11 +2,11 @@ import {
   Controller,
   Post,
   Body,
-  Param,
   Delete,
   UseGuards,
   UsePipes,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { PurchasesService } from './purchases.service';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
@@ -16,11 +16,18 @@ import {
   ApiBody,
   ApiCookieAuth,
   ApiOperation,
-  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Purchase } from './schemas/purchases.schema';
+import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
+import { Request } from 'express';
+
+declare module 'express' {
+  interface Request {
+    user?: AllInformationUserDto;
+  }
+}
 
 @ApiTags('Purchases')
 @Controller('purchases')
@@ -53,12 +60,6 @@ export class PurchasesController {
     summary: 'Удаление покупки по ID из mongoDB после успешной оплаты',
   })
   @ApiCookieAuth('auth_token')
-  @ApiParam({
-    name: 'id',
-    type: 'integer',
-    description: 'Идентификатор покупки',
-    example: 1,
-  })
   @ApiResponse({ status: 200, description: 'Покупка успешно удалена' })
   @ApiResponse({
     status: 404,
@@ -67,8 +68,8 @@ export class PurchasesController {
   @ApiResponse({ status: 403, description: 'Не авторизован' })
   @UseGuards(JwtAuthGuard)
   @UsePipes(ParseIntPipe)
-  @Delete('purchase/:id')
-  remove(@Param('id') id: number) {
-    return this.purchasesService.remove(id);
+  @Delete('purchase')
+  remove(@Req() req: Request) {
+    return this.purchasesService.remove(req.user.id);
   }
 }

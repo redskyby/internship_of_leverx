@@ -34,30 +34,30 @@ export class StripeService {
     const { purchases } = candidate;
 
     const purchase = await this.purchasesService.findPurchaseById(
-      Number(purchases),
+      // @ts-ignore
+      purchases,
     );
 
     if (!purchase) {
       throw new NotFoundException('Корзина пуста');
     }
+    const lineItems = purchase.map((purchase) => ({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: purchase.name,
+        },
+        unit_amount: purchase.price * 100,
+      },
+      quantity: purchase.count,
+    }));
 
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd', // Валюта
-            product_data: {
-              name: purchase.name,
-            },
-            unit_amount: purchase.price * 100, // Цена за единицу в центах (19.99 доллара)
-          },
-          quantity: purchase.count, // Количество
-        },
-      ],
+      line_items: lineItems,
       success_url: `http://localhost:5000/stripe/success?email=${user.email}&name=${user.name}`,
-      cancel_url: 'http://localhost:5000/stripe/cansel',
+      cancel_url: 'http://localhost:5000/stripe/cancel',
     });
 
     return { url: session.url };
@@ -68,9 +68,9 @@ export class StripeService {
 
     const candidate = await this.purchasesService.findUserByEmail(dto.email);
 
-    const { purchases } = candidate;
+    const { id } = candidate;
 
-    await this.purchasesService.remove(Number(purchases));
+    await this.purchasesService.remove(id);
 
     return { message: 'Спасибо за оплату, ваш платеж обрабатывается.' };
   }

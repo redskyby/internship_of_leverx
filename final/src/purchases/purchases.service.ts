@@ -77,25 +77,23 @@ export class PurchasesService {
     return user;
   }
 
-  public async findPurchaseById(id: number) {
-    const purchase = await this.purchaseModel.findOne({ id: id });
-
+  public async findPurchaseById(id: number[]) {
+    const purchase = await this.purchaseModel.find({ id: id });
     return purchase;
   }
 
-  public async remove(id: number) {
-    const newPurchase = await this.purchaseModel.findOne({ id: id });
+  public async remove(userId: number) {
+    const purchases = await this.purchaseModel.find({ userId: userId });
 
-    if (!newPurchase) {
-      throw new NotFoundException('Такой покупки нет в вашей корзине.');
+    if (purchases.length === 0) {
+      throw new NotFoundException(
+        'Нет покупок, связанных с данным пользователем.',
+      );
     }
 
-    await this.userModel.updateOne(
-      { id: newPurchase.userId },
-      { $set: { purchases: [] } },
-    );
+    await this.userModel.updateOne({ id: userId }, { $set: { purchases: [] } });
 
-    await this.purchaseModel.deleteOne({ id: id });
+    await this.purchaseModel.deleteMany({ userId: userId });
 
     return { message: 'Покупка успешна удалена' };
   }

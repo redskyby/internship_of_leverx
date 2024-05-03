@@ -35,7 +35,6 @@ export class VinylsService {
 
   public async findAll(offset: number, limit: number) {
     const vinyls = await this.vinylRepository.findAll({
-
       subQuery: false,
       include: [
         {
