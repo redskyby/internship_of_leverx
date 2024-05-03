@@ -77,8 +77,8 @@ export class PurchasesService {
     return user;
   }
 
-  public async findPurchaseById(id: number[]) {
-    const purchase = await this.purchaseModel.find({ id: id });
+  public async findPurchaseById(id: number) {
+    const purchase = await this.purchaseModel.find({ userId: id });
     return purchase;
   }
 

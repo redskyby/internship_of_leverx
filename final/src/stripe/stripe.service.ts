@@ -31,16 +31,13 @@ export class StripeService {
     if (!candidate) {
       throw new NotFoundException('Такого пользователя не существует.');
     }
-    const { purchases } = candidate;
 
-    const purchase = await this.purchasesService.findPurchaseById(
-      // @ts-ignore
-      purchases,
-    );
+    const purchase = await this.purchasesService.findPurchaseById(candidate.id);
 
     if (!purchase) {
       throw new NotFoundException('Корзина пуста');
     }
+
     const lineItems = purchase.map((purchase) => ({
       price_data: {
         currency: 'usd',
