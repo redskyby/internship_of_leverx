@@ -1,6 +1,5 @@
 import {
   Controller,
-  Post,
   Body,
   UsePipes,
   Get,
@@ -11,7 +10,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
@@ -24,7 +22,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthSwaggerInterface } from '../interfaces/auth-swagger.interface';
 
 declare module 'express' {
   interface Request {
@@ -36,24 +33,6 @@ declare module 'express' {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @ApiOperation({ summary: 'Регистрация в системе посредством ввода данных' })
-  @ApiBody({ type: CreateUserDto, description: 'Данные для входа' })
-  @ApiResponse({
-    status: 200,
-    description: 'Успешный вход',
-    type: AuthSwaggerInterface,
-  })
-  @ApiResponse({ status: 403, description: 'Неверный пароль.' })
-  @ApiResponse({
-    status: 400,
-    description: 'Пользователь с таким email уже существует',
-  })
-  @UsePipes(ValidationPipe)
-  @Post()
-  registration(@Body() userDto: CreateUserDto) {
-    return this.usersService.createUser(userDto);
-  }
 
   @ApiOperation({ summary: 'Информация об пользователе' })
   @ApiCookieAuth('auth_token')
