@@ -208,4 +208,32 @@ describe('UsersController', () => {
 
     await expect(result).toEqual(mockAnswer);
   });
+
+  it('should show NotFoundException delete profile', async () => {
+    const user: AllInformationUserDto = {
+      id: 1,
+      name: 'Павел',
+      lastName: 'Доценко',
+      email: 'none@none.com',
+      birthdate: new Date('2020-10-12').toDateString(),
+      avatar: 'funny.jpg',
+      roles: [],
+      iat: 1,
+      exp: 1,
+    };
+
+    const mockResponse: Response = null;
+
+    mockUserService.deleteProfile.mockRejectedValue(
+      new NotFoundException('Пользователь не найден.'),
+    );
+
+    await expect(
+      controller.deleteProfile({ user } as Request, mockResponse),
+    ).rejects.toThrow(NotFoundException);
+
+    await expect(
+      controller.deleteProfile({ user } as Request, mockResponse),
+    ).rejects.toThrow('Пользователь не найден');
+  });
 });
