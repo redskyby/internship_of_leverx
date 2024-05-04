@@ -2,14 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VinylsController } from './vinyls.controller';
 import { VinylsService } from './vinyls.service';
 import { JwtModule } from '@nestjs/jwt';
-import {CreateVinylDto} from "./dto/create-vinyl.dto";
+import { CreateVinylDto } from './dto/create-vinyl.dto';
+import { ForbiddenException } from '@nestjs/common';
 
 describe('VinylsController', () => {
   let controller: VinylsController;
   let vinylService: VinylsService;
 
   const mockVinylService = {
-    create : jest.fn(),
+    create: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -38,26 +39,43 @@ describe('VinylsController', () => {
   });
 
   it('should create a vinyl', async () => {
-      const vinyl : CreateVinylDto = {
-        name : "newVinyl",
-        price : 10,
-        author : "Pasha",
-        description : "song for Gods"
-      }
+    const vinyl: CreateVinylDto = {
+      name: 'newVinyl',
+      price: 10,
+      author: 'Pasha',
+      description: 'song for Gods',
+    };
 
-      const mockVinyl : CreateVinylDto = {
-        name : "newVinyl1",
-        price : 12,
-        author : "Pasha2",
-        description : "song for Gods2"
-      }
+    const mockVinyl: CreateVinylDto = {
+      name: 'newVinyl1',
+      price: 12,
+      author: 'Pasha2',
+      description: 'song for Gods2',
+    };
 
-      mockVinylService.create.mockResolvedValue(mockVinyl)
+    mockVinylService.create.mockResolvedValue(mockVinyl);
 
-      const result = await controller.create(vinyl);
+    const result = await controller.create(vinyl);
 
-      await expect(vinylService.create).toHaveBeenCalledWith(vinyl)
-    await  expect(result).toEqual(mockVinyl);
+    await expect(vinylService.create).toHaveBeenCalledWith(vinyl);
+    await expect(result).toEqual(mockVinyl);
+  });
 
+  it('should show ForbiddenException', async () => {
+    const vinyl: CreateVinylDto = {
+      name: 'newVinyl',
+      price: 10,
+      author: 'Pasha',
+      description: 'song for Gods',
+    };
+
+    mockVinylService.create.mockRejectedValue(
+      new ForbiddenException('Пластинка с таким именем уже существует.'),
+    );
+
+    await expect(controller.create(vinyl)).rejects.toThrow(ForbiddenException);
+    await expect(controller.create(vinyl)).rejects.toThrow(
+      'Пластинка с таким именем уже существует.',
+    );
   });
 });
