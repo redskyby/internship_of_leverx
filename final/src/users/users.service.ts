@@ -100,7 +100,7 @@ export class UsersService {
 
     const token = await this.jwtService.sign(payload);
 
-    const newUser = await this.jwtService.verify(token);
+    const newUser: AllInformationUserDto = await this.jwtService.verify(token);
 
     return newUser;
   }
