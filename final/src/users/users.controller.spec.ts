@@ -3,7 +3,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AllInformationUserDto } from './dto/all-information-user.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 describe('UsersController', () => {
@@ -13,6 +13,7 @@ describe('UsersController', () => {
   const mockUserService = {
     showUser: jest.fn(),
     editProfile: jest.fn(),
+    deleteProfile: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -140,5 +141,71 @@ describe('UsersController', () => {
     );
 
     await expect(result).toEqual(mockUser);
+  });
+
+  it('should show NotFoundException edit profile', async () => {
+    const user: AllInformationUserDto = {
+      id: 1,
+      name: 'Павел',
+      lastName: 'Доценко',
+      email: 'none@none.com',
+      birthdate: new Date('2020-10-12').toDateString(),
+      avatar: 'funny.jpg',
+      roles: [],
+      iat: 1,
+      exp: 1,
+    };
+
+    const newInformation: UpdateUserDto = {
+      newName: 'newName',
+      newLastName: 'newLastName',
+      newBirthdate: new Date('2020-10-12'),
+      newAvatar: 'newFunny.jpg',
+    };
+
+    mockUserService.editProfile.mockRejectedValue(
+      new NotFoundException('Пользователь не найден.'),
+    );
+
+    await expect(
+      controller.editProfile({ user } as Request, newInformation),
+    ).rejects.toThrow(NotFoundException);
+
+    await expect(
+      controller.editProfile({ user } as Request, newInformation),
+    ).rejects.toThrow('Пользователь не найден');
+  });
+
+  it('should delete the user', async () => {
+    const user: AllInformationUserDto = {
+      id: 1,
+      name: 'Павел',
+      lastName: 'Доценко',
+      email: 'none@none.com',
+      birthdate: new Date('2020-10-12').toDateString(),
+      avatar: 'funny.jpg',
+      roles: [],
+      iat: 1,
+      exp: 1,
+    };
+
+    const mockAnswer = { message: 'Профиль удален.' };
+    const mockResponse: Response = null;
+
+    mockUserService.deleteProfile.mockResolvedValue({
+      message: 'Профиль удален.',
+    });
+
+    const result = await controller.deleteProfile(
+      { user } as Request,
+      mockResponse as Response,
+    );
+
+    await expect(userService.deleteProfile).toHaveBeenCalledWith(
+      user,
+      mockResponse,
+    );
+
+    await expect(result).toEqual(mockAnswer);
   });
 });
