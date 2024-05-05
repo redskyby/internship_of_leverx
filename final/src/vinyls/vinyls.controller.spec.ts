@@ -252,4 +252,26 @@ describe('VinylsController', () => {
     await expect(vinylService.findByAuthor).toHaveBeenCalledWith(vinyl);
     await expect(result).toEqual(mockvinylS);
   });
+
+  it('should return BadRequestException by author ', async () => {
+    const vinyl: FindVinylDto = {
+      name: 'ds',
+      author: 'Pasha',
+      offset: 0,
+      limit: 10,
+    };
+
+    mockVinylService.findByAuthor.mockRejectedValue(
+      new BadRequestException(
+        'Записи не найдены или измените параметры поиска',
+      ),
+    );
+
+    await expect(controller.findByAuthor(vinyl)).rejects.toThrow(
+      BadRequestException,
+    );
+    await expect(controller.findByAuthor(vinyl)).rejects.toThrow(
+      'Записи не найдены или измените параметры поиска',
+    );
+  });
 });
