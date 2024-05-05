@@ -3,7 +3,8 @@ import { VinylsController } from './vinyls.controller';
 import { VinylsService } from './vinyls.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import {BadRequestException, ForbiddenException, NotFoundException} from '@nestjs/common';
+import { UpdateVinylDto } from './dto/update-vinyl.dto';
 
 describe('VinylsController', () => {
   let controller: VinylsController;
@@ -12,6 +13,7 @@ describe('VinylsController', () => {
   const mockVinylService = {
     create: jest.fn(),
     findAll: jest.fn(),
+    update: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -122,5 +124,63 @@ describe('VinylsController', () => {
     await expect(mockVinylService.findAll(offset, limit)).rejects.toThrow(
       'Задайте другие настройки поиска или список пуст.',
     );
+  });
+
+  it('should return new information of vinyl', async () => {
+    const newVinyl: UpdateVinylDto = {
+      id: 1,
+      name: 'dc',
+      newName: 'new dc',
+      price: 10,
+      newPrice: 12,
+      author: 'Pasha',
+      description: 'info',
+      newDescription: 'new info',
+    };
+
+    const mockVinyl: UpdateVinylDto = {
+      id: 1,
+      name: 'dc1',
+      newName: 'new dc1',
+      price: 101,
+      newPrice: 121,
+      author: 'Pasha1',
+      description: 'info1',
+      newDescription: 'new info1',
+    };
+
+    mockVinylService.update.mockResolvedValue(mockVinyl);
+    const result = await controller.update(newVinyl);
+    await expect(mockVinylService.update).toHaveBeenCalledWith(newVinyl);
+    await expect(result).toEqual(mockVinyl);
+  });
+  it('should return NotFoundException', async () => {
+    const newVinyl: UpdateVinylDto = {
+      id: 1,
+      name: 'dc',
+      newName: 'new dc',
+      price: 10,
+      newPrice: 12,
+      author: 'Pasha',
+      description: 'info',
+      newDescription: 'new info',
+    };
+
+    const mockVinyl: UpdateVinylDto = {
+      id: 1,
+      name: 'dc1',
+      newName: 'new dc1',
+      price: 101,
+      newPrice: 121,
+      author: 'Pasha1',
+      description: 'info1',
+      newDescription: 'new info1',
+    };
+
+    mockVinylService.update.mockRejectedValue(new NotFoundException('Пластинка с таким  именем не существует.'));
+
+    await expect(mockVinylService.update(newVinyl)).rejects.toThrow(NotFoundException);
+
+    await expect(result).toEqual(mockVinyl);
   });
 });
