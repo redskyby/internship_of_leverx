@@ -9,6 +9,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
+import { FindVinylDto } from './dto/find-vinyl.dto';
+import { Vinyl } from './entities/vinyl.entity';
 
 describe('VinylsController', () => {
   let controller: VinylsController;
@@ -19,6 +21,7 @@ describe('VinylsController', () => {
     findAll: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
+    findByAuthor: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -123,10 +126,10 @@ describe('VinylsController', () => {
       ),
     );
 
-    await expect(mockVinylService.findAll(offset, limit)).rejects.toThrow(
+    await expect(vinylService.findAll(offset, limit)).rejects.toThrow(
       BadRequestException,
     );
-    await expect(mockVinylService.findAll(offset, limit)).rejects.toThrow(
+    await expect(vinylService.findAll(offset, limit)).rejects.toThrow(
       'Задайте другие настройки поиска или список пуст.',
     );
   });
@@ -156,7 +159,7 @@ describe('VinylsController', () => {
 
     mockVinylService.update.mockResolvedValue(mockVinyl);
     const result = await controller.update(newVinyl);
-    await expect(mockVinylService.update).toHaveBeenCalledWith(newVinyl);
+    await expect(vinylService.update).toHaveBeenCalledWith(newVinyl);
     await expect(result).toEqual(mockVinyl);
   });
 
@@ -209,5 +212,44 @@ describe('VinylsController', () => {
     await expect(controller.remove(id)).rejects.toThrow(
       'Пластинок с таким id не существует.',
     );
+  });
+
+  it('should return vinyls by author', async () => {
+    const vinyl: FindVinylDto = {
+      name: 'ds',
+      author: 'Pasha',
+      offset: 0,
+      limit: 10,
+    };
+
+    const mockvinylS = [
+      {
+        id: 4,
+        name: 'Back in Black1',
+        price: 28,
+        author: 'AC/DC',
+        description: 'A high-energy rock album.',
+        createdAt: '2024-04-28T19:28:12.000Z',
+        updatedAt: '2024-04-28T19:28:12.000Z',
+        reviews: [],
+      },
+      {
+        id: 5,
+        name: 'Back in Black1',
+        price: 28,
+        author: 'AC/DC',
+        description: 'A high-energy rock album.',
+        createdAt: '2024-04-28T19:28:12.000Z',
+        updatedAt: '2024-04-28T19:28:12.000Z',
+        reviews: [],
+      },
+    ];
+
+    mockVinylService.findByAuthor.mockResolvedValue(mockvinylS);
+
+    const result = await controller.findByAuthor(vinyl);
+
+    await expect(vinylService.findByAuthor).toHaveBeenCalledWith(vinyl);
+    await expect(result).toEqual(mockvinylS);
   });
 });
