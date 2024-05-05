@@ -3,7 +3,7 @@ import { VinylsController } from './vinyls.controller';
 import { VinylsService } from './vinyls.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
-import { ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 
 describe('VinylsController', () => {
   let controller: VinylsController;
@@ -11,7 +11,7 @@ describe('VinylsController', () => {
 
   const mockVinylService = {
     create: jest.fn(),
-    findAll : jest.fn(),
+    findAll: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -80,29 +80,47 @@ describe('VinylsController', () => {
     );
   });
 
-  it('should return vinyls with limit and offset', async ()=> {
-    const mockVinyls: CreateVinylDto[] = [{
-      name: 'newVinyl',
-      price: 10,
-      author: 'Pasha',
-      description: 'song for Gods',
-    },
+  it('should return vinyls with limit and offset', async () => {
+    const mockVinyls: CreateVinylDto[] = [
+      {
+        name: 'newVinyl',
+        price: 10,
+        author: 'Pasha',
+        description: 'song for Gods',
+      },
       {
         name: 'newVinyl2',
         price: 12,
         author: 'Pasha2',
         description: 'song for Gods2',
-      }
+      },
     ];
-    const offset : number= 10;
-    const limit: number = 2
+    const offset: number = 10;
+    const limit: number = 2;
 
-    mockVinylService.findAll.mockResolvedValue(mockVinyls)
+    mockVinylService.findAll.mockResolvedValue(mockVinyls);
 
-  const result = await controller.findAll(offset , limit);
-   await expect(vinylService.findAll).toHaveBeenCalledWith(offset , limit);
+    const result = await controller.findAll(offset, limit);
+    await expect(vinylService.findAll).toHaveBeenCalledWith(offset, limit);
 
-   await expect(result).toEqual(mockVinyls);
+    await expect(result).toEqual(mockVinyls);
+  });
 
+  it('should return BadRequestException', async () => {
+    const offset: number = 10;
+    const limit: number = 2;
+
+    mockVinylService.findAll.mockRejectedValue(
+      new BadRequestException(
+        'Задайте другие настройки поиска или список пуст.',
+      ),
+    );
+
+    await expect(mockVinylService.findAll(offset, limit)).rejects.toThrow(
+      BadRequestException,
+    );
+    await expect(mockVinylService.findAll(offset, limit)).rejects.toThrow(
+      'Задайте другие настройки поиска или список пуст.',
+    );
   });
 });
