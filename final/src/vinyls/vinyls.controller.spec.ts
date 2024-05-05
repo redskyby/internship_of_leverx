@@ -11,6 +11,7 @@ describe('VinylsController', () => {
 
   const mockVinylService = {
     create: jest.fn(),
+    findAll : jest.fn(),
   };
 
   beforeEach(async () => {
@@ -77,5 +78,31 @@ describe('VinylsController', () => {
     await expect(controller.create(vinyl)).rejects.toThrow(
       'Пластинка с таким именем уже существует.',
     );
+  });
+
+  it('should return vinyls with limit and offset', async ()=> {
+    const mockVinyls: CreateVinylDto[] = [{
+      name: 'newVinyl',
+      price: 10,
+      author: 'Pasha',
+      description: 'song for Gods',
+    },
+      {
+        name: 'newVinyl2',
+        price: 12,
+        author: 'Pasha2',
+        description: 'song for Gods2',
+      }
+    ];
+    const offset : number= 10;
+    const limit: number = 2
+
+    mockVinylService.findAll.mockResolvedValue(mockVinyls)
+
+  const result = await controller.findAll(offset , limit);
+   await expect(vinylService.findAll).toHaveBeenCalledWith(offset , limit);
+
+   await expect(result).toEqual(mockVinyls);
+
   });
 });
