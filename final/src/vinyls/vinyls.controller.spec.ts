@@ -3,7 +3,11 @@ import { VinylsController } from './vinyls.controller';
 import { VinylsService } from './vinyls.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
-import {BadRequestException, ForbiddenException, NotFoundException} from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
 
 describe('VinylsController', () => {
@@ -166,21 +170,16 @@ describe('VinylsController', () => {
       newDescription: 'new info',
     };
 
-    const mockVinyl: UpdateVinylDto = {
-      id: 1,
-      name: 'dc1',
-      newName: 'new dc1',
-      price: 101,
-      newPrice: 121,
-      author: 'Pasha1',
-      description: 'info1',
-      newDescription: 'new info1',
-    };
+    mockVinylService.update.mockRejectedValue(
+      new NotFoundException('Пластинка с таким  именем не существует.'),
+    );
 
-    mockVinylService.update.mockRejectedValue(new NotFoundException('Пластинка с таким  именем не существует.'));
+    await expect(mockVinylService.update(newVinyl)).rejects.toThrow(
+      NotFoundException,
+    );
 
-    await expect(mockVinylService.update(newVinyl)).rejects.toThrow(NotFoundException);
-
-    await expect(result).toEqual(mockVinyl);
+    await expect(mockVinylService.update(newVinyl)).rejects.toThrow(
+      'Пластинка с таким  именем не существует.',
+    );
   });
 });
