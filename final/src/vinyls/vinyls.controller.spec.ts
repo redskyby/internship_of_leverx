@@ -312,4 +312,22 @@ describe('VinylsController', () => {
     await expect(vinylService.sort).toHaveBeenCalledWith(sort);
     await expect(result).toEqual(mockvinylS);
   });
+
+  it('should return BadRequestException in sort array', async () => {
+    const sort: SortVinylDto = {
+      sort: 'id',
+      limit: 10,
+      offset: 0,
+    };
+    mockVinylService.sort.mockRejectedValue(
+      new BadRequestException(
+        'Записи не найдены или измените параметры поиска',
+      ),
+    );
+
+    await expect(controller.sort(sort)).rejects.toThrow(BadRequestException);
+    await expect(controller.sort(sort)).rejects.toThrow(
+      'Записи не найдены или измените параметры поиска',
+    );
+  });
 });
