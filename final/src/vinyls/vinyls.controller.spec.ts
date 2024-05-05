@@ -327,7 +327,7 @@ describe('VinylsController', () => {
 
     await expect(controller.sort(sort)).rejects.toThrow(BadRequestException);
     await expect(controller.sort(sort)).rejects.toThrow(
-      'Записи не найдены или измените параметры поиска',
+      'Записи не найдены или измените параметры поиска'
     );
   });
 });
