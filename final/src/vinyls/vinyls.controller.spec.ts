@@ -11,6 +11,7 @@ import {
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
 import { FindVinylDto } from './dto/find-vinyl.dto';
 import { Vinyl } from './entities/vinyl.entity';
+import { SortVinylDto } from './dto/sort-vinyl.dto';
 
 describe('VinylsController', () => {
   let controller: VinylsController;
@@ -22,6 +23,7 @@ describe('VinylsController', () => {
     update: jest.fn(),
     remove: jest.fn(),
     findByAuthor: jest.fn(),
+    sort: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -273,5 +275,41 @@ describe('VinylsController', () => {
     await expect(controller.findByAuthor(vinyl)).rejects.toThrow(
       'Записи не найдены или измените параметры поиска',
     );
+  });
+
+  it('should return sort array', async () => {
+    const sort: SortVinylDto = {
+      sort: 'id',
+      limit: 10,
+      offset: 0,
+    };
+    const mockvinylS = [
+      {
+        id: 4,
+        name: 'Back in Black1',
+        price: 28,
+        author: 'AC/DC',
+        description: 'A high-energy rock album.',
+        createdAt: '2024-04-28T19:28:12.000Z',
+        updatedAt: '2024-04-28T19:28:12.000Z',
+        reviews: [],
+      },
+      {
+        id: 5,
+        name: 'Back in Black1',
+        price: 28,
+        author: 'AC/DC',
+        description: 'A high-energy rock album.',
+        createdAt: '2024-04-28T19:28:12.000Z',
+        updatedAt: '2024-04-28T19:28:12.000Z',
+        reviews: [],
+      },
+    ];
+
+    mockVinylService.sort.mockResolvedValue(mockvinylS);
+
+    const result = await controller.sort(sort);
+    await expect(vinylService.sort).toHaveBeenCalledWith(sort);
+    await expect(result).toEqual(mockvinylS);
   });
 });
