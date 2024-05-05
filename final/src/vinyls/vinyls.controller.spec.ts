@@ -197,4 +197,17 @@ describe('VinylsController', () => {
     await expect(vinylService.remove).toHaveBeenCalledWith(id);
     await expect(result).toEqual(mockAnswer);
   });
+
+  it('should show NotFoundException delete vinyl', async () => {
+    const id: number = 1;
+
+    mockVinylService.remove.mockRejectedValue(
+      new NotFoundException('Пластинок с таким id не существует.'),
+    );
+
+    await expect(controller.remove(id)).rejects.toThrow(NotFoundException);
+    await expect(controller.remove(id)).rejects.toThrow(
+      'Пластинок с таким id не существует.',
+    );
+  });
 });
