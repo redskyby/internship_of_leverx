@@ -18,6 +18,7 @@ describe('VinylsController', () => {
     create: jest.fn(),
     findAll: jest.fn(),
     update: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -158,6 +159,7 @@ describe('VinylsController', () => {
     await expect(mockVinylService.update).toHaveBeenCalledWith(newVinyl);
     await expect(result).toEqual(mockVinyl);
   });
+
   it('should return NotFoundException', async () => {
     const newVinyl: UpdateVinylDto = {
       id: 1,
@@ -181,5 +183,18 @@ describe('VinylsController', () => {
     await expect(mockVinylService.update(newVinyl)).rejects.toThrow(
       'Пластинка с таким  именем не существует.',
     );
+  });
+
+  it('should delete the vinyl', async () => {
+    const id: number = 1;
+
+    const mockAnswer = { message: 'Информация об пластинке удалена.' };
+
+    mockVinylService.remove.mockResolvedValue(mockAnswer);
+
+    const result = await controller.remove(id);
+
+    await expect(vinylService.remove).toHaveBeenCalledWith(id);
+    await expect(result).toEqual(mockAnswer);
   });
 });
