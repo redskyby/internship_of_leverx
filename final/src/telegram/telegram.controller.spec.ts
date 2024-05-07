@@ -1,14 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TelegramService } from './telegram.service';
 import { JwtModule } from '@nestjs/jwt';
+import { TelegramController } from './telegram.controller';
+import { TelegramService } from './telegram.service';
 
-describe('TelegramService', () => {
-  let service: TelegramService;
+describe('TelegramController', () => {
+  let controller: TelegramController;
+  let telegramService: TelegramService;
 
   const mockTelegramService = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [TelegramController],
       imports: [
         JwtModule.register({
           secret: 'test-secret',
@@ -23,10 +26,11 @@ describe('TelegramService', () => {
       ],
     }).compile();
 
-    service = module.get<TelegramService>(TelegramService);
+    controller = module.get<TelegramController>(TelegramController);
+    telegramService = module.get<TelegramService>(TelegramService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(controller).toBeDefined();
   });
 });
