@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MailService } from './mail.service';
-import {ConfigModule} from "@nestjs/config";
+import { ConfigModule } from '@nestjs/config';
 
 describe('MailService', () => {
   let service: MailService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot()],
+      imports: [ConfigModule],
       providers: [MailService],
     }).compile();
 
