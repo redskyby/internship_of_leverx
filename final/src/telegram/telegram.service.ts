@@ -14,11 +14,6 @@ export class TelegramService {
   }
 
   async create(id: number) {
-    // Создать канал
-    // Добавить бота админом
-    // Получить id канала
-    // Отправить сообщение
-
     const vinyl = await this.vinylsService.findById(id);
 
     if (!vinyl) {

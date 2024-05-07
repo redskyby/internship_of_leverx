@@ -12,8 +12,8 @@ module.exports = {
             lastName: 'Johnson',
             email: 'alice.johnson@example.com',
             password: await bcrypt.hash('password123', 3),
-            birthdate: new Date('1990-01-15'), // пример даты рождения
-            avatar: 'https://example.com/avatars/alice.jpg', // пример ссылки на аватар
+            birthdate: new Date('1990-01-15'),
+            avatar: 'https://example.com/avatars/alice.jpg',
             createdAt: new Date(),
             updatedAt: new Date(),
           },
