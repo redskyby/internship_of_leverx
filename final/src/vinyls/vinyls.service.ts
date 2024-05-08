@@ -78,7 +78,7 @@ export class VinylsService {
         price: dto.newPrice,
         description: dto.newDescription,
       },
-      { where: { id: vinyl.dataValues.id } },
+      { where: { id: dto.id } },
     );
 
     return { message: 'Информация об пластинке изменена' };

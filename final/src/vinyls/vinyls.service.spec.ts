@@ -5,6 +5,7 @@ import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { UpdateVinylDto } from './dto/update-vinyl.dto';
 
 describe('VinylsService', () => {
   let service: VinylsService;
@@ -132,4 +133,41 @@ describe('VinylsService', () => {
       'Задайте другие настройки поиска или список пуст.',
     );
   });
+
+  it('should update vinyl', async () => {
+    const updateDto: UpdateVinylDto = {
+      id: 1,
+      name: 'old name',
+      newName: 'new name',
+      description: 'old description',
+      newDescription: 'new description',
+      price: 10,
+      newPrice: 12,
+      author: 'Pasha',
+    };
+
+    mockVinylRepository.findOne.mockResolvedValue({
+      id: 1,
+      name: 'old name',
+      description: 'old description',
+      price: 10,
+    });
+
+    const result = await service.update(updateDto);
+
+    expect(mockVinylRepository.findOne).toHaveBeenCalledWith({
+      where: { id: 1 },
+    });
+    expect(mockVinylRepository.update).toHaveBeenCalledWith(
+      {
+        name: 'new name',
+        price: 12,
+        description: 'new description',
+      },
+      { where: { id: 1 } },
+    );
+    expect(result).toEqual({ message: 'Информация об пластинке изменена' });
+  });
+
+
 });
