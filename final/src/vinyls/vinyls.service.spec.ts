@@ -74,4 +74,42 @@ describe('VinylsService', () => {
       'Пластинка с таким именем уже существует.',
     );
   });
+
+  it('should findAll vinyls', async () => {
+    const offset: number = 0;
+    const limit: number = 10;
+
+    const vinyls  = [
+      {
+        id: 1,
+        name: "test",
+        price: 999,
+        author: "The Beatles",
+        description: "test",
+        createdAt: "2024-04-28T19:28:12.000Z",
+        updatedAt: "2024-04-28T19:36:26.000Z",
+        avgRating: "1.0000"
+      },
+      {
+        id: 2,
+        name: "The Dark Side of the Moon-new",
+        price: 30,
+        author: "Pink Floyd",
+        description: "An iconic album by Pink Floyd.",
+        createdAt: "2024-04-28T19:28:12.000Z",
+        updatedAt: "2024-04-28T19:28:12.000Z",
+        avgRating: "5.0000"
+      }]
+
+    mockVinylRepository.findAll.mockResolvedValue(vinyls);
+
+    const result = await service.findAll(offset, limit);
+
+    expect(mockVinylRepository.findAll).toHaveBeenCalledWith(expect.objectContaining({
+      offset: 0,
+      limit: 10,
+    }));
+    expect(result).toEqual(vinyls)
+
+  });
 });
