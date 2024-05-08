@@ -4,7 +4,11 @@ import { getModelToken } from '@nestjs/sequelize';
 import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
 
 describe('VinylsService', () => {
@@ -169,5 +173,25 @@ describe('VinylsService', () => {
     expect(result).toEqual({ message: 'Информация об пластинке изменена' });
   });
 
+  it('should return NotFoundException update', async () => {
+    const updateDto: UpdateVinylDto = {
+      id: 1,
+      name: 'old name',
+      newName: 'new name',
+      description: 'old description',
+      newDescription: 'new description',
+      price: 10,
+      newPrice: 12,
+      author: 'Pasha',
+    };
 
+    mockVinylRepository.findOne.mockRejectedValue(
+      new NotFoundException('Пластинка с таким  именем не существует.'),
+    );
+
+    await expect(service.update(updateDto)).rejects.toThrow(NotFoundException);
+    await expect(service.update(updateDto)).rejects.toThrow(
+      'Пластинка с таким  именем не существует.',
+    );
+  });
 });
