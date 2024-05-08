@@ -194,4 +194,27 @@ describe('VinylsService', () => {
       'Пластинка с таким  именем не существует.',
     );
   });
+
+  it('should remove the vinyl', async () => {
+    const id: number = 1;
+    const mockAnswer = { message: 'Информация об пластинке удалена.' };
+    const vinyl = {
+      id: 2,
+      name: 'The Dark Side of the Moon-new',
+      price: 30,
+      author: 'Pink Floyd',
+      description: 'An iconic album by Pink Floyd.',
+      createdAt: '2024-04-28T19:28:12.000Z',
+      updatedAt: '2024-04-28T19:28:12.000Z',
+    };
+
+    mockVinylRepository.findOne.mockResolvedValue(vinyl);
+
+    const result = await service.remove(id);
+
+    await expect(mockVinylRepository.destroy).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: 1 } }),
+    );
+    await expect(result).toEqual(mockAnswer);
+  });
 });
