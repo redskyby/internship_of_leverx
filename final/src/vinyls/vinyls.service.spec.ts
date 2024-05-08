@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/sequelize';
 import { Vinyl } from './entities/vinyl.entity';
 import { Review } from '../reviews/entities/review.entity';
 import { CreateVinylDto } from './dto/create-vinyl.dto';
-import { ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 
 describe('VinylsService', () => {
   let service: VinylsService;
@@ -79,37 +79,57 @@ describe('VinylsService', () => {
     const offset: number = 0;
     const limit: number = 10;
 
-    const vinyls  = [
+    const vinyls = [
       {
         id: 1,
-        name: "test",
+        name: 'test',
         price: 999,
-        author: "The Beatles",
-        description: "test",
-        createdAt: "2024-04-28T19:28:12.000Z",
-        updatedAt: "2024-04-28T19:36:26.000Z",
-        avgRating: "1.0000"
+        author: 'The Beatles',
+        description: 'test',
+        createdAt: '2024-04-28T19:28:12.000Z',
+        updatedAt: '2024-04-28T19:36:26.000Z',
+        avgRating: '1.0000',
       },
       {
         id: 2,
-        name: "The Dark Side of the Moon-new",
+        name: 'The Dark Side of the Moon-new',
         price: 30,
-        author: "Pink Floyd",
-        description: "An iconic album by Pink Floyd.",
-        createdAt: "2024-04-28T19:28:12.000Z",
-        updatedAt: "2024-04-28T19:28:12.000Z",
-        avgRating: "5.0000"
-      }]
+        author: 'Pink Floyd',
+        description: 'An iconic album by Pink Floyd.',
+        createdAt: '2024-04-28T19:28:12.000Z',
+        updatedAt: '2024-04-28T19:28:12.000Z',
+        avgRating: '5.0000',
+      },
+    ];
 
     mockVinylRepository.findAll.mockResolvedValue(vinyls);
 
     const result = await service.findAll(offset, limit);
 
-    expect(mockVinylRepository.findAll).toHaveBeenCalledWith(expect.objectContaining({
-      offset: 0,
-      limit: 10,
-    }));
-    expect(result).toEqual(vinyls)
+    expect(mockVinylRepository.findAll).toHaveBeenCalledWith(
+      expect.objectContaining({
+        offset: 0,
+        limit: 10,
+      }),
+    );
+    expect(result).toEqual(vinyls);
+  });
 
+  it('should return BadRequestException findAll ', async () => {
+    const offset: number = 0;
+    const limit: number = 10;
+
+    mockVinylRepository.findAll.mockRejectedValue(
+      new BadRequestException(
+        'Задайте другие настройки поиска или список пуст.',
+      ),
+    );
+
+    await expect(service.findAll(offset, limit)).rejects.toThrow(
+      BadRequestException,
+    );
+    await expect(service.findAll(offset, limit)).rejects.toThrow(
+      'Задайте другие настройки поиска или список пуст.',
+    );
   });
 });
