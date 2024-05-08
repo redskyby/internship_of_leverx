@@ -217,4 +217,16 @@ describe('VinylsService', () => {
     );
     await expect(result).toEqual(mockAnswer);
   });
+
+  it('should return NotFoundException remove', async () => {
+    const id: number = 999;
+
+    mockVinylRepository.findOne.mockRejectedValue(
+      new NotFoundException('Пластинок с таким id не существует.'),
+    );
+    await expect(service.remove(id)).rejects.toThrow(NotFoundException);
+    await expect(service.remove(id)).rejects.toThrow(
+      'Пластинок с таким id не существует.',
+    );
+  });
 });
