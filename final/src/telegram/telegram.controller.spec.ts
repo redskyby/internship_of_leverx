@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { JwtModule } from '@nestjs/jwt';
 import { TelegramController } from './telegram.controller';
 import { TelegramService } from './telegram.service';
+import { NotFoundException } from '@nestjs/common';
 
 describe('TelegramController', () => {
   let controller: TelegramController;
@@ -47,5 +48,18 @@ describe('TelegramController', () => {
 
     await expect(telegramService.create).toHaveBeenCalledWith(id);
     await expect(result).toEqual(mockAnswer);
+  });
+
+  it('should return NotFoundException', async () => {
+    const id: number = 999;
+
+    mockTelegramService.create.mockRejectedValue(
+      new NotFoundException('Пластинок с таким id не существует.'),
+    );
+
+    await expect(controller.sendMessage(id)).rejects.toThrow(NotFoundException);
+    await expect(controller.sendMessage(id)).rejects.toThrow(
+      'Пластинок с таким id не существует.',
+    );
   });
 });
