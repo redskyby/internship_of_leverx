@@ -8,7 +8,7 @@ import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { Request } from 'express';
 import { NotFoundException } from '@nestjs/common';
 import { SendInformationDto } from './dto/send-information.dto';
-import {MailService} from "../mail/mail.service";
+import { MailService } from '../mail/mail.service';
 
 describe('StripeController', () => {
   let controller: StripeController;
@@ -26,6 +26,7 @@ describe('StripeController', () => {
   const mockPurchasesService = {
     findUserByEmail: jest.fn(),
     findPurchaseById: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -173,6 +174,7 @@ describe('StripeController', () => {
     mockStripeService.success.mockResolvedValue(mockResponse);
 
     const result = await controller.stripeSuccess(dto);
+
     await expect(stripeService.success).toHaveBeenCalledWith(dto);
     await expect(result).toEqual(mockResponse);
   });
