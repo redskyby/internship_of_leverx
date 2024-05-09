@@ -7,6 +7,8 @@ import { CreateStripeDto } from './dto/create-stripe.dto';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { Request } from 'express';
 import { NotFoundException } from '@nestjs/common';
+import { SendInformationDto } from './dto/send-information.dto';
+import {MailService} from "../mail/mail.service";
 
 describe('StripeController', () => {
   let controller: StripeController;
@@ -14,6 +16,11 @@ describe('StripeController', () => {
 
   const mockStripeService = {
     createPayments: jest.fn(),
+    success: jest.fn(),
+    cancel: jest.fn(),
+  };
+  const mockMailService = {
+    sendNewInformation: jest.fn(),
   };
 
   const mockPurchasesService = {
@@ -38,6 +45,10 @@ describe('StripeController', () => {
         {
           provide: PurchasesService,
           useValue: mockPurchasesService,
+        },
+        {
+          provide: MailService,
+          useValue: mockMailService,
         },
       ],
     }).compile();
@@ -147,5 +158,22 @@ describe('StripeController', () => {
     await expect(
       controller.create(createStripeDto, { user } as Request),
     ).rejects.toThrow('Корзина пуста.');
+  });
+
+  it('should return stripe success', async () => {
+    const dto: SendInformationDto = {
+      email: 'example@gmail.com',
+      name: 'John Doe',
+    };
+
+    const mockResponse = {
+      message: 'Спасибо за оплату, ваш платеж обрабатывается.',
+    };
+
+    mockStripeService.success.mockResolvedValue(mockResponse);
+
+    const result = await controller.stripeSuccess(dto);
+    await expect(stripeService.success).toHaveBeenCalledWith(dto);
+    await expect(result).toEqual(mockResponse);
   });
 });
