@@ -6,6 +6,7 @@ import { PurchasesService } from '../purchases/purchases.service';
 import { CreateStripeDto } from './dto/create-stripe.dto';
 import { AllInformationUserDto } from '../users/dto/all-information-user.dto';
 import { Request } from 'express';
+import { NotFoundException } from '@nestjs/common';
 
 describe('StripeController', () => {
   let controller: StripeController;
@@ -79,5 +80,67 @@ describe('StripeController', () => {
       user,
     );
     await expect(result).toEqual(mockAnswer);
+  });
+
+  it('should throw NotFoundException if user not found', async () => {
+    const createStripeDto: CreateStripeDto = {
+      email: 'pashadocenko@gmail.com',
+      vinylId: 1,
+    };
+
+    const user: AllInformationUserDto = {
+      name: 'Pavel',
+      id: 1,
+      lastName: 'Dotsenko',
+      email: 'test@gmail.com',
+      birthdate: '2020-10-12',
+      avatar: 'funny.jpg',
+      roles: [],
+      iat: 1744521,
+      exp: 45484,
+    };
+
+    mockPurchasesService.findUserByEmail.mockRejectedValue(null);
+    mockStripeService.createPayments.mockRejectedValue(
+      new NotFoundException('Такого пользователя не существует.'),
+    );
+
+    await expect(
+      controller.create(createStripeDto, { user } as Request),
+    ).rejects.toThrow(NotFoundException);
+    await expect(
+      controller.create(createStripeDto, { user } as Request),
+    ).rejects.toThrow('Такого пользователя не существует.');
+  });
+
+  it('should throw NotFoundException if no purchase found', async () => {
+    const createStripeDto: CreateStripeDto = {
+      email: 'pashadocenko@gmail.com',
+      vinylId: 1,
+    };
+
+    const user: AllInformationUserDto = {
+      name: 'Pavel',
+      id: 1,
+      lastName: 'Dotsenko',
+      email: 'test@gmail.com',
+      birthdate: '2020-10-12',
+      avatar: 'funny.jpg',
+      roles: [],
+      iat: 1744521,
+      exp: 45484,
+    };
+
+    mockPurchasesService.findPurchaseById.mockRejectedValue(null);
+    mockStripeService.createPayments.mockRejectedValue(
+      new NotFoundException('Корзина пуста.'),
+    );
+
+    await expect(
+      controller.create(createStripeDto, { user } as Request),
+    ).rejects.toThrow(NotFoundException);
+    await expect(
+      controller.create(createStripeDto, { user } as Request),
+    ).rejects.toThrow('Корзина пуста.');
   });
 });

@@ -35,7 +35,7 @@ export class StripeService {
     const purchase = await this.purchasesService.findPurchaseById(candidate.id);
 
     if (!purchase) {
-      throw new NotFoundException('Корзина пуста');
+      throw new NotFoundException('Корзина пуста.');
     }
 
     const lineItems = purchase.map((purchase) => ({
