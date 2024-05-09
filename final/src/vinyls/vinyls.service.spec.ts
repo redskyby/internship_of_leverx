@@ -261,12 +261,34 @@ describe('VinylsService', () => {
     mockVinylRepository.findAll.mockResolvedValue(mockVinyl);
     const result = await service.findByAuthor(vinyl);
 
-    expect(mockVinylRepository.findAll).toHaveBeenCalledWith({
+    await expect(mockVinylRepository.findAll).toHaveBeenCalledWith({
       where: { name: 'The Dark Side of the Moon-new', author: 'Pink Floyd' },
       limit: 10,
       offset: 0,
     });
 
-    expect(result).toEqual(mockVinyl);
+    await expect(result).toEqual(mockVinyl);
+  });
+
+  it('should return BadRequestException findByAuthor ', async () => {
+    const vinyl: FindVinylDto = {
+      name: 'The Dark Side of the Moon-new',
+      author: 'Pink Floyd',
+      limit: 10,
+      offset: 0,
+    };
+
+    mockVinylRepository.findAll.mockRejectedValue(
+      new BadRequestException(
+        'Записи не найдены или измените параметры поиска',
+      ),
+    );
+
+    await expect(service.findByAuthor(vinyl)).rejects.toThrow(
+      BadRequestException,
+    );
+    await expect(service.findByAuthor(vinyl)).rejects.toThrow(
+      'Записи не найдены или измените параметры поиска',
+    );
   });
 });
