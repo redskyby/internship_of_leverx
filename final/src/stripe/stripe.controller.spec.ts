@@ -131,6 +131,11 @@ describe('StripeController', () => {
       exp: 45484,
     };
 
+    const mockUser = {
+      email: 'unknown@gmail.com',
+    };
+
+    mockPurchasesService.findUserByEmail.mockResolvedValue(mockUser);
     mockPurchasesService.findPurchaseById.mockRejectedValue(null);
     mockStripeService.createPayments.mockRejectedValue(
       new NotFoundException('Корзина пуста.'),
