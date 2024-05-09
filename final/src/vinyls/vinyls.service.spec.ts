@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
 import { FindVinylDto } from './dto/find-vinyl.dto';
+import { SortVinylDto } from './dto/sort-vinyl.dto';
 
 describe('VinylsService', () => {
   let service: VinylsService;
@@ -290,5 +291,44 @@ describe('VinylsService', () => {
     await expect(service.findByAuthor(vinyl)).rejects.toThrow(
       'Записи не найдены или измените параметры поиска',
     );
+  });
+
+  it('should return sort array', async () => {
+    const vinyl: SortVinylDto = {
+      sort: 'id',
+      limit: 10,
+      offset: 0,
+    };
+
+    const mockVinyl = [
+      {
+        id: 1,
+        name: 'The Dark Side of the Moon-new',
+        price: 30,
+        author: 'Pink Floyd',
+        description: 'An iconic album by Pink Floyd.',
+        reviews: [],
+      },
+      {
+        id: 2,
+        name: 'The Dark Side of the Moon-new',
+        price: 31,
+        author: 'Pink Floyd',
+        description: 'An iconic album by Pink Floyd.',
+        reviews: [],
+      },
+    ];
+
+    mockVinylRepository.findAll.mockResolvedValue(mockVinyl);
+
+    const result = await service.sort(vinyl);
+
+    await expect(mockVinylRepository.findAll).toHaveBeenCalledWith({
+      order: [['id', 'ASC']],
+      limit: 10,
+      offset: 0,
+    });
+
+    await expect(result).toEqual(mockVinyl);
   });
 });
