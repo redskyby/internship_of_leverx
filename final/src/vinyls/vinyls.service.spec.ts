@@ -349,4 +349,24 @@ describe('VinylsService', () => {
       'Записи не найдены или измените параметры поиска',
     );
   });
+
+  it('should return a vinyl by id', async () => {
+    const vinyl = {
+      id: 1,
+      name: 'The Dark Side of the Moon-new',
+      price: 30,
+      author: 'Pink Floyd',
+      description: 'An iconic album by Pink Floyd.',
+      reviews: [],
+    };
+    const id: number = 1;
+
+    mockVinylRepository.findOne.mockResolvedValue(vinyl);
+    const result = await service.findById(id);
+
+    await expect(mockVinylRepository.findOne).toHaveBeenCalledWith({
+      where: { id: 1 },
+    });
+    await expect(result).toEqual(vinyl);
+  });
 });
