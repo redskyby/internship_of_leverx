@@ -1,13 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TelegramService } from './telegram.service';
 import { JwtModule } from '@nestjs/jwt';
+import { NotFoundException } from '@nestjs/common';
+import { VinylsService } from '../vinyls/vinyls.service';
 
 describe('TelegramService', () => {
   let service: TelegramService;
 
   const mockTelegramService = {
-    findById: jest.fn(),
     create: jest.fn(),
+  };
+  const mockVinylsService = {
+    findById: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -22,6 +26,10 @@ describe('TelegramService', () => {
         {
           provide: TelegramService,
           useValue: mockTelegramService,
+        },
+        {
+          provide: VinylsService,
+          useValue: mockVinylsService,
         },
       ],
     }).compile();
@@ -48,12 +56,26 @@ describe('TelegramService', () => {
 
     const mockAnswer = { message: 'Сообщение успешно отправлено' };
 
-    mockTelegramService.findById.mockResolvedValue(vinyl);
+    mockVinylsService.findById.mockResolvedValue(vinyl);
     mockTelegramService.create.mockResolvedValue(mockAnswer);
 
     const result = await service.create(id);
 
     await expect(mockTelegramService.create).toHaveBeenCalledWith(id);
     await expect(result).toEqual(mockAnswer);
+  });
+
+  it('should return NotFoundException', async () => {
+    const id: number = 999;
+
+    mockVinylsService.findById.mockRejectedValue(null);
+    mockTelegramService.create.mockRejectedValue(
+      new NotFoundException('Пластинок с таким id не существует.'),
+    );
+
+    await expect(service.create(id)).rejects.toThrow(NotFoundException);
+    await expect(service.create(id)).rejects.toThrow(
+      'Пластинок с таким id не существует.',
+    );
   });
 });

@@ -13,7 +13,7 @@ export class TelegramService {
     this.bot = new Telegraf(this.configService.get<string>('TELEGRAM_TOKEN'));
   }
 
-  async create(id: number) {
+  public async create(id: number) {
     const vinyl = await this.vinylsService.findById(id);
 
     if (!vinyl) {
