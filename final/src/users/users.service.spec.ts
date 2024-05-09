@@ -132,9 +132,11 @@ describe('UsersService', () => {
 
     const result = await service.showUser(userDto);
 
-    expect(mockUserModel.findOne).toHaveBeenCalledWith({ where: { email } });
+    await expect(mockUserModel.findOne).toHaveBeenCalledWith({
+      where: { email },
+    });
 
-    expect(result).toEqual(userDto);
+    await expect(result).toEqual(userDto);
   });
 
   it('should show NotFoundException', async () => {
