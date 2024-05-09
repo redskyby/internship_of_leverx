@@ -331,4 +331,22 @@ describe('VinylsService', () => {
 
     await expect(result).toEqual(mockVinyl);
   });
+
+  it('should return BadRequestException sort ', async () => {
+    const vinyl: SortVinylDto = {
+      sort: 'id',
+      limit: 10,
+      offset: 0,
+    };
+
+    mockVinylRepository.findAll.mockRejectedValue(
+      new BadRequestException(
+        'Записи не найдены или измените параметры поиска',
+      ),
+    );
+    await expect(service.sort(vinyl)).rejects.toThrow(BadRequestException);
+    await expect(service.sort(vinyl)).rejects.toThrow(
+      'Записи не найдены или измените параметры поиска',
+    );
+  });
 });
