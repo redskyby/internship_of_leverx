@@ -7,7 +7,9 @@ describe('TelegramController', () => {
   let controller: TelegramController;
   let telegramService: TelegramService;
 
-  const mockTelegramService = {};
+  const mockTelegramService = {
+    create: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,5 +34,18 @@ describe('TelegramController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('should create a message', async () => {
+    const id: number = 1;
+
+    const mockAnswer = { message: 'Сообщение успешно отправлено' };
+
+    mockTelegramService.create.mockResolvedValue(mockAnswer);
+
+    const result = await controller.sendMessage(id);
+
+    await expect(telegramService.create).toHaveBeenCalledWith(id);
+    await expect(result).toEqual(mockAnswer);
   });
 });
