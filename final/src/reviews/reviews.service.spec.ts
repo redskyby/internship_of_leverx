@@ -53,6 +53,10 @@ describe('ReviewsService', () => {
     service = module.get<ReviewsService>(ReviewsService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });

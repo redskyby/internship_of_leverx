@@ -49,6 +49,10 @@ describe('StripeService', () => {
     service = module.get<StripeService>(StripeService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });

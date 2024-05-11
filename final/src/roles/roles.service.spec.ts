@@ -31,6 +31,10 @@ describe('RolesService', () => {
     service = module.get<RolesService>(RolesService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });

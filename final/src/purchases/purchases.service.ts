@@ -43,7 +43,6 @@ export class PurchasesService {
 
     if (!mongoUser) {
       mongoUser = await new this.userModel(candidate.dataValues);
-
       await mongoUser.save();
     }
 

@@ -33,6 +33,10 @@ describe('TelegramController', () => {
     telegramService = module.get<TelegramService>(TelegramService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });

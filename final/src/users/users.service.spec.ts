@@ -59,8 +59,11 @@ describe('UsersService', () => {
 
     service = module.get<UsersService>(UsersService);
 
-    // Mock return value for create method to simulate expected behavior
     mockUserModel.create.mockResolvedValue(userWithMethods);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {

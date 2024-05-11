@@ -47,6 +47,10 @@ describe('VinylsController', () => {
     vinylService = module.get<VinylsService>(VinylsService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', async () => {
     expect(controller).toBeDefined();
   });

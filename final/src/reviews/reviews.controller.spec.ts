@@ -40,6 +40,10 @@ describe('ReviewsController', () => {
     reviewsService = module.get<ReviewsService>(ReviewsService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
