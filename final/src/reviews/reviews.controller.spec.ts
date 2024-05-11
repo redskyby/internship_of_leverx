@@ -119,4 +119,32 @@ describe('ReviewsController', () => {
       'Лайк уже установлен для данного пользователя и поста.',
     );
   });
+
+  it('should find all reviews with pagination', async () => {
+    const offset = 0;
+    const limit = 10;
+
+    const reviews = [
+      {
+        review: 10,
+        vinylId: 1,
+        userId: 1,
+      },
+      {
+        review: 9,
+        vinylId: 2,
+        userId: 1,
+      },
+    ];
+
+    mockReviewsService.findAll.mockResolvedValue(reviews);
+
+    const result = await controller.findAll(offset, limit);
+
+    await expect(mockReviewsService.findAll).toHaveBeenCalledWith(
+      offset,
+      limit,
+    );
+    await expect(result).toEqual(reviews);
+  });
 });
