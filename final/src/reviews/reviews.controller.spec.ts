@@ -157,7 +157,6 @@ describe('ReviewsController', () => {
         'Задайте другие настройки поиска или список пуст.',
     ));
 
-
     await expect(controller.findAll(offset, limit)).rejects.toThrow(
         BadRequestException
     );
@@ -166,4 +165,24 @@ describe('ReviewsController', () => {
     );
   });
 
+  it('should remove a review by ID', async () => {
+    const id : number  = 1;
+
+    const mockAnswer = { message: 'Отзыв удален.' }
+    mockReviewsService.remove.mockResolvedValue(mockAnswer);
+
+    const result = await  controller.remove(id)
+
+   await expect(mockReviewsService.remove).toHaveBeenCalledWith(id)
+   await expect(result).toEqual(mockAnswer)
+  });
+
+  it('should remove a review by ID', async () => {
+    const id : number  = 1;
+
+    mockReviewsService.remove.mockRejectedValue(new NotFoundException('Отзывов с таким id не существует.'));
+
+    await expect(controller.remove(id)).rejects.toThrow(NotFoundException)
+    await expect(controller.remove(id)).rejects.toThrow('Отзывов с таким id не существует.')
+  });
 });
