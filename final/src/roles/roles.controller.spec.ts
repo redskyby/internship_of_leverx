@@ -3,6 +3,7 @@ import { RolesController } from './roles.controller';
 import { RolesService } from './roles.service';
 import { JwtModule } from '@nestjs/jwt';
 import {CreateRoleDto} from "./dto/create-role.dto";
+import {DuplicateException} from "../exceptions/duplicate.exception";
 
 describe('RolesController', () => {
   let controller: RolesController;
@@ -51,5 +52,12 @@ describe('RolesController', () => {
     await expect(mockRolesService.create).toHaveBeenCalledWith(roleDto);
   });
 
+  it('should throw an error if role already exists', async () => {
+    const roleDto: CreateRoleDto = { value: 'test_role' };
+    mockRolesService.create.mockRejectedValue(new DuplicateException('Такая роль уже существует'));
+
+    await expect(controller.create(roleDto)).rejects.toThrow(DuplicateException);
+    await expect(controller.create(roleDto)).rejects.toThrow('Такая роль уже существует');
+  });
 
 });
