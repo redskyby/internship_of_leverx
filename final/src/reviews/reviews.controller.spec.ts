@@ -3,7 +3,11 @@ import { ReviewsController } from './reviews.controller';
 import { ReviewsService } from './reviews.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CreateReviewDto } from './dto/create-review.dto';
-import {BadRequestException, ForbiddenException, NotFoundException} from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('ReviewsController', () => {
   let controller: ReviewsController;
@@ -152,39 +156,42 @@ describe('ReviewsController', () => {
     const offset = 0;
     const limit = 0;
 
-
-    mockReviewsService.findAll.mockRejectedValue(new BadRequestException(
+    mockReviewsService.findAll.mockRejectedValue(
+      new BadRequestException(
         'Задайте другие настройки поиска или список пуст.',
-    ));
+      ),
+    );
 
     await expect(controller.findAll(offset, limit)).rejects.toThrow(
-        BadRequestException
+      BadRequestException,
     );
     await expect(controller.findAll(offset, limit)).rejects.toThrow(
-        "Задайте другие настройки поиска или список пуст."
+      'Задайте другие настройки поиска или список пуст.',
     );
   });
 
   it('should remove a review by ID', async () => {
-    const id : number  = 1;
+    const id: number = 1;
 
-    const mockAnswer = { message: 'Отзыв удален.' }
+    const mockAnswer = { message: 'Отзыв удален.' };
     mockReviewsService.remove.mockResolvedValue(mockAnswer);
 
-    const result = await  controller.remove(id)
+    const result = await controller.remove(id);
 
-   await expect(mockReviewsService.remove).toHaveBeenCalledWith(id)
-   await expect(result).toEqual(mockAnswer)
+    await expect(mockReviewsService.remove).toHaveBeenCalledWith(id);
+    await expect(result).toEqual(mockAnswer);
   });
 
-
-
   it('should remove a review by ID', async () => {
-    const id : number  = 1;
+    const id: number = 1;
 
-    mockReviewsService.remove.mockRejectedValue(new NotFoundException('Отзывов с таким id не существует.'));
+    mockReviewsService.remove.mockRejectedValue(
+      new NotFoundException('Отзывов с таким id не существует.'),
+    );
 
-    await expect(controller.remove(id)).rejects.toThrow(NotFoundException)
-    await expect(controller.remove(id)).rejects.toThrow('Отзывов с таким id не существует.')
+    await expect(controller.remove(id)).rejects.toThrow(NotFoundException);
+    await expect(controller.remove(id)).rejects.toThrow(
+      'Отзывов с таким id не существует.',
+    );
   });
 });
