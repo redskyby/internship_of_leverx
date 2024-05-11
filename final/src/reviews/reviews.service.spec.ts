@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { VinylsService } from '../vinyls/vinyls.service';
 import { UsersService } from '../users/users.service';
+import {NotFoundException} from "@nestjs/common";
 
 describe('ReviewsService', () => {
   let service: ReviewsService;
@@ -74,5 +75,18 @@ describe('ReviewsService', () => {
 
     await expect(mockReviewRepository.create).toHaveBeenCalledWith(createReviewDto)
     await expect(result).toEqual(mockReviewDto)
+  });
+
+  it('should throw NotFoundException if user does not exist', async () => {
+    const createReviewDto: CreateReviewDto = {
+      review: 10,
+      vinylId: 1,
+      userId: 1,
+    };
+
+    mockReviewRepository.create.mockRejectedValue(new NotFoundException('Такого пользователя не существует.'))
+
+    await expect(service.create(createReviewDto)).rejects.toThrow(NotFoundException);
+    await expect(service.create(createReviewDto)).rejects.toThrow('Такого пользователя не существует.');
   });
 });
