@@ -14,6 +14,7 @@ describe('ReviewsService', () => {
     create: jest.fn(),
     findAll: jest.fn(),
     destroy: jest.fn(),
+    remove: jest.fn(),
   };
 
   const mockVinylRepository = {
