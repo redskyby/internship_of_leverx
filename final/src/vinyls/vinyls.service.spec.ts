@@ -45,6 +45,11 @@ describe('VinylsService', () => {
 
     service = module.get<VinylsService>(VinylsService);
   });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
