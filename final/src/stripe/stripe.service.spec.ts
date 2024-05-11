@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StripeService } from './stripe.service';
 import { JwtModule } from '@nestjs/jwt';
-import {PurchasesService} from "../purchases/purchases.service";
-import {MailService} from "../mail/mail.service";
+import { PurchasesService } from '../purchases/purchases.service';
+import { MailService } from '../mail/mail.service';
 
 describe('StripeService', () => {
   let service: StripeService;
@@ -52,5 +52,4 @@ describe('StripeService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
 });
