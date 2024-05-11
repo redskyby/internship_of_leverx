@@ -3,7 +3,7 @@ import { ReviewsController } from './reviews.controller';
 import { ReviewsService } from './reviews.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {BadRequestException, ForbiddenException, NotFoundException} from '@nestjs/common';
 
 describe('ReviewsController', () => {
   let controller: ReviewsController;
@@ -147,4 +147,23 @@ describe('ReviewsController', () => {
     );
     await expect(result).toEqual(reviews);
   });
+
+  it('should return error find all reviews with pagination', async () => {
+    const offset = 0;
+    const limit = 0;
+
+
+    mockReviewsService.findAll.mockRejectedValue(new BadRequestException(
+        'Задайте другие настройки поиска или список пуст.',
+    ));
+
+
+    await expect(controller.findAll(offset, limit)).rejects.toThrow(
+        BadRequestException
+    );
+    await expect(controller.findAll(offset, limit)).rejects.toThrow(
+        "Задайте другие настройки поиска или список пуст."
+    );
+  });
+
 });
