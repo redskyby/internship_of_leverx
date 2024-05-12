@@ -22,6 +22,7 @@ import {
   ApiCookieAuth,
 } from '@nestjs/swagger';
 import { AuthSwaggerInterface } from '../interfaces/auth-swagger.interface';
+import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -94,7 +95,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Get('/logout')
-  logout(@Res() res) {
+  logout(@Res() res: Response) {
     return this.authService.logOut(res);
   }
 }
