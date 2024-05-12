@@ -89,13 +89,15 @@ describe('UsersService', () => {
     const result = await service.createUser(userDto);
 
     // Check that the `$set` method was called with the expected arguments
-    expect(userWithMethods.$set).toHaveBeenCalledWith('roles', [role.id]);
+    await expect(userWithMethods.$set).toHaveBeenCalledWith('roles', [role.id]);
 
     // Check that the role was obtained as expected
-    expect(mockRolesService.getRoleByValue).toHaveBeenCalledWith('customer');
+    await expect(mockRolesService.getRoleByValue).toHaveBeenCalledWith(
+      'customer',
+    );
 
     // Ensure the created user has the correct roles
-    expect(result.roles).toEqual([role]);
+    await expect(result.roles).toEqual([role]);
   });
 
   it('should throw an error when creating a user with an existing email', async () => {
