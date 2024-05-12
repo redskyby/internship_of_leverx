@@ -54,7 +54,7 @@ describe('RolesController', () => {
     const result = await controller.create(roleDto);
 
     await expect(result).toEqual(createdRole);
-    await expect(mockRolesService.create).toHaveBeenCalledWith(roleDto);
+    await expect(rolesService.create).toHaveBeenCalledWith(roleDto);
   });
 
   it('should throw an error if role already exists', async () => {
@@ -78,9 +78,7 @@ describe('RolesController', () => {
 
     const result = await controller.getByValue(roleValue);
 
-    await expect(mockRolesService.getRoleByValue).toHaveBeenCalledWith(
-      roleValue,
-    );
+    await expect(rolesService.getRoleByValue).toHaveBeenCalledWith(roleValue);
     await expect(result).toEqual(role);
   });
 

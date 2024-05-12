@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { UpdateVinylDto } from './dto/update-vinyl.dto';
 import { FindVinylDto } from './dto/find-vinyl.dto';
-import { Vinyl } from './entities/vinyl.entity';
 import { SortVinylDto } from './dto/sort-vinyl.dto';
 
 describe('VinylsController', () => {
