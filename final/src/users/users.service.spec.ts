@@ -82,21 +82,14 @@ describe('UsersService', () => {
 
     const role = { id: 1, value: 'customer' };
 
-    // Mock the response from the role service
     mockRolesService.getRoleByValue.mockResolvedValue(role);
 
-    // Create the user
     const result = await service.createUser(userDto);
 
-    // Check that the `$set` method was called with the expected arguments
     await expect(userWithMethods.$set).toHaveBeenCalledWith('roles', [role.id]);
-
-    // Check that the role was obtained as expected
     await expect(mockRolesService.getRoleByValue).toHaveBeenCalledWith(
       'customer',
     );
-
-    // Ensure the created user has the correct roles
     await expect(result.roles).toEqual([role]);
   });
 
@@ -140,7 +133,6 @@ describe('UsersService', () => {
     await expect(mockUserModel.findOne).toHaveBeenCalledWith({
       where: { email },
     });
-
     await expect(result).toEqual(userDto);
   });
 
@@ -160,7 +152,6 @@ describe('UsersService', () => {
     mockUserModel.findOne.mockResolvedValue(null);
 
     await expect(service.showUser(userDto)).rejects.toThrow(NotFoundException);
-
     await expect(service.showUser(userDto)).rejects.toThrow(
       'Пользователь не найден',
     );

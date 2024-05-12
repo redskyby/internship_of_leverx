@@ -1,11 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
+import { LoginUserDto } from '../users/dto/login-user.dto';
 
 describe('AuthService', () => {
   let service: AuthService;
 
-  const mockAuthService = {};
+  const mockAuthService = {
+    login: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,5 +35,21 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should call login method', async () => {
+    const mockUserDto: LoginUserDto = {
+      email: 'pashadocenk@gmail.com',
+      password: '123456',
+    };
+
+    const mockResult = { token: '12348548wqe' };
+
+    mockAuthService.login.mockResolvedValue(mockResult);
+
+    const result = await service.login(mockUserDto);
+
+    expect(mockAuthService.login).toHaveBeenCalledWith(mockUserDto);
+    await expect(result).toEqual(mockResult);
   });
 });
