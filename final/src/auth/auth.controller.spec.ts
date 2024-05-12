@@ -47,7 +47,7 @@ describe('AuthController', () => {
   });
 
   it('should registration by google', async () => {
-    const mockReq = {};
+    const mockReq = undefined;
 
     const result = await controller.googleAuthRedirect(mockReq);
 
@@ -72,7 +72,7 @@ describe('AuthController', () => {
   });
 
   describe('refistratuion', () => {
-    it('should call registration ', async () => {
+    it('should  registration ', async () => {
       const mockUserDto: CreateUserDto = {
         email: 'pashadocenk@gmail.com',
         password: '123456',
