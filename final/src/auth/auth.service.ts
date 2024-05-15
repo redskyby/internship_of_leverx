@@ -40,7 +40,6 @@ export class AuthService {
         birthdate: new Date('2010-01-10'),
         avatar: user.picture,
       });
-
       return this.generateToken(newUser);
     }
 

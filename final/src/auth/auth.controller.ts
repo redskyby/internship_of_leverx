@@ -36,7 +36,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Неавторизованный' })
   @UseGuards(AuthGuard('google'))
   @Get('google')
-  async googleAuth(@Req() req) {}
+  async googleAuth() {}
 
   @ApiOperation({ summary: 'Обработчик перенаправления Google' })
   @ApiResponse({
