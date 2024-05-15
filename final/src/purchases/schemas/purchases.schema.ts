@@ -13,8 +13,8 @@ export class Purchase extends Document {
   id: number;
 
   @ApiProperty({
-    example: 1, // Пример значения
-    description: 'Уникальный идентификатор покупки', // Описание свойства
+    example: 1,
+    description: 'Уникальный идентификатор покупки',
   })
   @Prop({ type: String, required: true, unique: true })
   name: string;

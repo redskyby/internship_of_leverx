@@ -42,10 +42,7 @@ export class UsersController {
     type: AllInformationUserDto,
   })
   @ApiResponse({ status: 404, description: 'Пользователь не найден' })
-  @ApiResponse({
-    status: 400,
-    description: 'Пользователь с таким email уже существует',
-  })
+  @ApiResponse({ status: 401, description: 'Неавторизованный' })
   @UseGuards(JwtAuthGuard)
   @Get('/user')
   profile(@Req() req: Request) {

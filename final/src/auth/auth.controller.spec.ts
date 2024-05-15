@@ -71,7 +71,7 @@ describe('AuthController', () => {
     expect(result).toEqual(mockResult);
   });
 
-  describe('refistratuion', () => {
+  describe('registration', () => {
     it('should  registration ', async () => {
       const mockUserDto: CreateUserDto = {
         email: 'pashadocenk@gmail.com',
